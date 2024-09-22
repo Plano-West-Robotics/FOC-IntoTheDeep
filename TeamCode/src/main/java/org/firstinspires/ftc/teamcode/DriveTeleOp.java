@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 @TeleOp(name = "TELEOP - USE THIS ONE")
 public class  DriveTeleOp extends OpMode {
-    // Drive Variables
+    // drive variables
     private DcMotor motorFR, motorFL, motorBR, motorBL;
     private double powerFR, powerFL, powerBR, powerBL;
     private double drive = 0, strafe = 0, turn = 0;
@@ -20,13 +20,35 @@ public class  DriveTeleOp extends OpMode {
     private boolean last_right_bumper = false;
 
     @Override
+    public void init() {
+        // initializes the drive motors
+        motorFR = hardwareMap.get(DcMotor.class, "frontRight");
+        motorFL = hardwareMap.get(DcMotor.class, "frontLeft");
+        motorBR = hardwareMap.get(DcMotor.class, "rearRight");
+        motorBL = hardwareMap.get(DcMotor.class, "rearLeft");
+
+        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motorFR.setPower(0);
+        motorFL.setPower(0);
+        motorBR.setPower(0);
+        motorBL.setPower(0);
+    }
+
+    @Override
     public void loop() {
         takeControllerInput();
         drive();
     }
 
     /**
-     * Utilizes inout given from the controller.
+     * Utilizes input given from the controller.
      */
     private void takeControllerInput() {
         drive = -1 * gamepad1.left_stick_y;
@@ -63,27 +85,5 @@ public class  DriveTeleOp extends OpMode {
         motorFL.setPower(powerFL);
         motorBR.setPower(powerBR);
         motorBL.setPower(powerBL);
-    }
-
-    @Override
-    public void init() {
-        //initializes the drive motors
-        motorFR = hardwareMap.get(DcMotor.class, "frontRight");
-        motorFL = hardwareMap.get(DcMotor.class, "frontLeft");
-        motorBR = hardwareMap.get(DcMotor.class, "rearRight");
-        motorBL = hardwareMap.get(DcMotor.class, "rearLeft");
-
-        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        motorFR.setPower(0);
-        motorFL.setPower(0);
-        motorBR.setPower(0);
-        motorBL.setPower(0);
     }
 }

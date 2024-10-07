@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * OpMode. Initalizing variables for the drive constants.
  */
 @TeleOp(name = "TELEOP - USE THIS ONE")
-public class  DriveTeleOp extends OpMode {
+public class KeepsakeMecanumDrive extends OpMode {
     // drive variables
     private DcMotor motorFR, motorFL, motorBR, motorBL;
     private double powerFR, powerFL, powerBR, powerBL;

@@ -1,23 +1,33 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.modules.Claw;
+import org.firstinspires.ftc.teamcode.modules.Drivetrain;
 
 public abstract class Base extends OpMode
 {
-    public Claw clawModule;
+    public Drivetrain drive;
+
+    public DcMotor motorFR, motorFL, motorBR, motorBL;
 
     public void initHardware()
     {
-        Servo clawServo = hardwareMap.get(Servo.class, "Claw Servo");
+        motorFR = hardwareMap.get(DcMotor.class, "frontRight");
+        motorFL = hardwareMap.get(DcMotor.class, "frontLeft");
+        motorBR = hardwareMap.get(DcMotor.class, "rearRight");
+        motorBL = hardwareMap.get(DcMotor.class, "rearLeft");
+        drive = new Drivetrain(motorFR, motorFL, motorBR, motorBL, gamepad1);
+    }
 
-        clawModule = new Claw(clawServo);
+    public void updateDrive()
+    {
+        drive.takeControllerInput();
+        drive.drive();
     }
 
     /**
-     * Needed in order for MainTeleOp class to inherit OpMode methods
+     * Abstract methods are needed for our OpModes to inherit the superclass init and loop methods
      */
     @Override
     public abstract void init();

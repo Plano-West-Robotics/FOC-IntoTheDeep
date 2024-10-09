@@ -15,8 +15,8 @@ public class MainTeleOp extends Base
     }
 
     @Override
-    public void loop() {
-        if (gamepad1.a) clawModule.open();
-        if (gamepad1.b) clawModule.close();
+    public void loop()
+    {
+        updateDrive();
     }
 }

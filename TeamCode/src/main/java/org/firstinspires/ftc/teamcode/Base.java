@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.modules.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsytems.Drivetrain;
 
 public abstract class Base extends OpMode
 {

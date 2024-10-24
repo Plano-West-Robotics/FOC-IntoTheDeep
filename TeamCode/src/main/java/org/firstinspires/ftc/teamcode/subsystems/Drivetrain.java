@@ -8,8 +8,7 @@ public class Drivetrain {
     private final DcMotor motorFR, motorFL, motorBR, motorBL;
     private final Gamepad g;
 
-    private double drive, strafe, turn;
-    private double speed;
+    private double drive, strafe, turn, speed;
     private boolean last_left_bumper, last_right_bumper;
 
     public Drivetrain(DcMotor motorFR, DcMotor motorFL, DcMotor motorBR, DcMotor motorBL, Gamepad g)

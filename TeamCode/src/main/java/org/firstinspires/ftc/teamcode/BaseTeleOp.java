@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
-public abstract class Base extends OpMode
+public abstract class BaseTeleOp extends OpMode
 {
     public Drivetrain drive;
 

@@ -4,14 +4,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class Drivetrain {
+public class MecanumDrive {
+    public static final double INITIAL_SPEED = 0.4;
+
     private final DcMotor motorFR, motorFL, motorBR, motorBL;
     private final Gamepad g;
-
     private double drive, strafe, turn, speed;
     private boolean last_left_bumper, last_right_bumper;
 
-    public Drivetrain(DcMotor motorFR, DcMotor motorFL, DcMotor motorBR, DcMotor motorBL, Gamepad g)
+    public MecanumDrive(DcMotor motorFR, DcMotor motorFL, DcMotor motorBR, DcMotor motorBL, Gamepad g)
     {
         this.motorFR = motorFR;
         this.motorFL = motorFL;
@@ -20,7 +21,7 @@ public class Drivetrain {
         this.g = g;
 
         drive = strafe = turn = 0;
-        speed = 0.4;
+        speed = INITIAL_SPEED;
         last_left_bumper = last_right_bumper = false;
 
         initMotors();

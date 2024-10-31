@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive;
 
 public abstract class BaseTeleOp extends OpMode
 {
-    public Drivetrain drive;
+    public MecanumDrive drivetrain;
 
     public DcMotor motorFR, motorFL, motorBR, motorBL;
 
@@ -17,13 +17,7 @@ public abstract class BaseTeleOp extends OpMode
         motorFL = hardwareMap.get(DcMotor.class, "frontLeft");
         motorBR = hardwareMap.get(DcMotor.class, "backRight");
         motorBL = hardwareMap.get(DcMotor.class, "backLeft");
-        drive = new Drivetrain(motorFR, motorFL, motorBR, motorBL, gamepad1);
-    }
-
-    public void updateDrive()
-    {
-        drive.takeControllerInput();
-        drive.drive();
+        drivetrain = new MecanumDrive(motorFR, motorFL, motorBR, motorBL, gamepad1);
     }
 
     /**

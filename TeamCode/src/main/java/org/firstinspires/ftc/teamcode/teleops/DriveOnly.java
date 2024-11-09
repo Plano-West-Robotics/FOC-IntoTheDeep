@@ -23,8 +23,7 @@ public class DriveOnly extends OpMode
                 hw.motorBR,
                 hw.motorBL,
                 gamepad1,
-                telemetry,
-                RobotParameters.INITIAL_DRIVE_SPEED);
+                telemetry);
 
         telemetry.addLine("Init finished.");
         telemetry.update();

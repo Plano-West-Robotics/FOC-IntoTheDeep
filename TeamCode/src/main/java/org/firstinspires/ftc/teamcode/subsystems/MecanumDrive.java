@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.RobotParameters;
 
 public class MecanumDrive
 {
@@ -19,8 +20,7 @@ public class MecanumDrive
                         DcMotor motorBR,
                         DcMotor motorBL,
                         Gamepad gamepad,
-                        Telemetry telemetry,
-                        double initialSpeed)
+                        Telemetry telemetry)
     {
         this.motorFR = motorFR;
         this.motorFL = motorFL;
@@ -30,7 +30,7 @@ public class MecanumDrive
         this.telemetry = telemetry;
 
         drive = strafe = turn = 0;
-        speed = initialSpeed;
+        speed = RobotParameters.INITIAL_DRIVE_SPEED;
         last_left_bumper = last_right_bumper = false;
     }
 

@@ -26,8 +26,7 @@ public class LinearSlides extends OpMode
                 hw.motorBR,
                 hw.motorBL,
                 gamepad1,
-                telemetry,
-                RobotParameters.INITIAL_DRIVE_SPEED
+                telemetry
         );
 
         intakeSlidePair = new LinearSlidePair(

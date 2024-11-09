@@ -3,22 +3,31 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class MecanumDrive
 {
-    private final DcMotor motorFR, motorFL, motorBR, motorBL;
-    private final Gamepad gamepad;
-    private double drive, strafe, turn, speed;
-    private double powerFR, powerFL, powerBR, powerBL;
-    private boolean last_left_bumper, last_right_bumper;
+    public final DcMotor motorFR, motorFL, motorBR, motorBL;
+    public final Gamepad gamepad;
+    public final Telemetry telemetry;
+    public double drive, strafe, turn, speed;
+    public double powerFR, powerFL, powerBR, powerBL;
+    public boolean last_left_bumper, last_right_bumper;
 
-    public MecanumDrive(DcMotor motorFR, DcMotor motorFL, DcMotor motorBR, DcMotor motorBL,
-                        Gamepad gamepad, double initialSpeed)
+    public MecanumDrive(DcMotor motorFR,
+                        DcMotor motorFL,
+                        DcMotor motorBR,
+                        DcMotor motorBL,
+                        Gamepad gamepad,
+                        Telemetry telemetry,
+                        double initialSpeed)
     {
         this.motorFR = motorFR;
         this.motorFL = motorFL;
         this.motorBR = motorBR;
         this.motorBL = motorBL;
         this.gamepad = gamepad;
+        this.telemetry = telemetry;
 
         drive = strafe = turn = 0;
         speed = initialSpeed;

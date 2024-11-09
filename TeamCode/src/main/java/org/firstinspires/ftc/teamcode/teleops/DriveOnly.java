@@ -17,8 +17,14 @@ public class DriveOnly extends OpMode
     public void init()
     {
         hw = new Hardware(hardwareMap);
-        drive = new MecanumDrive(hw.motorFR, hw.motorFL, hw.motorBR, hw.motorBL,
-                                 gamepad1, RobotParameters.INITIAL_DRIVE_SPEED);
+        drive = new MecanumDrive(
+                hw.motorFR,
+                hw.motorFL,
+                hw.motorBR,
+                hw.motorBL,
+                gamepad1,
+                telemetry,
+                RobotParameters.INITIAL_DRIVE_SPEED);
 
         telemetry.addLine("Init finished.");
         telemetry.update();

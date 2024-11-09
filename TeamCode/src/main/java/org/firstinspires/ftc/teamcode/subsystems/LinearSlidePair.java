@@ -8,29 +8,29 @@ import org.firstinspires.ftc.teamcode.RobotParameters;
 
 public class LinearSlidePair
 {
-    private final DcMotor motorL, motorR;
-    private final Gamepad gamepad;
-    private final double SPEED; // Ticks per second;
-    private final double MAX_TICKS;
-    private final Telemetry telemetry;
-    private double stickInput; // Y-value of the left joystick.
-    private boolean a, x, b, y; // Buttons for ascending/descending to the low chamber,
+    public final DcMotor motorL, motorR;
+    public final Gamepad gamepad;
+    public final Telemetry telemetry;
+    public final double SPEED; // Ticks per second;
+    public final double MAX_TICKS;
+    public double stickInput; // Y-value of the left joystick.
+    public boolean a, x, b, y; // Buttons for ascending/descending to the low chamber,
                                 // high chamber, low basket, and high basket, respectively
-    private boolean a_last, x_last, b_last, y_last;
+    public boolean a_last, x_last, b_last, y_last;
 
     public LinearSlidePair(DcMotor motorL,
                            DcMotor motorR,
                            Gamepad gamepad,
+                           Telemetry telemetry,
                            double speed,
-                           double maxTicks,
-                           Telemetry telemetry)
+                           double maxTicks)
     {
         this.motorL = motorL;
         this.motorR = motorR;
         this.gamepad = gamepad;
+        this.telemetry = telemetry;
         this.SPEED = speed;
         this.MAX_TICKS = maxTicks;
-        this.telemetry = telemetry;
 
         stickInput = 0;
         a = x = b = y = a_last = x_last = b_last = y_last = false;
@@ -47,8 +47,6 @@ public class LinearSlidePair
         {
             if (motorL.getCurrentPosition() >= 0 && motorR.getCurrentPosition() >= 0)
             {
-                telemetry.addLine("foo2");
-                telemetry.update();
                 motorL.setPower(SPEED * stickInput);
                 motorR.setPower(SPEED * stickInput);
             }

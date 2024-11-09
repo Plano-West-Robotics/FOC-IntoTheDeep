@@ -26,6 +26,7 @@ public class LinearSlideTest extends OpMode
                 hw.motorBR,
                 hw.motorBL,
                 gamepad1,
+                telemetry,
                 RobotParameters.INITIAL_DRIVE_SPEED
         );
 
@@ -33,18 +34,18 @@ public class LinearSlideTest extends OpMode
                 hw.intakeSlideMotorL,
                 hw.intakeSlideMotorR,
                 gamepad2,
+                telemetry,
                 RobotParameters.INTAKE_SLIDE_SPEED,
-                RobotParameters.INTAKE_SLIDE_MAX_TICKS,
-                telemetry
+                RobotParameters.INTAKE_SLIDE_MAX_TICKS
         );
 
         outtakeSlidePair = new LinearSlidePair(
                 hw.outtakeSlideMotorL,
                 hw.outtakeSlideMotorR,
                 gamepad2,
+                telemetry,
                 RobotParameters.OUTTAKE_SLIDE_SPEED,
-                RobotParameters.OUTTAKE_SLIDE_MAX_TICKS,
-                telemetry
+                RobotParameters.OUTTAKE_SLIDE_MAX_TICKS
         );
 
         telemetry.addLine("Init finished.");

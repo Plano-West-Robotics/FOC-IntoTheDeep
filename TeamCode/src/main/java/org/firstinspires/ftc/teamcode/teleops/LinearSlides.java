@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.RobotParameters;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlidePair;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive;
 
-@TeleOp(name = "LinearSlideTest")
-public class LinearSlideTest extends OpMode
+@TeleOp(name = "LinearSlides")
+public class LinearSlides extends OpMode
 {
     Hardware hw;
     MecanumDrive drive;
@@ -74,7 +73,5 @@ public class LinearSlideTest extends OpMode
             telemetry.addData("Button Registers%n", "A=%s B=%s X=%s Y=%s",
                     gamepad2.a, gamepad2.b, gamepad2.x, gamepad2.y);
         }
-
-
     }
 }

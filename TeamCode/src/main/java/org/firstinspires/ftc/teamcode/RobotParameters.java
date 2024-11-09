@@ -7,7 +7,7 @@ public final class RobotParameters
 
     // Linear slides.
     public static final int SLIDE_SLOWDOWN_THRESHOLD = 100; // Ticks.
-    // TODO: Tune slide speed.
+    // TODO: Tune slide speeds.
     public static final double INTAKE_SLIDE_MAX_SPEED = 0.4;
     public static final double OUTTAKE_SLIDE_MAX_SPEED = 0.4;
     public static final int INTAKE_SLIDE_MAX_TICKS = 1100;

@@ -12,12 +12,11 @@ public class LinearSlidePair
     public final DcMotor motorL, motorR;
     public final Gamepad gamepad;
     public final Telemetry telemetry;
-    public final double MAX_SPEED;  // Ticks per second;
+    public final double MAX_SPEED;  // Within [0, 1].
     public final int MAX_TICKS;
-    public double speed;
     public double stickInput;   // Y-value of the left joystick.
-    public boolean a, x, b, y;  // Buttons for ascending/descending to the low chamber,
-                                // high chamber, low basket, and high basket, respectively
+    public boolean a, x, b, y;  // Buttons for traveling to the low chamber, high chamber, low
+                                // basket, and high basket, respectively.
     public boolean a_last, x_last, b_last, y_last;
 
     public LinearSlidePair(DcMotor motorL,
@@ -34,7 +33,6 @@ public class LinearSlidePair
         this.MAX_SPEED = maxSpeed;
         this.MAX_TICKS = maxTicks;
 
-        speed = 0;
         stickInput = 0;
         a = x = b = y = a_last = x_last = b_last = y_last = false;
     }
@@ -47,12 +45,22 @@ public class LinearSlidePair
 
         stickInput = -1 * gamepad.left_stick_y;
         stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
+
+        /*
+        The maximum speed the motors can safely travel at
+        (it tends towards 0 as slides approach minimum and maximum extension).
+         */
         double smartMaxSpeed = MathUtils.calcSmartMaxSpeed(
                 motorL.getCurrentPosition(),
                 MAX_TICKS,
                 RobotParameters.SLIDE_SLOWDOWN_THRESHOLD,
                 MAX_SPEED
         );
+
+        /*
+        stickInput is reduced to the conservative speed (smartMaxSpeed) if it exceeds smartMaxSpeed,
+        otherwise stickInput stays untouched.
+         */
         if (stickInput < 0) stickInput = Math.max(stickInput, -smartMaxSpeed);
         else if (stickInput > 0) stickInput = Math.min(stickInput, smartMaxSpeed);
         else
@@ -61,6 +69,7 @@ public class LinearSlidePair
             motorR.setPower(0);
             return;
         }
+
         motorL.setPower(stickInput);
         motorR.setPower(stickInput);
     }

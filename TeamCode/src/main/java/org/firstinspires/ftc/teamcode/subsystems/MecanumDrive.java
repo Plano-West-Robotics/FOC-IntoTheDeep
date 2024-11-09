@@ -62,7 +62,7 @@ public class MecanumDrive
     /**
      * Updates power values for each motor based on drive variables.
      */
-    public void calculateMotorPowers()
+    public void updateMotorPowers()
     {
         // Motor power variables
         powerFR = drive - strafe;

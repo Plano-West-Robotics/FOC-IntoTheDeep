@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.MathUtils;
 import org.firstinspires.ftc.teamcode.RobotParameters;
 
 public class LinearSlidePair
@@ -11,27 +12,29 @@ public class LinearSlidePair
     public final DcMotor motorL, motorR;
     public final Gamepad gamepad;
     public final Telemetry telemetry;
-    public final double SPEED; // Ticks per second;
-    public final double MAX_TICKS;
-    public double stickInput; // Y-value of the left joystick.
-    public boolean a, x, b, y; // Buttons for ascending/descending to the low chamber,
-                                // high chamber, low basket, and high basket, respectively
+    public final double MAX_SPEED;  // Ticks per second;
+    public final int MAX_TICKS;
+    public double speed;
+    public double stickInput;   // Y-value of the left joystick.
+    public boolean a, x, b, y;  // Buttons for ascending/descending to the low chamber,
+    // high chamber, low basket, and high basket, respectively
     public boolean a_last, x_last, b_last, y_last;
 
     public LinearSlidePair(DcMotor motorL,
                            DcMotor motorR,
                            Gamepad gamepad,
                            Telemetry telemetry,
-                           double speed,
-                           double maxTicks)
+                           double maxSpeed,
+                           int maxTicks)
     {
         this.motorL = motorL;
         this.motorR = motorR;
         this.gamepad = gamepad;
         this.telemetry = telemetry;
-        this.SPEED = speed;
+        this.MAX_SPEED = maxSpeed;
         this.MAX_TICKS = maxTicks;
 
+        speed = 0;
         stickInput = 0;
         a = x = b = y = a_last = x_last = b_last = y_last = false;
     }
@@ -43,19 +46,23 @@ public class LinearSlidePair
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         stickInput = -1 * gamepad.left_stick_y;
-        if (motorL.getCurrentPosition() < MAX_TICKS && motorR.getCurrentPosition() < MAX_TICKS)
-        {
-            if (motorL.getCurrentPosition() >= 0 && motorR.getCurrentPosition() >= 0)
-            {
-                motorL.setPower(SPEED * stickInput);
-                motorR.setPower(SPEED * stickInput);
-            }
-        }
+        stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
+        double smartMaxSpeed = MathUtils.calcSmartMaxSpeed(
+                motorL.getCurrentPosition(),
+                MAX_TICKS,
+                RobotParameters.SLIDE_SLOWDOWN_THRESHOLD,
+                MAX_SPEED
+        );
+        if (stickInput < 0) stickInput = Math.max(stickInput, -smartMaxSpeed);
+        else if (stickInput > 0) stickInput = Math.min(stickInput, smartMaxSpeed);
         else
         {
             motorL.setPower(0);
             motorR.setPower(0);
+            return;
         }
+        motorL.setPower(stickInput);
+        motorR.setPower(stickInput);
     }
 
     // Should only be used for outtake slide.
@@ -87,8 +94,8 @@ public class LinearSlidePair
         motorL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motorL.setPower(SPEED);
-        motorR.setPower(SPEED);
+        motorL.setPower(MAX_SPEED);
+        motorR.setPower(MAX_SPEED);
     }
 
     public int getMotorLPosition()

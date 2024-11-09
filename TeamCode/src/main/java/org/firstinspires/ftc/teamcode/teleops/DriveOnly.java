@@ -34,7 +34,7 @@ public class DriveOnly extends OpMode
     public void loop()
     {
         drive.takeControllerInput();
-        drive.calculateMotorPowers();
+        drive.updateMotorPowers();
         drive.powerMotors();
     }
 }

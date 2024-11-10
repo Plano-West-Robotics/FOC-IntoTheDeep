@@ -52,9 +52,9 @@ public class LinearSlidePair
          */
         double smartMaxSpeed = MathUtils.calcSmartMaxSpeed(
                 motorL.getCurrentPosition(),
+                MAX_SPEED,
                 MAX_TICKS,
-                RobotParameters.SLIDE_SLOWDOWN_THRESHOLD,
-                MAX_SPEED
+                RobotParameters.INTAKE_SLIDE_SLOWDOWN_THRESHOLD
         );
 
         /*

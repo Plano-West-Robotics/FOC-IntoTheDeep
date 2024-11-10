@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Hardware
 {
-    public DcMotor motorFR, motorFL, motorBR, motorBL;
-    public DcMotor intakeSlideMotorL, intakeSlideMotorR, outtakeSlideMotorL, outtakeSlideMotorR;
+    public final DcMotor motorFR, motorFL, motorBR, motorBL;
+    public final DcMotor intakeSlideMotorL, intakeSlideMotorR, outtakeSlideMotorL, outtakeSlideMotorR;
+    public final Servo intakeServoL, intakeServoR;
+    public final CRServo intakeWheelL, intakeWheelR;
 
     public Hardware(HardwareMap hwMap)
     {
@@ -62,6 +66,19 @@ public class Hardware
 
             outtakeSlideMotorL.setPower(0);
             outtakeSlideMotorR.setPower(0);
+        }
+
+        // Intake servos.
+        {
+            intakeServoL = hwMap.get(Servo.class, "intakeLeft");
+            intakeServoR = hwMap.get(Servo.class, "intakeRight");
+
+            // TODO: May need to one of the servo's direction.
+            // intakeServoL.setDirection(Servo.Direction.REVERSE);
+            // intakeServoR.setDirection(Servo.Direction.REVERSE);
+
+            intakeWheelL = hwMap.get(CRServo.class, "intakeWheelLeft");
+            intakeWheelR = hwMap.get(CRServo.class, "intakeWheelRight");
         }
     }
 }

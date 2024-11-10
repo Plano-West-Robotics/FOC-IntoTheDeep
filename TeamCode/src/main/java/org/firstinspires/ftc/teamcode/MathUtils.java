@@ -16,7 +16,7 @@ public class MathUtils
      * @param maxSpeed  maximum value the function can return
      * @return          a weighted speed value (between 0 and maxSpeed, exclusive)
      */
-    public static double calcSmartMaxSpeed(int ticks, int maxTicks, int threshold, double maxSpeed)
+    public static double calcSmartMaxSpeed(int ticks, double maxSpeed, int maxTicks, int threshold)
     {
         return (maxSpeed / (1 + Math.exp(-K * (ticks - threshold)))) - (maxSpeed / (1 + Math.exp(-K * (ticks - (maxTicks - threshold)))));
     }

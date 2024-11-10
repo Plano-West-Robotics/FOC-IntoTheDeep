@@ -5,15 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.RobotParameters;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlidePair;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive;
 
-@TeleOp(name = "LinearSlides")
-public class LinearSlides extends OpMode
+@TeleOp(name = "AllStuff")
+public class AllStuff extends OpMode
 {
     Hardware hw;
     MecanumDrive drive;
     LinearSlidePair intakeSlidePair, outtakeSlidePair;
+    Intake intake;
 
     @Override
     public void init()
@@ -27,6 +29,14 @@ public class LinearSlides extends OpMode
                 hw.motorBL,
                 gamepad1,
                 telemetry
+        );
+
+        intake = new Intake(
+                hw.intakeServoL,
+                hw.intakeServoR,
+                hw.intakeWheelL,
+                hw.intakeWheelR,
+                gamepad1
         );
 
         intakeSlidePair = new LinearSlidePair(
@@ -60,17 +70,6 @@ public class LinearSlides extends OpMode
 
         intakeSlidePair.updateVelocity();
 
-        // TODO: Implement outtakeSlidePair.
-
-        // TODO: Debug intake linear slide system.
-        {
-            telemetry.addData("Left Joystick Raw Y%n", "%d", gamepad2.left_stick_y);
-            telemetry.addData("Intake Slide Tick%n", "L=%d R=%d",
-                    intakeSlidePair.motorL.getCurrentPosition(), intakeSlidePair.motorR.getCurrentPosition());
-            telemetry.addData("Intake Slide Power%n", "L=%f R=%f",
-                    intakeSlidePair.motorL.getPower(), intakeSlidePair.motorR.getPower());
-            telemetry.addData("Button Registers%n", "A=%s B=%s X=%s Y=%s",
-                    gamepad2.a, gamepad2.b, gamepad2.x, gamepad2.y);
-        }
+        intake.takeControllerInput();
     }
 }

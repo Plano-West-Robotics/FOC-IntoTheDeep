@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.RobotParameters;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive;
 
 @TeleOp(name = "DriveOnly")

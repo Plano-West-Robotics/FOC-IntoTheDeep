@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MathUtils;
@@ -20,6 +21,10 @@ public class LinearSlidePair
                                 // basket, and high basket, respectively.
     public boolean a_last, x_last, b_last, y_last;
 
+    public final ElapsedTime timer;
+    public double currTime, currError, prevError, prevTime;
+    public double Kp, Ki, Kd, p, i, d, adjustment;
+
     public LinearSlidePair(DcMotor motorL,
                            DcMotor motorR,
                            Gamepad gamepad,
@@ -36,6 +41,12 @@ public class LinearSlidePair
 
         stickInput = 0;
         a = x = b = y = a_last = x_last = b_last = y_last = false;
+
+        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        currTime = currError = prevError = prevTime = 0;
+        Kp = 0.001;
+        Ki = 0.000;
+        Kd = 0.000;
     }
 
     // Should only be used for intake slide.
@@ -82,12 +93,36 @@ public class LinearSlidePair
         ((DcMotorEx) motorR).setVelocity(RobotParameters.MAX_TICKS_PER_SECOND * stickInput);
     }
 
+    public void PIDUpdateVelocity()
+    {
+        motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        stickInput = -1 * gamepad.left_stick_y;
+        stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
+
+        currTime = timer.milliseconds();
+        currError = motorL.getCurrentPosition() - motorR.getCurrentPosition();
+
+        p = Kp * currError;
+        d = Kd * (currError - prevError) / (currTime - prevTime);
+
+        adjustment = p + d;
+
+        motorL.setPower(stickInput);
+        motorL.setPower(stickInput + adjustment);
+
+        prevTime = currTime;
+        prevError = currError;
+    }
+
     public void simpleUpdateVelocity()
     {
         motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         stickInput = -1 * gamepad.left_stick_y;
+        stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
 
         motorL.setPower(stickInput);
         motorR.setPower(stickInput);

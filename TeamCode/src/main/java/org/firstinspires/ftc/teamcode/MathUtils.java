@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class MathUtils
 {
-    public static final double K = 0.05; // Steepness constant for calcSpeed().
+    public static final double K = 0.1; // Steepness constant for calcSpeed().
 
     /**
      * Applies a double logistic curve to an input (ticks) that returns an output which (nearly)

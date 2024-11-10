@@ -6,9 +6,9 @@ public final class RobotParameters
     public static final double INITIAL_DRIVE_SPEED = 0.4;
 
     // Intake linear slides.
-    public static final double INTAKE_SLIDE_MAX_SPEED = 0.4; // TODO: Tune.
+    public static final double INTAKE_SLIDE_MAX_SPEED = 0.6; // TODO: Tune.
     public static final int INTAKE_SLIDE_MAX_TICKS = 1100;
-    public static final int INTAKE_SLIDE_SLOWDOWN_THRESHOLD = 100; // TODO: Tune.
+    public static final int INTAKE_SLIDE_SLOWDOWN_THRESHOLD = 50; // TODO: Tune.
 
     // Outtake linear slides.
     public static final double OUTTAKE_SLIDE_MAX_SPEED = 0.4; // TODO: Tune.

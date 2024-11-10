@@ -64,12 +64,12 @@ public class LinearSlides extends OpMode
 
         // TODO: Debug intake linear slide system.
         {
-            telemetry.addData("Left Joystick Raw Y%n", "%d", gamepad2.left_stick_y);
-            telemetry.addData("Intake Slide Tick%n", "L=%d R=%d",
+            telemetry.addData("Left Joystick Raw", gamepad2.left_stick_y);
+            telemetry.addData("Intake Slide Tick", "L=%d R=%d",
                     intakeSlidePair.motorL.getCurrentPosition(), intakeSlidePair.motorR.getCurrentPosition());
-            telemetry.addData("Intake Slide Power%n", "L=%f R=%f",
+            telemetry.addData("Intake Slide Power", "L=%f R=%f",
                     intakeSlidePair.motorL.getPower(), intakeSlidePair.motorR.getPower());
-            telemetry.addData("Button Registers%n", "A=%s B=%s X=%s Y=%s",
+            telemetry.addData("Button Registers", "A=%s B=%s X=%s Y=%s",
                     gamepad2.a, gamepad2.b, gamepad2.x, gamepad2.y);
         }
     }

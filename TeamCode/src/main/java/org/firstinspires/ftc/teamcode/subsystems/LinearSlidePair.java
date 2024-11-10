@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MathUtils;
@@ -40,35 +41,53 @@ public class LinearSlidePair
     // Should only be used for intake slide.
     public void updateVelocity()
     {
+        int avgPosition = (int) Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0);
+
         motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         stickInput = -1 * gamepad.left_stick_y;
-        stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
 
         /*
         The maximum speed the motors can safely travel at
         (it tends towards 0 as slides approach minimum and maximum extension).
          */
         double smartMaxSpeed = MathUtils.calcSmartMaxSpeed(
-                motorL.getCurrentPosition(),
+                avgPosition,
                 MAX_SPEED,
                 MAX_TICKS,
                 RobotParameters.INTAKE_SLIDE_SLOWDOWN_THRESHOLD
         );
 
         /*
-        stickInput is reduced to the conservative speed (smartMaxSpeed) if it exceeds smartMaxSpeed,
-        otherwise stickInput stays untouched.
+        If the slide is approaching an endpoint, the lesser of two speeds' magnitudes
+        (stickInput and smartMaxSpeed) is assigned to stickInput.
          */
-        if (stickInput < 0) stickInput = Math.max(stickInput, -smartMaxSpeed);
-        else if (stickInput > 0) stickInput = Math.min(stickInput, smartMaxSpeed);
-        else
+        if (stickInput < 0 && avgPosition < RobotParameters.INTAKE_SLIDE_SLOWDOWN_THRESHOLD)
         {
-            motorL.setPower(0);
-            motorR.setPower(0);
-            return;
+            stickInput = Math.max(stickInput, -smartMaxSpeed);
         }
+        if (stickInput > 0 && avgPosition > MAX_TICKS - RobotParameters.INTAKE_SLIDE_SLOWDOWN_THRESHOLD)
+        {
+            stickInput = Math.min(stickInput, smartMaxSpeed);
+        }
+
+        /*
+        Covers cases when slide is not within "approaching" threshold of an endpoint
+        but stickInput exceeds MAX_SPEED.
+         */
+        stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
+
+        motorL.setPower(stickInput);
+        motorR.setPower(stickInput);
+    }
+
+    public void simpleUpdateVelocity()
+    {
+        motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        stickInput = -1 * gamepad.left_stick_y;
 
         motorL.setPower(stickInput);
         motorR.setPower(stickInput);

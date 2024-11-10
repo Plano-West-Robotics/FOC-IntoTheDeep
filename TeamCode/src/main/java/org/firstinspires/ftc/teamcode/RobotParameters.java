@@ -7,8 +7,9 @@ public final class RobotParameters
 
     // Intake linear slides.
     public static final double INTAKE_SLIDE_MAX_SPEED = 0.6; // TODO: Tune.
-    public static final int INTAKE_SLIDE_MAX_TICKS = 1100;
-    public static final int INTAKE_SLIDE_SLOWDOWN_THRESHOLD = 50; // TODO: Tune.
+    public static final int INTAKE_SLIDE_MAX_TICKS = 1106;
+    public static final int INTAKE_SLIDE_SLOWDOWN_THRESHOLD = 70; // TODO: Tune.
+    public static final double MAX_TICKS_PER_SECOND = 2796; // Given a 312 RPM motor and 38.2 diameter pulley
 
     // Outtake linear slides.
     public static final double OUTTAKE_SLIDE_MAX_SPEED = 0.4; // TODO: Tune.

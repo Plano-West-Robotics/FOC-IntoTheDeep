@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class MathUtils
 {
-    public static final double K = 0.1; // Steepness constant for calcSpeed().
+    public static final double K = 0.15; // Steepness constant for calcSpeed().
 
     /**
      * Applies a double logistic curve to an input (ticks) that returns an output which (nearly)
@@ -18,7 +18,13 @@ public class MathUtils
      */
     public static double calcSmartMaxSpeed(int ticks, double maxSpeed, int maxTicks, int threshold)
     {
-        return (maxSpeed / (1 + Math.exp(-K * (ticks - threshold)))) - (maxSpeed / (1 + Math.exp(-K * (ticks - (maxTicks - threshold)))));
+        if (ticks < 0 || ticks > maxTicks)
+            throw new IllegalArgumentException("p must be in the range [0, p_max]");
+
+        double term1 = maxSpeed / (1 + Math.exp(-K * (ticks - (threshold / 2.0))));
+        double term2 = maxSpeed / (1 + Math.exp(-K * (ticks - (maxTicks - threshold / 2.0))));
+
+        return term1 - term2;
     }
 
     /**

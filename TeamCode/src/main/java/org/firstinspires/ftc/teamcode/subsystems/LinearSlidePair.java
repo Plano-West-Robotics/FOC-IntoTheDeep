@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MathUtils;
@@ -73,13 +73,13 @@ public class LinearSlidePair
         }
 
         /*
-        Covers cases when slide is not within "approaching" threshold of an endpoint
-        but stickInput exceeds MAX_SPEED.
+        Covers cases when slide is not within a slowdown threshold,
+        but abs(stickInput) exceeds abs(MAX_SPEED).
          */
         stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
 
-        motorL.setPower(stickInput);
-        motorR.setPower(stickInput);
+        ((DcMotorEx) motorL).setVelocity(RobotParameters.MAX_TICKS_PER_SECOND * stickInput);
+        ((DcMotorEx) motorR).setVelocity(RobotParameters.MAX_TICKS_PER_SECOND * stickInput);
     }
 
     public void simpleUpdateVelocity()

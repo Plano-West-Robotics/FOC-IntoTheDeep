@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -12,29 +11,26 @@ import org.firstinspires.ftc.teamcode.RobotParameters;
 public class LinearSlidePair
 {
     public final DcMotor motorL, motorR;
-    public final Gamepad gamepad;
     public final Telemetry telemetry;
     public final double MAX_SPEED;  // Within [0, 1].
     public final int MAX_TICKS;
     public double stickInput;   // Y-value of the left joystick.
     public boolean a, x, b, y;  // Buttons for traveling to the low chamber, high chamber, low
-                                // basket, and high basket, respectively.
+    // basket, and high basket, respectively.
     public boolean a_last, x_last, b_last, y_last;
 
-    public final ElapsedTime timer;
+    public ElapsedTime timer;
     public double currTime, currError, prevError, prevTime;
-    public double Kp, Ki, Kd, p, i, d, adjustment;
+    public double Kp, Ki, Kd, p, i, d, iMax, adjustment;
 
     public LinearSlidePair(DcMotor motorL,
                            DcMotor motorR,
-                           Gamepad gamepad,
                            Telemetry telemetry,
                            double maxSpeed,
                            int maxTicks)
     {
         this.motorL = motorL;
         this.motorR = motorR;
-        this.gamepad = gamepad;
         this.telemetry = telemetry;
         this.MAX_SPEED = maxSpeed;
         this.MAX_TICKS = maxTicks;
@@ -42,20 +38,20 @@ public class LinearSlidePair
         stickInput = 0;
         a = x = b = y = a_last = x_last = b_last = y_last = false;
 
-        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         currTime = currError = prevError = prevTime = 0;
-        Kp = 0.001;
+        Kp = 0.005;
         Ki = 0.000;
         Kd = 0.000;
+        iMax = 0.5;
     }
 
     // Should only be used for intake slide.
-    public void updateVelocity()
+    public void updateVelocity(Gamepad gamepad)
     {
-        int avgPosition = (int) Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0);
-
         motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        int avgPosition = (int) Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0);
 
         stickInput = -1 * gamepad.left_stick_y;
 
@@ -89,34 +85,63 @@ public class LinearSlidePair
          */
         stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
 
-        ((DcMotorEx) motorL).setVelocity(RobotParameters.MAX_TICKS_PER_SECOND * stickInput);
-        ((DcMotorEx) motorR).setVelocity(RobotParameters.MAX_TICKS_PER_SECOND * stickInput);
+        motorL.setPower(stickInput);
+        motorR.setPower(stickInput);
     }
 
-    public void PIDUpdateVelocity()
+    public void pidUpdateVelocity(Gamepad gamepad)
     {
         motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        int avgPosition = (int) Math.round((motorL.getCurrentPosition() + motorR.getCurrentPosition()) / 2.0);
+
         stickInput = -1 * gamepad.left_stick_y;
         stickInput = MathUtils.clamp(stickInput, -MAX_SPEED, MAX_SPEED);
 
+        double smartMaxSpeed = MathUtils.calcSmartMaxSpeed(
+                avgPosition,
+                MAX_SPEED,
+                MAX_TICKS,
+                RobotParameters.INTAKE_SLIDE_SLOWDOWN_THRESHOLD
+        );
+        if (stickInput < 0 && avgPosition < RobotParameters.INTAKE_SLIDE_SLOWDOWN_THRESHOLD)
+        {
+            stickInput = Math.max(stickInput, -smartMaxSpeed);
+        }
+        if (stickInput > 0 && avgPosition > MAX_TICKS - RobotParameters.INTAKE_SLIDE_SLOWDOWN_THRESHOLD)
+        {
+            stickInput = Math.min(stickInput, smartMaxSpeed);
+        }
+
         currTime = timer.milliseconds();
         currError = motorL.getCurrentPosition() - motorR.getCurrentPosition();
+        // Exits the method if there is a large difference in time/ticks from the last function call.
+        if (currTime - prevTime > 5000 || currError - prevError > 200)
+        {
+            prevTime = currTime;
+            prevError = currError;
+            return;
+        }
 
         p = Kp * currError;
+
+        i += Ki * (currError * (currTime - prevTime));
+        if (i > iMax) i = iMax;
+        else if (i < -iMax) i = -iMax;
+
         d = Kd * (currError - prevError) / (currTime - prevTime);
 
-        adjustment = p + d;
+        adjustment = p + i;
 
         motorL.setPower(stickInput);
-        motorL.setPower(stickInput + adjustment);
+        motorR.setPower(stickInput + adjustment);
 
         prevTime = currTime;
         prevError = currError;
     }
 
-    public void simpleUpdateVelocity()
+    public void simpleUpdateVelocity(Gamepad gamepad)
     {
         motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -130,7 +155,7 @@ public class LinearSlidePair
 
     // Should only be used for outtake slide.
     // TODO: Not usable until scoring heights are determined (check RobotParameters).
-    public void useButtonAction()
+    public void useButtonAction(Gamepad gamepad)
     {
         a = gamepad.a;
         x = gamepad.x;
@@ -148,7 +173,6 @@ public class LinearSlidePair
         y_last = gamepad.y;
     }
 
-    // Should only be used for outtake slide.
     public void goTo(int ticks) throws IllegalArgumentException
     {
         if (ticks > MAX_TICKS) throw new IllegalArgumentException("Target height exceeds this linear slide's maximum extension.");
@@ -161,5 +185,22 @@ public class LinearSlidePair
 
         motorL.setPower(MAX_SPEED);
         motorR.setPower(MAX_SPEED);
+    }
+
+    public void holdMotors()
+    {
+        motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        motorL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motorL.setPower(0);
+        motorR.setPower(0);
+    }
+
+    public void initPIDTimer()
+    {
+        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 }

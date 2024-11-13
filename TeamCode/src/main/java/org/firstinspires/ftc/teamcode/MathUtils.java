@@ -18,9 +18,6 @@ public class MathUtils
      */
     public static double calcSmartMaxSpeed(int ticks, double maxSpeed, int maxTicks, int threshold)
     {
-        if (ticks < 0 || ticks > maxTicks)
-            throw new IllegalArgumentException("p must be in the range [0, p_max]");
-
         double term1 = maxSpeed / (1 + Math.exp(-K * (ticks - (threshold / 2.0))));
         double term2 = maxSpeed / (1 + Math.exp(-K * (ticks - (maxTicks - threshold / 2.0))));
 

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class Hardware
+public final class Hardware
 {
     public final DcMotor motorFR, motorFL, motorBR, motorBL;
     public final DcMotor intakeSlideMotorL, intakeSlideMotorR, outtakeSlideMotorL, outtakeSlideMotorR;

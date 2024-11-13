@@ -20,19 +20,11 @@ public class LinearSlides extends OpMode
     {
         hw = new Hardware(hardwareMap);
 
-        drive = new MecanumDrive(
-                hw.motorFR,
-                hw.motorFL,
-                hw.motorBR,
-                hw.motorBL,
-                gamepad1,
-                telemetry
-        );
+        drive = new MecanumDrive(hw, telemetry);
 
         intakeSlidePair = new LinearSlidePair(
                 hw.intakeSlideMotorL,
                 hw.intakeSlideMotorR,
-                gamepad2,
                 telemetry,
                 RobotParameters.INTAKE_SLIDE_MAX_SPEED,
                 RobotParameters.INTAKE_SLIDE_MAX_TICKS
@@ -41,7 +33,6 @@ public class LinearSlides extends OpMode
         outtakeSlidePair = new LinearSlidePair(
                 hw.outtakeSlideMotorL,
                 hw.outtakeSlideMotorR,
-                gamepad2,
                 telemetry,
                 RobotParameters.OUTTAKE_SLIDE_MAX_SPEED,
                 RobotParameters.OUTTAKE_SLIDE_MAX_TICKS
@@ -52,25 +43,29 @@ public class LinearSlides extends OpMode
     }
 
     @Override
+    public void start()
+    {
+        intakeSlidePair.initPIDTimer();
+    }
+
+    @Override
     public void loop()
     {
-        drive.takeControllerInput();
+        drive.takeControllerInput(gamepad1);
         drive.updateMotorPowers();
-        drive.powerMotors();
 
-        intakeSlidePair.updateVelocity();
+        intakeSlidePair.pidUpdateVelocity(gamepad2);
 
         // TODO: Implement outtakeSlidePair.
 
         // TODO: Debug intake linear slide system.
         {
             telemetry.addData("Left Joystick Raw", gamepad2.left_stick_y);
-            telemetry.addData("Intake Slide Tick", "L=%d R=%d",
-                    intakeSlidePair.motorL.getCurrentPosition(), intakeSlidePair.motorR.getCurrentPosition());
-            telemetry.addData("Intake Slide Power", "L=%f R=%f",
-                    intakeSlidePair.motorL.getPower(), intakeSlidePair.motorR.getPower());
-            telemetry.addData("Button Registers", "A=%s B=%s X=%s Y=%s",
-                    gamepad2.a, gamepad2.b, gamepad2.x, gamepad2.y);
+            telemetry.addData("Intake Slide Ticks", "L=%d R=%d",
+                    intakeSlidePair.motorL.getCurrentPosition(),
+                    intakeSlidePair.motorR.getCurrentPosition());
+            telemetry.addData("Right Motor Error (+ => behind; - => ahead)",
+                    intakeSlidePair.currError);
         }
     }
 }

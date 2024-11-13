@@ -4,87 +4,68 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.RobotParameters;
 
 public class Intake
 {
-    public final Servo left, right;
-    public final CRServo leftWheel, rightWheel;
+    public final Servo servoL, servoR;
+    public final CRServo wheelL, wheelR;
     public final Gamepad gamepad;
-    public boolean a, x;
-    public boolean a_last, x_last;
-    public boolean isExtended, isIntaking;
+    public IntakeState intakeState;
+    public boolean a, b;
+    public boolean a_last, b_last;
 
-    public Intake(Servo left,
-                  Servo right,
-                  CRServo leftWheel,
-                  CRServo rightWheel,
-                  Gamepad gamepad)
+    public enum IntakeState
     {
-        this.left = left;
-        this.right = right;
-        this.leftWheel = leftWheel;
-        this.rightWheel = rightWheel;
-        this.gamepad = gamepad;
-
-        a = x = a_last = x_last = false;
-        isExtended = isIntaking = true;
-
-        extend();
-        startIntake();
+        RETRACTED_SLIDE,
+        EXTENDED_SLIDE,
+        RETRACT,
+        EXTEND,
+        RETREAT,
+        DUMP
     }
 
-    public void takeControllerInput()
+    public Intake(Hardware hw, Gamepad gamepad)
     {
-        a = gamepad.a;
-        x = gamepad.x;
+        this.servoL = hw.intakeServoL;
+        this.servoR = hw.intakeServoR;
+        this.wheelL = hw.intakeWheelL;
+        this.wheelR = hw.intakeWheelR;
+        this.gamepad = gamepad;
 
-        if ((a_last != a) && a)
-        {
-            if (isExtended) retract();
-            else extend();
-            isExtended = !isExtended;
-        }
-        if ((x_last != x) && x)
-        {
-            if (isIntaking) startEject();
-            else startIntake();
-            isIntaking = !isIntaking;
-        }
-
-        a_last = gamepad.a;
-        x_last = gamepad.x;
+        a = b = a_last = b_last = false;
     }
 
     // TODO: Program servo limits before calling.
     public void retract()
     {
-        left.setPosition(0);
-        right.setPosition(0);
+        servoL.setPosition(0);
+        servoR.setPosition(0);
     }
 
     // TODO: Program servo limits before calling.
     public void extend()
     {
-        left.setPosition(1);
-        right.setPosition(1);
+        servoL.setPosition(1);
+        servoR.setPosition(1);
     }
 
     public void startIntake()
     {
-        leftWheel.setPower(RobotParameters.INTAKE_WHEEL_SPEED);
-        rightWheel.setPower(RobotParameters.INTAKE_WHEEL_SPEED);
+        wheelL.setPower(RobotParameters.INTAKE_WHEEL_SPEED);
+        wheelR.setPower(RobotParameters.INTAKE_WHEEL_SPEED);
     }
 
-    public void startEject()
+    public void startDump()
     {
-        leftWheel.setPower(-RobotParameters.INTAKE_WHEEL_SPEED);
-        rightWheel.setPower(-RobotParameters.INTAKE_WHEEL_SPEED);
+        wheelL.setPower(-RobotParameters.INTAKE_WHEEL_SPEED);
+        wheelR.setPower(-RobotParameters.INTAKE_WHEEL_SPEED);
     }
 
     public void haltWheels()
     {
-        leftWheel.setPower(0);
-        rightWheel.setPower(0);
+        wheelL.setPower(0);
+        wheelR.setPower(0);
     }
 }

@@ -16,13 +16,7 @@ public class DriveOnly extends OpMode
     public void init()
     {
         hw = new Hardware(hardwareMap);
-        drive = new MecanumDrive(
-                hw.motorFR,
-                hw.motorFL,
-                hw.motorBR,
-                hw.motorBL,
-                gamepad1,
-                telemetry);
+        drive = new MecanumDrive(hw, telemetry);
 
         telemetry.addLine("Init finished.");
         telemetry.update();
@@ -31,8 +25,7 @@ public class DriveOnly extends OpMode
     @Override
     public void loop()
     {
-        drive.takeControllerInput();
+        drive.takeControllerInput(gamepad1);
         drive.updateMotorPowers();
-        drive.powerMotors();
     }
 }

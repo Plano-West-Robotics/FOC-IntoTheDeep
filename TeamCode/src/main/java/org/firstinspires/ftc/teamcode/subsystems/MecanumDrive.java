@@ -4,29 +4,23 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.RobotParameters;
 
 public class MecanumDrive
 {
     public final DcMotor motorFR, motorFL, motorBR, motorBL;
-    public final Gamepad gamepad;
     public final Telemetry telemetry;
     public double drive, strafe, turn, speed;
     public double powerFR, powerFL, powerBR, powerBL;
     public boolean last_left_bumper, last_right_bumper;
 
-    public MecanumDrive(DcMotor motorFR,
-                        DcMotor motorFL,
-                        DcMotor motorBR,
-                        DcMotor motorBL,
-                        Gamepad gamepad,
-                        Telemetry telemetry)
+    public MecanumDrive(Hardware hw, Telemetry telemetry)
     {
-        this.motorFR = motorFR;
-        this.motorFL = motorFL;
-        this.motorBR = motorBR;
-        this.motorBL = motorBL;
-        this.gamepad = gamepad;
+        this.motorFR = hw.motorFR;
+        this.motorFL = hw.motorFL;
+        this.motorBR = hw.motorBR;
+        this.motorBL = hw.motorBL;
         this.telemetry = telemetry;
 
         drive = strafe = turn = 0;
@@ -38,7 +32,7 @@ public class MecanumDrive
      * Reads input from the gamepad to get drive variables;
      * increments/decrements speed multiplier value upon valid input.
      */
-    public void takeControllerInput()
+    public void takeControllerInput(Gamepad gamepad)
     {
         drive = -1 * gamepad.left_stick_y;
         strafe = gamepad.left_stick_x;
@@ -64,6 +58,11 @@ public class MecanumDrive
      */
     public void updateMotorPowers()
     {
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         // Motor power variables
         powerFR = drive - strafe;
         powerFL = drive + strafe;
@@ -81,17 +80,6 @@ public class MecanumDrive
         powerFL *= speed;
         powerBR *= speed;
         powerBL *= speed;
-    }
-
-    /**
-     * Applies power to each motor.
-     */
-    public void powerMotors()
-    {
-        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Sets the power
         motorFR.setPower(powerFR);

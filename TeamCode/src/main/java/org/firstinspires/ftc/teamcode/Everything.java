@@ -170,8 +170,8 @@ public class Everything extends OpMode
         // OuttakeArm
         {
             oArm = hardwareMap.get(Servo.class, "oArm");
-            oArmExtendPosition = 0.04;
-            oArmRetractPosition = 0.85;
+            oArmExtendPosition = 0.07;
+            oArmRetractPosition = 0.865;
             oArmIsExtended = false;
         }
 

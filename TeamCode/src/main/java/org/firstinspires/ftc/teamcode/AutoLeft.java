@@ -165,7 +165,7 @@ public class AutoLeft extends LinearOpMode {
          */
 
         moveForward();
-        strafeRight();
+        strafeLeft();
         retractIntakeArm();
         closeOuttakeClaw();
 
@@ -188,12 +188,12 @@ public class AutoLeft extends LinearOpMode {
         bl.setPower(0);
     }
 
-    public void strafeRight() {
+    public void strafeLeft() {
         fr.setPower(0.5);
         fl.setPower(-0.5);
         br.setPower(-0.5);
         bl.setPower(0.5);
-        sleep(1100);
+        sleep(1200);
         fr.setPower(0);
         fl.setPower(0);
         br.setPower(0);

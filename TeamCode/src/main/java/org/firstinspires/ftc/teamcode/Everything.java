@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Everything")
 public class Everything extends OpMode
@@ -13,6 +14,8 @@ public class Everything extends OpMode
     public Servo iArmL, iArmR;
     public double iArmLExtendPosition, iArmRExtendPosition, iArmLRetractPosition, iArmRRetractPosition;
     public boolean iArmIsExtended;
+    public ElapsedTime iArmTimerRetract;
+    public boolean autoRetractTriggered;
 
     public DcMotor iSlideL, iSlideR;
     public int I_SLIDE_MAX_POSITION;
@@ -101,6 +104,8 @@ public class Everything extends OpMode
             iArmLRetractPosition = 0.96;
             iArmRRetractPosition = 0.04;
             iArmIsExtended = false;
+            iArmTimerRetract = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+            autoRetractTriggered = false;
         }
 
         // IntakeSlides
@@ -256,10 +261,14 @@ public class Everything extends OpMode
                 }
                 iArmIsExtended = !iArmIsExtended;
             }
-            else if (g2_l_stick_y * -1 < -0.1 && (iSlideL.getCurrentPosition() < 300 && iSlideR.getCurrentPosition() < 300))
+
+            // Auto retract for moving backwards
+            else if (g2_l_stick_y * -1 < -0.1 && (iSlideL.getCurrentPosition() < 400 || iSlideR.getCurrentPosition() < 400))
             {
                 if (iArmIsExtended)
                 {
+                    iArmTimerRetract.reset();
+                    autoRetractTriggered = true;
                     iArmIsExtended = false;
                     iArmL.setPosition(iArmLRetractPosition);
                     iArmR.setPosition(iArmRRetractPosition);
@@ -269,15 +278,35 @@ public class Everything extends OpMode
                         oClawIsOpen = true;
                     }
                 }
-            } else if (g2_l_stick_y * -1 > 0.1 && (iSlideL.getCurrentPosition() > 300 && iSlideR.getCurrentPosition() > 300))
+
+                // Temporary to see whether the timer is working as intended
+                telemetry.addData("Elapsed time: ", iArmTimerRetract.milliseconds());
+                telemetry.update();
+            }
+
+            // Auto extend for moving forwards
+            else if (g2_l_stick_y * -1 > 0.1 && (iSlideL.getCurrentPosition() > 300 && iSlideR.getCurrentPosition() > 300))
             {
-                if (!iArmIsExtended)
+                if (!iArmIsExtended) // If retracted
                 {
                     iArmIsExtended = true;
                     iArmL.setPosition(iArmLExtendPosition);
                     iArmR.setPosition(iArmRExtendPosition);
+                    iWheelsAreIntaking = true;
+                    iWheelL.setPower(-1);
+                    iWheelR.setPower(-1);
                 }
             }
+
+            // For auto ejecting the sample into the storage
+            if (autoRetractTriggered && (iArmTimerRetract.milliseconds() >= 1300))
+            {
+                autoRetractTriggered = !autoRetractTriggered;
+                iWheelsAreIntaking = false;
+                iWheelL.setPower(1);
+                iWheelR.setPower(1);
+            }
+
         }
 
         // IntakeSlides
@@ -312,14 +341,14 @@ public class Everything extends OpMode
                 {
                     iWheelL.setPower(-1);
                     iWheelR.setPower(-1);
-                    iWheelsAreIntaking = !iWheelsAreIntaking;
                 }
                 else
                 {
                     iWheelL.setPower(1);
                     iWheelR.setPower(1);
-                    iWheelsAreIntaking = !iWheelsAreIntaking;
                 }
+
+                iWheelsAreIntaking = !iWheelsAreIntaking;
             }
 
             if (ControllerUtils.justPressed(g2_r_bumper, g2_r_bumper_last))

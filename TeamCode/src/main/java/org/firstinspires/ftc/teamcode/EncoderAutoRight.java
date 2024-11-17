@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 public class EncoderAutoRight {
     /*
-        Theoretical auto plan:
+        Theoretical auto plan (use IMU for maintaining proper orientation):
+
+        Score two specimens (one preloaded), one sample, and park
+
 
         Load with specimen
 

@@ -16,6 +16,8 @@ public class Everything extends OpMode
     public boolean iArmIsExtended;
     public ElapsedTime iArmTimerRetract;
     public boolean autoRetractTriggered;
+    public boolean autoExpulsionTriggered;
+    public boolean autoOArmExtendTriggered;
 
     public DcMotor iSlideL, iSlideR;
     public int I_SLIDE_MAX_POSITION;
@@ -106,6 +108,8 @@ public class Everything extends OpMode
             iArmIsExtended = false;
             iArmTimerRetract = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
             autoRetractTriggered = false;
+            autoExpulsionTriggered = false;
+            autoOArmExtendTriggered = false;
         }
 
         // IntakeSlides
@@ -262,10 +266,14 @@ public class Everything extends OpMode
                 iArmIsExtended = !iArmIsExtended;
             }
 
+            // IDEA: Once it gets to the auto retract point, completely let the automation
+            // take over and make it so the drivers only have to control the vertical linear slide and movement
+            // even the vertical linear slide can be set to move to a certain height (based on different buttons for the high bucket and high bar?)
+
             // Auto retract for moving backwards
             else if (g2_l_stick_y * -1 < -0.1 && (iSlideL.getCurrentPosition() < 400 || iSlideR.getCurrentPosition() < 400))
             {
-                if (iArmIsExtended)
+                if (iArmIsExtended && !autoOArmExtendTriggered)
                 {
                     iArmTimerRetract.reset();
                     autoRetractTriggered = true;
@@ -279,9 +287,6 @@ public class Everything extends OpMode
                     }
                 }
 
-                // Temporary to see whether the timer is working as intended
-                telemetry.addData("Elapsed time: ", iArmTimerRetract.milliseconds());
-                telemetry.update();
             }
 
             // Auto extend for moving forwards
@@ -298,13 +303,53 @@ public class Everything extends OpMode
                 }
             }
 
-            // For auto ejecting the sample into the storage
+            // The following code auto ejects the sample into the storage,
+            // closes the claw, extends the intake arm, and extends the outtake arm
+
+            // Auto eject the sample into the storage after 1.3 seconds
             if (autoRetractTriggered && (iArmTimerRetract.milliseconds() >= 1300))
             {
+                autoExpulsionTriggered = true;
                 autoRetractTriggered = !autoRetractTriggered;
                 iWheelsAreIntaking = false;
                 iWheelL.setPower(1);
                 iWheelR.setPower(1);
+
+            }
+
+            // Close the claw after ejecting and flip intake arm
+            else if (autoExpulsionTriggered && (iArmTimerRetract.milliseconds() >= 2100))
+            {
+                autoExpulsionTriggered = !autoExpulsionTriggered;
+                autoOArmExtendTriggered = true;
+
+                // If retracted
+                if (!iArmIsExtended) {
+                    iArmIsExtended = true;
+                    iArmL.setPosition(iArmLExtendPosition);
+                    iArmR.setPosition(iArmRExtendPosition);
+                }
+
+                if (oClawIsOpen)
+                {
+                    oClawIsOpen = false;
+                    oClaw.setPosition(oClawClosePosition);
+                }
+
+            }
+
+            // Extend outtake arm
+            else if (autoOArmExtendTriggered && (iArmTimerRetract.milliseconds() >= 3000))
+            {
+                autoOArmExtendTriggered = !autoOArmExtendTriggered;
+
+                // If the outtake arm is retracted, extend it
+                if (!oArmIsExtended)
+                {
+                    oArmIsExtended = true;
+                    oArm.setPosition(oArmExtendPosition);
+                }
+
             }
 
         }

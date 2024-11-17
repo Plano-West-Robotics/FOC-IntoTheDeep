@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 public class EncoderAutoRight {
     /*
         Theoretical auto plan (use IMU for maintaining proper orientation):
+        Additional idea: use april tags to make sure the robot is positioned correctly because
+        drive motor encoders can slip
 
         Score two specimens (one preloaded), one sample, and park
 

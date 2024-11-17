@@ -34,10 +34,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="AutoLeft")
-public class AutoLeft extends LinearOpMode {
+@Autonomous(name="ParkAutoRight")
+public class ParkAutoRight extends LinearOpMode {
 
     public Servo iArmL, iArmR;
     public double iArmLExtendPosition, iArmRExtendPosition, iArmLRetractPosition, iArmRRetractPosition;
@@ -93,17 +92,19 @@ public class AutoLeft extends LinearOpMode {
         oClawClosePosition = 0.16;
         oClawOpenPosition = 0.035;
 
-        // Wait for the game to start (driver presses START)
+
+        // When driver presses START
         waitForStart();
 
-        moveForward();
-        strafeLeft();
 
+        moveForward();
+        strafeRight();
+
+        // To prevent the robot from moving in between Auto and TeleOp
         retractIntakeArm();
         closeOuttakeClaw();
 
     }
-
 
 
     public void moveForward() {
@@ -118,11 +119,11 @@ public class AutoLeft extends LinearOpMode {
         bl.setPower(0);
     }
 
-    public void strafeLeft() {
-        fr.setPower(0.5);
-        fl.setPower(-0.5);
-        br.setPower(-0.5);
-        bl.setPower(0.5);
+    public void strafeRight() {
+        fr.setPower(-0.5);
+        fl.setPower(0.5);
+        br.setPower(0.5);
+        bl.setPower(-0.5);
         sleep(1200);
         fr.setPower(0);
         fl.setPower(0);

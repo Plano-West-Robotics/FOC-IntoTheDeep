@@ -37,6 +37,7 @@ public class Everything extends OpMode
     public DcMotor oSlideL, oSlideR;
     public int O_SLIDE_MAX_POSITION;
     public double O_SLIDE_SPEED_MULTIPLIER;
+    public double O_SLIDE_GRAVITY_FEEDFORWARD;
 
     public boolean g1_a, g1_x, g1_b, g1_y, g1_l_bumper, g1_r_bumper;
     public boolean g2_a, g2_x, g2_b, g2_y, g2_l_bumper, g2_r_bumper;
@@ -170,16 +171,16 @@ public class Everything extends OpMode
         // OuttakeArm
         {
             oArm = hardwareMap.get(Servo.class, "oArm");
-            oArmExtendPosition = 0.07;
-            oArmRetractPosition = 0.865;
+            oArmExtendPosition = 0.06;
+            oArmRetractPosition = 0.85;
             oArmIsExtended = false;
         }
 
         // OuttakeClaw
         {
             oClaw = hardwareMap.get(Servo.class, "oClaw");
-            oClawClosePosition = 1;
-            oClawOpenPosition = 0.93;
+            oClawClosePosition = 0.16;
+            oClawOpenPosition = 0.035;
             oClawIsOpen = false;
         }
 
@@ -202,8 +203,9 @@ public class Everything extends OpMode
             oSlideL.setPower(0);
             oSlideR.setPower(0);
 
-            O_SLIDE_MAX_POSITION = 2700;
+            O_SLIDE_MAX_POSITION = 4000;
             O_SLIDE_SPEED_MULTIPLIER = 0.5;
+            O_SLIDE_GRAVITY_FEEDFORWARD = 0.001;
         }
     }
 
@@ -383,26 +385,21 @@ public class Everything extends OpMode
             // When joystick says retract but slides are fully retracted.
             if (g2_r_stick_y * -1 < 0 && (oSlideL.getCurrentPosition() <= 0 || oSlideR.getCurrentPosition() <= 0))
             {
-                oSlideL.setPower(0);
-                oSlideR.setPower(0);
+                oSlideL.setPower(O_SLIDE_GRAVITY_FEEDFORWARD);
+                oSlideR.setPower(O_SLIDE_GRAVITY_FEEDFORWARD);
             }
             // When joystick says extend but slides are fully extended.
             else if (g2_r_stick_y * -1 > 0 && (oSlideL.getCurrentPosition() >= O_SLIDE_MAX_POSITION || oSlideR.getCurrentPosition() >= O_SLIDE_MAX_POSITION))
             {
-                oSlideL.setPower(0);
-                oSlideR.setPower(0);
+                oSlideL.setPower(O_SLIDE_GRAVITY_FEEDFORWARD);
+                oSlideR.setPower(O_SLIDE_GRAVITY_FEEDFORWARD);
             }
             else
             {
-                oSlideL.setPower(g2_r_stick_y * -1 * O_SLIDE_SPEED_MULTIPLIER);
-                oSlideR.setPower(g2_r_stick_y * -1 * O_SLIDE_SPEED_MULTIPLIER);
+                oSlideL.setPower(g2_r_stick_y * -1 * O_SLIDE_SPEED_MULTIPLIER + O_SLIDE_GRAVITY_FEEDFORWARD);
+                oSlideR.setPower(g2_r_stick_y * -1 * O_SLIDE_SPEED_MULTIPLIER + O_SLIDE_GRAVITY_FEEDFORWARD);
             }
         }
-
-        telemetry.addData("Gamepad 2 Right Stick Y", g2_r_stick_y);
-        telemetry.addData("Left Outtake Slide Motor Position", oSlideL.getCurrentPosition());
-        telemetry.addData("Right Outtake Slide Motor Position", oSlideR.getCurrentPosition());
-        telemetry.update();
 
         assignLastInputValues();
     }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeArm;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlides;
@@ -15,11 +16,22 @@ import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 public class EverythingSubsystems extends OpMode
 {
     public IntakeArm iArm;
+
+    public ElapsedTime iArmRetractTimer;
+
     public IntakeSlides iSlides;
+    public boolean iSlidesAutoRetractTriggered;
+
     public IntakeWheels iWheels;
+    public boolean iWheelsAutoEjectTriggered;
+
     public OuttakeArm oArm;
+    public boolean autoOArmExtendTriggered;
+
     public OuttakeClaw oClaw;
+
     public OuttakeSlides oSlides;
+
     public TeleDrive drive;
 
     public boolean g1_a, g1_x, g1_b, g1_y, g1_l_bumper, g1_r_bumper;
@@ -90,22 +102,25 @@ public class EverythingSubsystems extends OpMode
         // IntakeArm
         {
             iArm.retract();
+            iArmRetractTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         }
 
         // IntakeSlides
         {
-
+            iSlidesAutoRetractTriggered = false;
         }
 
         // IntakeWheels
         {
             iWheels.areIntaking = false;
             iWheels.areStopped = false;
+            iWheelsAutoEjectTriggered = false;
         }
 
         // OuttakeArm
         {
             oArm.retract();
+            autoOArmExtendTriggered = false;
         }
 
         // OuttakeClaw
@@ -136,15 +151,42 @@ public class EverythingSubsystems extends OpMode
                 if (iArm.isExtended) iArm.retract();
                 else iArm.extend();
             }
-            else if (g2_l_stick_y * -1 < -0.1 && iSlides.motorL.getCurrentPosition() < 300 && iSlides.motorR.getCurrentPosition() < 300)
+            else if (g2_l_stick_y * -1 < -0.1 && iSlides.motorL.getCurrentPosition() < 400 && iSlides.motorR.getCurrentPosition() < 400)
             {
-                if (iArm.isExtended) iArm.retract();
-                if (!oArm.isExtended) oClaw.open();
-
+                if (iArm.isExtended && !autoOArmExtendTriggered)
+                {
+                    iArmRetractTimer.reset();
+                    iSlidesAutoRetractTriggered = true;
+                    iArm.retract();
+                    if (!oArm.isExtended) oClaw.open();
+                }
             }
             else if (g2_l_stick_y * -1 < -0.1 && iSlides.motorL.getCurrentPosition() > 300 && iSlides.motorR.getCurrentPosition() > 300)
             {
+                if (!iArm.isExtended)
+                {
+                    iArm.extend();
+                    iWheels.intake();
+                }
+            }
+
+            if (iSlidesAutoRetractTriggered && iArmRetractTimer.milliseconds() >= 1300)
+            {
+                iWheelsAutoEjectTriggered = true;
+                iSlidesAutoRetractTriggered = !iSlidesAutoRetractTriggered;
+                iWheels.eject();
+            }
+            else if (iWheelsAutoEjectTriggered && iArmRetractTimer.milliseconds() >= 2100)
+            {
+                iWheelsAutoEjectTriggered = !iWheelsAutoEjectTriggered;
+                autoOArmExtendTriggered = true;
                 if (!iArm.isExtended) iArm.extend();
+                if (oClaw.isOpen) oClaw.close();
+            }
+            else if (autoOArmExtendTriggered && iArmRetractTimer.milliseconds() >= 3000)
+            {
+                autoOArmExtendTriggered = !autoOArmExtendTriggered;
+                if (!oArm.isExtended) oArm.extend();
             }
         }
 

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.IMUTest;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.bosch.BHI260IMU;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -28,7 +29,7 @@ public class AngleTest extends LinearOpMode {
     ElapsedTime timer = new ElapsedTime();
     public double lastError = 0;
 
-    public BHI260IMU imu;
+    public IMU imu;
     public IMU.Parameters params;
     Orientation myRobotOrientationDeg;
     Orientation myRobotOrientationRad;
@@ -46,7 +47,7 @@ public class AngleTest extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         // Need to add to the config atm
-        imu = hardwareMap.get(BHI260IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu");
 
         // Heading/yaw is for the z axis (upwards) (use thumb trick w/ right hand)
         // We just care about the yaw

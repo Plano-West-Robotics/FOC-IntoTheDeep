@@ -298,8 +298,8 @@ public class Everything extends OpMode
                     iArmL.setPosition(iArmLExtendPosition);
                     iArmR.setPosition(iArmRExtendPosition);
                     iWheelsAreIntaking = true;
-                    iWheelL.setPower(-1);
-                    iWheelR.setPower(-1);
+                    iWheelL.setPower(1);
+                    iWheelR.setPower(1);
                 }
             }
 
@@ -312,8 +312,8 @@ public class Everything extends OpMode
                 autoExpulsionTriggered = true;
                 autoRetractTriggered = !autoRetractTriggered;
                 iWheelsAreIntaking = false;
-                iWheelL.setPower(1);
-                iWheelR.setPower(1);
+                iWheelL.setPower(-1);
+                iWheelR.setPower(-1);
 
             }
 

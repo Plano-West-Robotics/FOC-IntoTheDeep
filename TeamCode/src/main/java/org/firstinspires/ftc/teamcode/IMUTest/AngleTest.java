@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class AngleTest extends LinearOpMode {
     double integralSum = 0;
 
-    // Use dashboard to tune
+    // Use dashboard to tune the constants
     double Kp = PIDConstants.Kp;
     double Ki = PIDConstants.Ki;
     double Kd = PIDConstants.Kd;

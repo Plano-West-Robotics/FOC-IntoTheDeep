@@ -70,10 +70,6 @@ public class ParkLeft extends LinearOpMode
         strafeRight();
         retractIntakeArm();
         closeOuttakeClaw();
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);  // pause to display final telemetry message.
     }
 
     public void moveForward()
@@ -95,7 +91,7 @@ public class ParkLeft extends LinearOpMode
         fl.setPower(-0.5);
         br.setPower(-0.5);
         bl.setPower(0.5);
-        sleep(1100);
+        sleep(1200);
         fr.setPower(0);
         fl.setPower(0);
         br.setPower(0);

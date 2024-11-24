@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="AutoLeft")
+@Autonomous(name="ParkLeft")
 public class ParkLeft extends LinearOpMode
 {
     public Servo iArmL, iArmR;

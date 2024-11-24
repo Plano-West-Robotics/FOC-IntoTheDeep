@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.teleops;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,29 +15,38 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name="Angle Test")
+@TeleOp(name = "Angle Test")
 public class AngleTest extends LinearOpMode
 {
-    public DcMotor fr, fl, br, bl;
-    public BHI260IMU imu;
-    public IMU.Parameters params;
-    public Orientation myRobotOrientationDeg;
-    public Orientation myRobotOrientationRad;
-    public float yawDeg;
-    public float yawRad;
+    double integralSum = 0;
 
-    public ElapsedTime timer = new ElapsedTime();
-    public double Kp;
-    public double Ki;
-    public double Kd;
-    public double integralSum = 0;
+    // Use dashboard to tune the constants
+    double Kp = PIDConstants.Kp;
+    double Ki = PIDConstants.Ki;
+    double Kd = PIDConstants.Kd;
+
+    ElapsedTime timer = new ElapsedTime();
     public double lastError = 0;
+
+    public IMU imu;
+    public IMU.Parameters params;
+    Orientation myRobotOrientationDeg;
+    Orientation myRobotOrientationRad;
+    float yawDeg;
+    float yawRad;
+
+    public DcMotor fr, fl, br, bl;
 
     @Override
     public void runOpMode() throws InterruptedException
     {
+
+        initMotors();
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         // Need to add to the config atm
-        imu = hardwareMap.get(BHI260IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu");
 
         // Heading/yaw is for the z axis (upwards) (use thumb trick w/ right hand)
         // We just care about the yaw
@@ -48,19 +56,15 @@ public class AngleTest extends LinearOpMode
                         RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
+
         imu.initialize(params);
 
-        Kp = PIDConstants.Kp;
-        Ki = PIDConstants.Ki;
-        Kd = PIDConstants.Kd;
         double referenceAngle = Math.toRadians(90);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        initMotors();
 
         waitForStart();
 
-        while (opModeIsActive())
-        {
+        while(opModeIsActive()){
+
             telemetry.addData("Target IMU Angle", Math.toDegrees(referenceAngle));
 
             myRobotOrientationDeg = imu.getRobotOrientation(
@@ -81,8 +85,9 @@ public class AngleTest extends LinearOpMode
 
             telemetry.addData("Current IMU Angle", yawDeg);
 
-            double powerOutput = PIDControl(referenceAngle, yawRad);
-            power(powerOutput);
+            double powerMotors = PIDControl(referenceAngle, yawRad);
+
+            power(powerMotors, fl, fr, bl, br);
 
             telemetry.update();
         }
@@ -102,21 +107,13 @@ public class AngleTest extends LinearOpMode
 
     public double angleWrap(double radians)
     {
-        while (radians > Math.PI) {
+        while(radians > Math.PI){
             radians -= 2 * Math.PI;
         }
-        while (radians < -Math.PI) {
+        while(radians < -Math.PI){
             radians += 2 * Math.PI;
         }
         return radians;
-    }
-
-    public void power(double output)
-    {
-        fl.setPower(-output);
-        bl.setPower(-output);
-        fr.setPower(output);
-        br.setPower(output);
     }
 
     public void initMotors()
@@ -149,4 +146,14 @@ public class AngleTest extends LinearOpMode
         br.setPower(0);
         bl.setPower(0);
     }
+
+    public void power(double output, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight)
+    {
+        frontLeft.setPower(-output);
+        backLeft.setPower(-output);
+        frontRight.setPower(output);
+        backRight.setPower(output);
+    }
+
+
 }

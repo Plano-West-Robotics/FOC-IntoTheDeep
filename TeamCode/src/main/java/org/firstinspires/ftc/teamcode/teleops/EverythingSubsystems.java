@@ -231,6 +231,7 @@ public class EverythingSubsystems extends OpMode
 
         // TeleDrive
         {
+            if (justPressed(g1_a, g1_a_last)) drive.toggleSlowMode();
             drive.updateMotorPowers(-1 * g1_l_stick_y, g1_l_stick_x, g1_r_stick_x);
         }
 

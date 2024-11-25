@@ -8,6 +8,7 @@ public class TeleDrive
 {
     public DcMotor fr, fl, br, bl;
     public double frPower, flPower, brPower, blPower;
+    public boolean slowModeActivated;
     public double SPEED_MULTIPLIER, TURN_SPEED_MULTIPLIER;
 
     public TeleDrive(HardwareMap hardwareMap)
@@ -40,6 +41,7 @@ public class TeleDrive
         br.setPower(0);
         bl.setPower(0);
 
+        slowModeActivated = false;
         SPEED_MULTIPLIER = 0.5;
         TURN_SPEED_MULTIPLIER = 0.7;
     }
@@ -65,5 +67,20 @@ public class TeleDrive
         fl.setPower(flPower);
         br.setPower(brPower);
         bl.setPower(blPower);
+    }
+
+    public void toggleSlowMode()
+    {
+        if (slowModeActivated)
+        {
+            SPEED_MULTIPLIER = 0.5;
+            TURN_SPEED_MULTIPLIER = 0.7;
+        }
+        else
+        {
+            SPEED_MULTIPLIER = 0.2;
+            TURN_SPEED_MULTIPLIER = 0.5;
+        }
+        slowModeActivated = !slowModeActivated;
     }
 }

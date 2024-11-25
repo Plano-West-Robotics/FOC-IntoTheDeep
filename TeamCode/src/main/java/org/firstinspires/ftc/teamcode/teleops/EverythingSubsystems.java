@@ -284,4 +284,9 @@ public class EverythingSubsystems extends OpMode
     {
         return currentInput && !lastInput;
     }
+
+    public boolean justReleased(boolean currentInput, boolean lastInput)
+    {
+        return !currentInput && lastInput;
+    }
 }

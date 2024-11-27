@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -60,6 +62,7 @@ public class EverythingSubsystems extends OpMode
         drive = new TeleDrive(hardwareMap);
         boolLogic = new BooleanLogic();
         autoOuttakeSequenceTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override

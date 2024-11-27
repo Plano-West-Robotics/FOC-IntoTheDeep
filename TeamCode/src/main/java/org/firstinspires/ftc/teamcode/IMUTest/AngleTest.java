@@ -37,11 +37,18 @@ public class AngleTest extends LinearOpMode
 
     public DcMotor fr, fl, br, bl;
 
+    public boolean g1_y;
+    public boolean lastg1_y;
+
+    public static final double DEGREE_ADD = 90.0;
+
     @Override
     public void runOpMode() throws InterruptedException
     {
 
         initMotors();
+
+        lastg1_y = gamepad1.y;
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -64,6 +71,10 @@ public class AngleTest extends LinearOpMode
         waitForStart();
 
         while(opModeIsActive()){
+
+            g1_y = gamepad1.y;
+
+            referenceAngle = checkRefAngle(referenceAngle, g1_y, lastg1_y);
 
             telemetry.addData("Target IMU Angle", Math.toDegrees(referenceAngle));
 
@@ -88,6 +99,8 @@ public class AngleTest extends LinearOpMode
             double powerMotors = PIDControl(referenceAngle, yawRad);
 
             power(powerMotors, fl, fr, bl, br);
+
+            lastg1_y = g1_y;
 
             telemetry.update();
         }
@@ -155,5 +168,18 @@ public class AngleTest extends LinearOpMode
         backRight.setPower(output);
     }
 
+    public double checkRefAngle(double refAngle, boolean button, boolean buttonLast)
+    {
+        if (justPressed(button, buttonLast)) {
+            refAngle = Math.toRadians(Math.toDegrees(refAngle) + DEGREE_ADD);
+        }
+
+        return refAngle;
+    }
+
+    public boolean justPressed(boolean currentInput, boolean lastInput)
+    {
+        return currentInput && !lastInput;
+    }
 
 }

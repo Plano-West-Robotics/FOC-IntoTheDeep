@@ -13,7 +13,7 @@ public class OuttakeArm
     {
         servoArm = hardwareMap.get(Servo.class, "oArm");
         servoExtendPosition = 0.06;
-        servoRetractPosition = 0.85;
+        servoRetractPosition = 0.847;
     }
 
     public void extend()

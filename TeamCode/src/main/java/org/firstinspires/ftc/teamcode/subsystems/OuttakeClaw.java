@@ -12,8 +12,8 @@ public class OuttakeClaw
     public OuttakeClaw(HardwareMap hardwareMap)
     {
         servoClaw = hardwareMap.get(Servo.class, "oClaw");
-        servoClosePosition = 0.16;
-        servoOpenPosition = 0.035;
+        servoClosePosition = 0.175;
+        servoOpenPosition = 0.04;
     }
 
     public void close()

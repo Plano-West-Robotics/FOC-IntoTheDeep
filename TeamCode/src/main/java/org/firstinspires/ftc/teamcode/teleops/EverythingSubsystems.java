@@ -122,7 +122,7 @@ public class EverythingSubsystems extends OpMode
                     autoOuttakeSequenceTimer.reset();
                     iArmAutoRetractTriggered = true;
                     iArm.retractIfPossible();
-                    oClaw.open();
+                    if (!oArm.isExtended) oClaw.open();
             }
 
             else if (boolLogic.triggerAutoExtend(g2_l_stick_y, iSlides.motorL))

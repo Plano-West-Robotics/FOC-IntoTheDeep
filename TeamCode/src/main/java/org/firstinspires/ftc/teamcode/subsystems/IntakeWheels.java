@@ -34,6 +34,18 @@ public class IntakeWheels
     {
         wheelL.setPower(0);
         wheelR.setPower(0);
-        areStopped = true;
+        booleanSwapTrick();
     }
+
+    public void switchStates()
+    {
+        if (areIntaking) eject();
+        else intake();
+    }
+
+    public void booleanSwapTrick()
+    {
+        areIntaking = !areIntaking;
+    }
+
 }

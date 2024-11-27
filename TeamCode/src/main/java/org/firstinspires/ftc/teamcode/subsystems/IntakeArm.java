@@ -35,4 +35,22 @@ public class IntakeArm
         servoR.setPosition(servoRRetractPosition);
         isExtended = false;
     }
+
+    public void switchPositions()
+    {
+        if (isExtended) retract();
+        else extend();
+    }
+
+    public void extendIfPossible()
+    {
+        if (!isExtended) extend();
+    }
+
+
+    public void retractIfPossible()
+    {
+        if (isExtended) retract();
+    }
+
 }

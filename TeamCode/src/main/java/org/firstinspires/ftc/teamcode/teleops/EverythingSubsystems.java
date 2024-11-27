@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.OuttakeArm;
 import org.firstinspires.ftc.teamcode.subsystems.OuttakeClaw;
 import org.firstinspires.ftc.teamcode.subsystems.OuttakeSlides;
 import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
+import org.firstinspires.ftc.teamcode.subsystems.BooleanLogic;
 
 @TeleOp(name="EverythingSubsystems")
 public class EverythingSubsystems extends OpMode
@@ -32,6 +33,8 @@ public class EverythingSubsystems extends OpMode
 
     public TeleDrive drive;
 
+    public BooleanLogic boolLogic;
+
     public ElapsedTime autoOuttakeSequenceTimer;
 
     public boolean g1_a, g1_x, g1_b, g1_y, g1_l_bumper, g1_r_bumper;
@@ -41,6 +44,9 @@ public class EverythingSubsystems extends OpMode
 
     public double g1_l_stick_x, g1_l_stick_y, g1_r_stick_x, g1_r_stick_y;
     public double g2_l_stick_x, g2_l_stick_y, g2_r_stick_x, g2_r_stick_y;
+
+    public double iSlidePower;
+    public double oSlidePower;
 
     @Override
     public void init()
@@ -52,6 +58,7 @@ public class EverythingSubsystems extends OpMode
         oClaw = new OuttakeClaw(hardwareMap);
         oSlides = new OuttakeSlides(hardwareMap);
         drive = new TeleDrive(hardwareMap);
+        boolLogic = new BooleanLogic();
         autoOuttakeSequenceTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
@@ -66,7 +73,7 @@ public class EverythingSubsystems extends OpMode
 
         // IntakeSlides
         {
-
+            iSlidePower = 0;
         }
 
         // IntakeWheels
@@ -89,7 +96,7 @@ public class EverythingSubsystems extends OpMode
 
         // OuttakeSlides
         {
-
+            oSlidePower = 0;
         }
 
         // TeleDrive
@@ -107,86 +114,77 @@ public class EverythingSubsystems extends OpMode
         {
             if (justPressed(g2_b, g2_b_last))
             {
-                if (iArm.isExtended) iArm.retract();
-                else iArm.extend();
-            }
-            else if (g2_l_stick_y * -1 < -0.1 && iSlides.motorL.getCurrentPosition() < 400 && iSlides.motorR.getCurrentPosition() < 400)
-            {
-                if (iArm.isExtended && !oArmAutoExtendTriggered)
-                {
-                    autoOuttakeSequenceTimer.reset();
-                    iArmAutoRetractTriggered = true;
-                    iArm.retract();
-                    if (!oArm.isExtended) oClaw.open();
-                }
-            }
-            else if (g2_l_stick_y * -1 < -0.1 && iSlides.motorL.getCurrentPosition() > 300 && iSlides.motorR.getCurrentPosition() > 300)
-            {
-                if (!iArm.isExtended)
-                {
-                    iArm.extend();
-                    iWheels.intake();
-                }
+                iArm.switchPositions(); // makes it so the intake arm extends if it's retracted and retracts if it's extended
             }
 
-            if (iArmAutoRetractTriggered && autoOuttakeSequenceTimer.milliseconds() >= 1300)
+            else if (boolLogic.triggerAutoRetract(g2_l_stick_y, iSlides.motorL) && iArm.isExtended && !oArmAutoExtendTriggered) // the last boolean here (!oArmAutoExtendTriggered) checks for whether the claw has extended yet in the logic sequence
             {
-                iArmAutoRetractTriggered = !iArmAutoRetractTriggered;
-                iWheelsAutoEjectTriggered = true;
+                    autoOuttakeSequenceTimer.reset();
+                    iArmAutoRetractTriggered = true;
+                    iArm.retractIfPossible();
+                    oClaw.open();
+            }
+
+            else if (boolLogic.triggerAutoExtend(g2_l_stick_y, iSlides.motorL))
+            {
+                iArm.extendIfPossible();
+                iWheels.intake();
+            }
+
+            // If the auto retract was triggered and it has been 1.3 seconds, set the wheels to eject mode
+            if (boolLogic.timerStageMS(1300, iArmAutoRetractTriggered, autoOuttakeSequenceTimer))
+            {
+                boolLogic.switchAndSetNext(iArmAutoRetractTriggered, iWheelsAutoEjectTriggered);
                 iWheels.eject();
             }
-            else if (iWheelsAutoEjectTriggered && autoOuttakeSequenceTimer.milliseconds() >= 2100)
+
+            // If it has been 2.1 seconds since the auto retract was triggered and the block was ejected from the intake arm,
+            // extend the intake so it doesn't get in the way and close the claw to hold the block,
+            else if (boolLogic.timerStageMS(2100, iWheelsAutoEjectTriggered, autoOuttakeSequenceTimer))
             {
-                iWheelsAutoEjectTriggered = !iWheelsAutoEjectTriggered;
-                oArmAutoExtendTriggered = true;
-                if (!iArm.isExtended) iArm.extend();
-                if (oClaw.isOpen) oClaw.close();
+                boolLogic.switchAndSetNext(iWheelsAutoEjectTriggered, oArmAutoExtendTriggered);
+                iArm.extendIfPossible();
+                oClaw.closeIfPossible();
             }
-            else if (oArmAutoExtendTriggered && autoOuttakeSequenceTimer.milliseconds() >= 3000)
+
+            // If it has been 3 seconds since the auto retract was triggered and the claw has been closed,
+            // extend the arm
+            else if (boolLogic.timerStageMS(3000, oArmAutoExtendTriggered, autoOuttakeSequenceTimer))
             {
-                oArmAutoExtendTriggered = !oArmAutoExtendTriggered;
-                if (!oArm.isExtended) oArm.extend();
+                oArmAutoExtendTriggered = false;
+                oArm.extendIfPossible();
             }
+
         }
 
         // IntakeSlides
         {
-            // When joystick says retract but slides are fully retracted.
-            if (g2_l_stick_y * -1 < 0)
+            // When joystick is negative but either of the slides is fully retracted.
+            if (!boolLogic.stickIsPositive(g2_l_stick_y) && boolLogic.motorMinPosReached(iSlides.motorL, iSlides.motorR))
             {
-                if (iSlides.motorL.getCurrentPosition() <= 0 || iSlides.motorL.getCurrentPosition() <= 0)
-                {
-                    iSlides.setPower(0);
-                }
+                iSlidePower = 0;
             }
+
             // When joystick says extend but slides are fully extended.
-            else if (g2_l_stick_y * -1 > 0)
+            else if (boolLogic.stickIsPositive(g2_l_stick_y) && boolLogic.motorMaxPosReached(iSlides.motorL, iSlides.motorR, iSlides.MAX_POSITION))
             {
-                if (iSlides.motorL.getCurrentPosition() >= iSlides.MAX_POSITION || iSlides.motorR.getCurrentPosition() >= iSlides.MAX_POSITION)
-                {
-                    iSlides.setPower(0);
-                }
+                iSlidePower = 0;
             }
-            else iSlides.setPower(g2_l_stick_y * -1);
+            else iSlidePower = g2_l_stick_y * -1;
+
+            iSlides.setPower(iSlidePower);
         }
 
         // IntakeWheels
         {
             if (justPressed(g2_r_bumper, g2_r_bumper_last))
             {
-                iWheels.areStopped = !iWheels.areStopped;
-                if (iWheels.areStopped) iWheels.stop();
-                else
-                {
-                    if (iWheels.areIntaking) iWheels.intake();
-                    else iWheels.eject();
-                }
+                iWheels.stop();
             }
 
-            if (justPressed(g2_x, g2_x_last) && !iWheels.areStopped)
+            if (justPressed(g2_x, g2_x_last))
             {
-                if (iWheels.areIntaking) iWheels.eject();
-                else iWheels.intake();
+                iWheels.switchStates();
             }
         }
 
@@ -194,8 +192,7 @@ public class EverythingSubsystems extends OpMode
         {
             if (justPressed(g2_y, g2_y_last))
             {
-                if (oArm.isExtended) oArm.retract();
-                else oArm.extend();
+                oArm.switchStates();
             }
         }
 
@@ -203,30 +200,25 @@ public class EverythingSubsystems extends OpMode
         {
             if (justPressed(g2_a, g2_a_last))
             {
-                if (oClaw.isOpen) oClaw.close();
-                else oClaw.open();
+                oClaw.switchStates();
             }
         }
 
         // OuttakeSlides
         {
             // When joystick says retract but slides are fully retracted.
-            if (g2_r_stick_y * -1 < 0)
+            if (!boolLogic.stickIsPositive(g2_r_stick_y) && boolLogic.motorMinPosReached(oSlides.motorL, oSlides.motorR))
             {
-                if (oSlides.motorL.getCurrentPosition() <= 0 || oSlides.motorR.getCurrentPosition() <= 0)
-                {
-                    oSlides.setPower(0);
-                }
+                oSlidePower = 0;
             }
             // When joystick says extend but slides are fully extended.
-            else if (g2_r_stick_y * -1 > 0)
+            else if (boolLogic.stickIsPositive(g2_r_stick_y) && boolLogic.motorMaxPosReached(oSlides.motorL, oSlides.motorR, oSlides.MAX_POSITION))
             {
-                if (oSlides.motorL.getCurrentPosition() >= oSlides.MAX_POSITION || oSlides.motorR.getCurrentPosition() >= oSlides.MAX_POSITION)
-                {
-                    oSlides.setPower(0);
-                }
+                oSlidePower = 0;
             }
-            else oSlides.setPower(g2_r_stick_y * -1);
+            else oSlidePower = g2_r_stick_y * -1;
+
+            oSlides.setPower(oSlidePower);
         }
 
         // TeleDrive

@@ -27,4 +27,16 @@ public class OuttakeClaw
         servoClaw.setPosition(servoOpenPosition);
         isOpen = true;
     }
+
+    public void closeIfPossible()
+    {
+        if (isOpen) close();
+    }
+
+    public void switchStates()
+    {
+        if (isOpen) close();
+        else open();
+    }
+
 }

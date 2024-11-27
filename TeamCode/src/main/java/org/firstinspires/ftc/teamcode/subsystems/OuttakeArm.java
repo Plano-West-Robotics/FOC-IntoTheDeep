@@ -27,4 +27,16 @@ public class OuttakeArm
         servoArm.setPosition(servoRetractPosition);
         isExtended = false;
     }
+
+    public void extendIfPossible()
+    {
+        if (!isExtended) extend();
+    }
+
+    public void switchStates()
+    {
+        if (isExtended) retract();
+        else extend();
+    }
+
 }

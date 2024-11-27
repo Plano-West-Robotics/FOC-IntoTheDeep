@@ -13,6 +13,12 @@ import org.firstinspires.ftc.teamcode.subsystems.OuttakeSlides;
 import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 import org.firstinspires.ftc.teamcode.subsystems.BooleanLogic;
 
+/**
+ * One servo for the pickup claw
+ * One servo for the pickup rotation
+ * Two servos for the intake arm
+ */
+
 @TeleOp(name="EverythingSubsystems")
 public class EverythingSubsystems extends OpMode
 {

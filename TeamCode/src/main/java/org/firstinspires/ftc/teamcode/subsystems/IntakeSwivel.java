@@ -3,21 +3,19 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class IntakeRotation
+public class IntakeSwivel
 {
     public Servo servoClaw;
     public double servoMinPosition, servoMaxPosition;
     public double curPos;
     public static final double INCREMENT_AMNT = 0.25;
 
-    public IntakeRotation(HardwareMap hardwareMap)
+    public IntakeSwivel(HardwareMap hardwareMap)
     {
         servoClaw = hardwareMap.get(Servo.class, "R2");
         servoMinPosition = 0.17; // need to adjust
         servoMaxPosition = 0.83; // need to adjust
         servoClaw.scaleRange(servoMinPosition, servoMaxPosition);
-        servoClaw.setPosition(0.5);
-        curPos = 0.5;
     }
 
     public void rotCCW()
@@ -32,4 +30,9 @@ public class IntakeRotation
         servoClaw.setPosition(curPos);
     }
 
+    public void moveTo(double position)
+    {
+        servoClaw.setPosition(position);
+        curPos = position;
+    }
 }

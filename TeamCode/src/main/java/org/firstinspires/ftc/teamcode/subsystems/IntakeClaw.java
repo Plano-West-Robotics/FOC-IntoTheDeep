@@ -33,6 +33,11 @@ public class IntakeClaw
         if (isOpen) close();
     }
 
+    public void openIfPossible()
+    {
+        if (!isOpen) open();
+    }
+
     public void switchStates()
     {
         if (isOpen) close();

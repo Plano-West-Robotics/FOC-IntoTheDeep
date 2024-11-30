@@ -12,8 +12,8 @@ public class OuttakeArm
     public OuttakeArm(HardwareMap hardwareMap)
     {
         servoArm = hardwareMap.get(Servo.class, "oArm");
-        servoExtendPosition = 0.15;
-        servoRetractPosition = 0.93;
+        servoExtendPosition = 0.06;
+        servoRetractPosition = 0.85;
     }
 
     public void extend()
@@ -31,6 +31,11 @@ public class OuttakeArm
     public void extendIfPossible()
     {
         if (!isExtended) extend();
+    }
+
+    public void retractIfPossible()
+    {
+        if (isExtended) retract();
     }
 
     public void switchStates()

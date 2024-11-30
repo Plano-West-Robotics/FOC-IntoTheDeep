@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeArm;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeClaw;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSwivel;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlides;
 import org.firstinspires.ftc.teamcode.subsystems.OuttakeArm;
 import org.firstinspires.ftc.teamcode.subsystems.OuttakeClaw;
@@ -31,6 +32,8 @@ public class EverythingSubsystems extends OpMode
 
     public boolean iWheelsAutoEjectTriggered;
 
+    public IntakeSwivel iSwivel;
+
     public OuttakeArm oArm;
     public boolean oArmAutoExtendTriggered;
 
@@ -49,6 +52,9 @@ public class EverythingSubsystems extends OpMode
     public boolean g1_a_last, g1_x_last, g1_b_last, g1_y_last, g1_l_bumper_last, g1_r_bumper_last;
     public boolean g2_a_last, g2_x_last, g2_b_last, g2_y_last, g2_l_bumper_last, g2_r_bumper_last;
 
+    public float g2_l_trigger, g2_r_trigger;
+    public float g2_l_trigger_last, g2_r_trigger_last;
+
     public double g1_l_stick_x, g1_l_stick_y, g1_r_stick_x, g1_r_stick_y;
     public double g2_l_stick_x, g2_l_stick_y, g2_r_stick_x, g2_r_stick_y;
 
@@ -61,6 +67,7 @@ public class EverythingSubsystems extends OpMode
         iArm = new IntakeArm(hardwareMap);
         iSlides = new IntakeSlides(hardwareMap);
         iClaw = new IntakeClaw(hardwareMap);
+        iSwivel = new IntakeSwivel(hardwareMap);
         oArm = new OuttakeArm(hardwareMap);
         oClaw = new OuttakeClaw(hardwareMap);
         oSlides = new OuttakeSlides(hardwareMap);
@@ -75,12 +82,23 @@ public class EverythingSubsystems extends OpMode
         // IntakeArm
         {
             iArm.retract();
+            iArm.isStandby = false;
             iArmAutoRetractTriggered = false;
         }
 
         // IntakeSlides
         {
             iSlidePower = 0;
+        }
+
+        // Intake Claw
+        {
+            iClaw.openIfPossible();
+        }
+
+        // Intake Swivel
+        {
+            iSwivel.moveTo(0.5);
         }
 
         // OuttakeArm
@@ -114,11 +132,21 @@ public class EverythingSubsystems extends OpMode
         {
             if (justPressed(g2_b, g2_b_last))
             {
-                iArm.switchPositions(); // makes it so the intake arm extends if it's retracted and retracts if it's extended
+                // iArm.switchPositions(); // makes it so the intake arm extends if it's retracted and retracts if it's extended
+                if (iArm.isStandby) iArm.retract();
+                else iArm.standby();
             }
 
-            else if (boolLogic.triggerAutoRetract(g2_l_stick_y, iSlides.motorL) && iArm.isExtended && !oArmAutoExtendTriggered) // the last boolean here (!oArmAutoExtendTriggered) checks for whether the claw has extended yet in the logic sequence
+
+            //telemetry.addData("Auto retract will trigger:", (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArmAutoExtendTriggered));
+            telemetry.addData("L Trigger", g2_l_trigger);
+            telemetry.addData("R Trigger", g2_r_trigger);
+            telemetry.addData("L Trigger Just Passed Threshold", triggerToggle(g2_l_trigger, g2_l_trigger_last));
+            telemetry.addData("R Trigger Just Passed Threshold", triggerToggle(g2_r_trigger, g2_r_trigger_last));
+            if (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArmAutoExtendTriggered) // the last boolean here (!oArmAutoExtendTriggered) checks for whether the claw has extended yet in the logic sequence
             {
+                    iClaw.closeIfPossible();
+                    iSwivel.moveTo(0.5);
                     autoOuttakeSequenceTimer.reset();
                     iArmAutoRetractTriggered = true;
                     iArm.retractIfPossible();
@@ -130,28 +158,37 @@ public class EverythingSubsystems extends OpMode
                 iArm.extendIfPossible();
             }
 
+            telemetry.addData("2.1 gate", iWheelsAutoEjectTriggered);
+            telemetry.addData("timerMS", autoOuttakeSequenceTimer.milliseconds());
             // If the auto retract was triggered and it has been 1.3 seconds, set the wheels to eject mode
             if (boolLogic.timerStageMS(1300, iArmAutoRetractTriggered, autoOuttakeSequenceTimer))
             {
-                boolLogic.switchAndSetNext(iArmAutoRetractTriggered, iWheelsAutoEjectTriggered);
+                iArmAutoRetractTriggered = false;
+                iWheelsAutoEjectTriggered = true;
+                //boolLogic.switchAndSetNext(iArmAutoRetractTriggered, iWheelsAutoEjectTriggered);
+                iClaw.openIfPossible();
             }
 
             // If it has been 2.1 seconds since the auto retract was triggered and the block was ejected from the intake arm,
             // extend the intake so it doesn't get in the way and close the claw to hold the block,
+
             else if (boolLogic.timerStageMS(2100, iWheelsAutoEjectTriggered, autoOuttakeSequenceTimer))
             {
-                boolLogic.switchAndSetNext(iWheelsAutoEjectTriggered, oArmAutoExtendTriggered);
+                //boolLogic.switchAndSetNext(iWheelsAutoEjectTriggered, oArmAutoExtendTriggered);
+                iWheelsAutoEjectTriggered = false;
+                oArmAutoExtendTriggered = true;
                 iArm.extendIfPossible();
                 oClaw.closeIfPossible();
             }
 
-            // If it has been 3 seconds since the auto retract was triggered and the claw has been closed,
+            // If it has been 3 seconds since the auto retract was triggered and the outtake claw has been closed,
             // extend the arm
             else if (boolLogic.timerStageMS(3000, oArmAutoExtendTriggered, autoOuttakeSequenceTimer))
             {
                 oArmAutoExtendTriggered = false;
                 oArm.extendIfPossible();
             }
+
 
         }
 
@@ -171,6 +208,22 @@ public class EverythingSubsystems extends OpMode
             else iSlidePower = g2_l_stick_y * -1;
 
             iSlides.setPower(iSlidePower);
+        }
+
+        // Intake Claw
+        {
+            if (justPressed(g2_x, g2_x_last)) {
+                iClaw.switchStates();
+            }
+        }
+
+        // Intake Swivel
+        {
+            if (justPressed(g2_l_bumper, g2_l_bumper_last)) {
+                iSwivel.rotCCW();
+            } else if (justPressed(g2_r_bumper, g2_r_bumper_last)) {
+                iSwivel.rotCW();
+            }
         }
 
         // OuttakeArm
@@ -229,6 +282,8 @@ public class EverythingSubsystems extends OpMode
         g2_y = gamepad2.y;
         g2_l_bumper = gamepad2.left_bumper;
         g2_r_bumper = gamepad2.right_bumper;
+        g2_l_trigger = gamepad2.left_trigger;
+        g2_r_trigger = gamepad2.right_trigger;
 
         g1_l_stick_x = gamepad1.left_stick_x;
         g1_l_stick_y = gamepad1.left_stick_y;
@@ -255,6 +310,8 @@ public class EverythingSubsystems extends OpMode
         g2_y_last = g2_y;
         g2_l_bumper_last = g2_l_bumper;
         g2_r_bumper_last = g2_r_bumper;
+        g2_l_trigger_last = g2_l_trigger;
+        g2_r_trigger_last = g2_r_trigger;
     }
 
     public boolean justPressed(boolean currentInput, boolean lastInput)
@@ -266,4 +323,10 @@ public class EverythingSubsystems extends OpMode
     {
         return !currentInput && lastInput;
     }
+
+    public boolean triggerToggle(float curTrigger, float lastTrigger) {
+        return (curTrigger >= 0.2 && lastTrigger < 0.2);
+    }
+
+
 }

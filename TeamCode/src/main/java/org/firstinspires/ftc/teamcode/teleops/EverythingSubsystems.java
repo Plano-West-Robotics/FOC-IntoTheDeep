@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeArm;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeClaw;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlides;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeWheels;
 import org.firstinspires.ftc.teamcode.subsystems.OuttakeArm;
 import org.firstinspires.ftc.teamcode.subsystems.OuttakeClaw;
 import org.firstinspires.ftc.teamcode.subsystems.OuttakeSlides;
@@ -27,7 +27,8 @@ public class EverythingSubsystems extends OpMode
 
     public IntakeSlides iSlides;
 
-    public IntakeWheels iWheels;
+    public IntakeClaw iClaw;
+
     public boolean iWheelsAutoEjectTriggered;
 
     public OuttakeArm oArm;
@@ -59,7 +60,7 @@ public class EverythingSubsystems extends OpMode
     {
         iArm = new IntakeArm(hardwareMap);
         iSlides = new IntakeSlides(hardwareMap);
-        iWheels = new IntakeWheels(hardwareMap);
+        iClaw = new IntakeClaw(hardwareMap);
         oArm = new OuttakeArm(hardwareMap);
         oClaw = new OuttakeClaw(hardwareMap);
         oSlides = new OuttakeSlides(hardwareMap);
@@ -80,13 +81,6 @@ public class EverythingSubsystems extends OpMode
         // IntakeSlides
         {
             iSlidePower = 0;
-        }
-
-        // IntakeWheels
-        {
-            iWheels.areIntaking = false;
-            iWheels.areStopped = false;
-            iWheelsAutoEjectTriggered = false;
         }
 
         // OuttakeArm
@@ -134,14 +128,12 @@ public class EverythingSubsystems extends OpMode
             else if (boolLogic.triggerAutoExtend(g2_l_stick_y, iSlides.motorL))
             {
                 iArm.extendIfPossible();
-                iWheels.intake();
             }
 
             // If the auto retract was triggered and it has been 1.3 seconds, set the wheels to eject mode
             if (boolLogic.timerStageMS(1300, iArmAutoRetractTriggered, autoOuttakeSequenceTimer))
             {
                 boolLogic.switchAndSetNext(iArmAutoRetractTriggered, iWheelsAutoEjectTriggered);
-                iWheels.eject();
             }
 
             // If it has been 2.1 seconds since the auto retract was triggered and the block was ejected from the intake arm,
@@ -179,19 +171,6 @@ public class EverythingSubsystems extends OpMode
             else iSlidePower = g2_l_stick_y * -1;
 
             iSlides.setPower(iSlidePower);
-        }
-
-        // IntakeWheels
-        {
-            if (justPressed(g2_r_bumper, g2_r_bumper_last))
-            {
-                iWheels.stop();
-            }
-
-            if (justPressed(g2_x, g2_x_last))
-            {
-                iWheels.switchStates();
-            }
         }
 
         // OuttakeArm

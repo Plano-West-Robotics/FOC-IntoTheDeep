@@ -11,9 +11,9 @@ public class IntakeClaw
 
     public IntakeClaw(HardwareMap hardwareMap)
     {
-        servoClaw = hardwareMap.get(Servo.class, "iClaw");
-        servoClosePosition = 0; // need to adjust
-        servoOpenPosition = 1; // need to adjust
+        servoClaw = hardwareMap.get(Servo.class, "L2");
+        servoClosePosition = 0.66; // need to adjust
+        servoOpenPosition = 0.57; // need to adjust
     }
 
     public void close()

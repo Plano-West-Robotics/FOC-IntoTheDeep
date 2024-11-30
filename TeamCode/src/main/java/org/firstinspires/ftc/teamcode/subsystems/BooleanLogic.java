@@ -45,12 +45,6 @@ public class BooleanLogic {
         return (pastBool && (timer.milliseconds() > timeInMilliseconds));
     }
 
-    public void switchAndSetNext(boolean pastBoolean, boolean nextBoolean)
-    {
-        pastBoolean = false;
-        nextBoolean = true;
-    }
-
     public boolean stickIsPositive(double lJoystick)
     {
         return (lJoystick < 0);

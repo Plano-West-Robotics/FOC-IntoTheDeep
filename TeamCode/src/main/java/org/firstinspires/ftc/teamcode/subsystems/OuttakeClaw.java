@@ -33,6 +33,11 @@ public class OuttakeClaw
         if (isOpen) close();
     }
 
+    public void openIfPossible()
+    {
+        if (!isOpen) open();
+    }
+
     public void switchStates()
     {
         if (isOpen) close();

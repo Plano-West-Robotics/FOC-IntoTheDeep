@@ -23,6 +23,16 @@ import org.firstinspires.ftc.teamcode.subsystems.BooleanLogic;
 @TeleOp(name="EverythingSubsystems")
 public class EverythingSubsystems extends OpMode
 {
+    public enum AutoRetractStates {
+        WAIT_FOR_INPUT,
+        RETRACT_INTAKE_ARM,
+        TRANSFER_INTO_STORAGE,
+        GRAB_BLOCK_FROM_STORAGE,
+        EXTEND_OUTPUT_ARM
+    }
+
+    AutoRetractStates autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
+
     public IntakeArm iArm;
     public boolean iArmAutoRetractTriggered;
 
@@ -132,41 +142,73 @@ public class EverythingSubsystems extends OpMode
         {
             if (justPressed(g2_b, g2_b_last))
             {
-                // iArm.switchPositions(); // makes it so the intake arm extends if it's retracted and retracts if it's extended
-                if (iArm.isStandby) iArm.retract();
-                else iArm.standby();
+                iArm.switchPositions(); // makes it so the intake arm extends if it's retracted and retracts if it's extended
             }
 
-
-            //telemetry.addData("Auto retract will trigger:", (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArmAutoExtendTriggered));
-            telemetry.addData("L Trigger", g2_l_trigger);
-            telemetry.addData("R Trigger", g2_r_trigger);
-            telemetry.addData("L Trigger Just Passed Threshold", triggerToggle(g2_l_trigger, g2_l_trigger_last));
-            telemetry.addData("R Trigger Just Passed Threshold", triggerToggle(g2_r_trigger, g2_r_trigger_last));
-            if (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArmAutoExtendTriggered) // the last boolean here (!oArmAutoExtendTriggered) checks for whether the claw has extended yet in the logic sequence
+            switch (autoRetract)
             {
-                    iClaw.closeIfPossible();
+                case WAIT_FOR_INPUT:
+                    if (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArm.isExtended)
+                        autoRetract = AutoRetractStates.RETRACT_INTAKE_ARM;
+                    break;
+
+                case RETRACT_INTAKE_ARM:
+                    oClaw.openIfPossible();
                     iSwivel.moveTo(0.5);
-                    autoOuttakeSequenceTimer.reset();
-                    iArmAutoRetractTriggered = true;
                     iArm.retractIfPossible();
-                    if (!oArm.isExtended) oClaw.open();
+
+                    autoOuttakeSequenceTimer.reset();
+                    autoRetract = AutoRetractStates.TRANSFER_INTO_STORAGE;
+                    break;
+
+                case TRANSFER_INTO_STORAGE:
+                    if (autoOuttakeSequenceTimer.milliseconds() > 1200) {
+                        iClaw.open();
+                        autoOuttakeSequenceTimer.reset();
+                        autoRetract = AutoRetractStates.GRAB_BLOCK_FROM_STORAGE;
+                    }
+                    break;
+
+                case GRAB_BLOCK_FROM_STORAGE:
+                    if (autoOuttakeSequenceTimer.milliseconds() > 400) {
+                        oClaw.close();
+                        iArm.extend();
+                        autoOuttakeSequenceTimer.reset();
+                        autoRetract = AutoRetractStates.EXTEND_OUTPUT_ARM;
+                    }
+                    break;
+
+                case EXTEND_OUTPUT_ARM:
+                    if (autoOuttakeSequenceTimer.milliseconds() > 400) {
+                        oArm.extend();
+                        autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
+                    }
+                    break;
             }
 
-            else if (boolLogic.triggerAutoExtend(g2_l_stick_y, iSlides.motorL))
+            if (boolLogic.triggerAutoExtend(g2_l_stick_y, iSlides.motorL))
             {
                 iArm.extendIfPossible();
             }
 
-            telemetry.addData("2.1 gate", iWheelsAutoEjectTriggered);
-            telemetry.addData("timerMS", autoOuttakeSequenceTimer.milliseconds());
+            /*
+            if (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArm.isExtended)
+            {
+                    iSwivel.moveTo(0.5);
+                    autoOuttakeSequenceTimer.reset();
+                    iArmAutoRetractTriggered = true;
+                    iArm.retractIfPossible();
+                    oClaw.openIfPossible();
+            }
+
+
+
             // If the auto retract was triggered and it has been 1.3 seconds, set the wheels to eject mode
             if (boolLogic.timerStageMS(1300, iArmAutoRetractTriggered, autoOuttakeSequenceTimer))
             {
                 iArmAutoRetractTriggered = false;
                 iWheelsAutoEjectTriggered = true;
-                //boolLogic.switchAndSetNext(iArmAutoRetractTriggered, iWheelsAutoEjectTriggered);
-                iClaw.openIfPossible();
+                iClaw.open();
             }
 
             // If it has been 2.1 seconds since the auto retract was triggered and the block was ejected from the intake arm,
@@ -174,11 +216,10 @@ public class EverythingSubsystems extends OpMode
 
             else if (boolLogic.timerStageMS(2100, iWheelsAutoEjectTriggered, autoOuttakeSequenceTimer))
             {
-                //boolLogic.switchAndSetNext(iWheelsAutoEjectTriggered, oArmAutoExtendTriggered);
                 iWheelsAutoEjectTriggered = false;
                 oArmAutoExtendTriggered = true;
                 iArm.extendIfPossible();
-                oClaw.closeIfPossible();
+                oClaw.close();
             }
 
             // If it has been 3 seconds since the auto retract was triggered and the outtake claw has been closed,
@@ -189,6 +230,8 @@ public class EverythingSubsystems extends OpMode
                 oArm.extendIfPossible();
             }
 
+
+             */
 
         }
 

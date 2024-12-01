@@ -153,6 +153,11 @@ public class EverythingSubsystems extends OpMode
                     break;
 
                 case RETRACT_INTAKE_ARM:
+                    if (triggerToggle(g2_l_trigger, g2_l_trigger_last)) {
+                        autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
+                        break;
+                    }
+
                     oClaw.openIfPossible();
                     iSwivel.moveTo(0.5);
                     iArm.retractIfPossible();
@@ -162,6 +167,11 @@ public class EverythingSubsystems extends OpMode
                     break;
 
                 case TRANSFER_INTO_STORAGE:
+                    if (triggerToggle(g2_l_trigger, g2_l_trigger_last)) {
+                        autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
+                        break;
+                    }
+
                     if (autoOuttakeSequenceTimer.milliseconds() > 1200) {
                         iClaw.open();
                         autoOuttakeSequenceTimer.reset();
@@ -170,6 +180,10 @@ public class EverythingSubsystems extends OpMode
                     break;
 
                 case GRAB_BLOCK_FROM_STORAGE:
+                    if (triggerToggle(g2_l_trigger, g2_l_trigger_last)) {
+                        autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
+                        break;
+                    }
                     if (autoOuttakeSequenceTimer.milliseconds() > 400) {
                         oClaw.close();
                         iArm.extend();

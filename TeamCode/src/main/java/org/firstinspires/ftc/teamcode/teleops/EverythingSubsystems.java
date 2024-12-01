@@ -148,7 +148,7 @@ public class EverythingSubsystems extends OpMode
             switch (autoRetract)
             {
                 case WAIT_FOR_INPUT:
-                    if (justPressed(g2_y, g2_y_last) && iArm.isExtended && !oArm.isExtended)
+                    if (justPressed(g2_y, g2_y_last) && iArm.isExtended && !oArm.isExtended && !iClaw.isOpen) // If Y is toggled, if the intake arm is extended, if the outtake arm is retracted, and if the intake claw is closed
                         autoRetract = AutoRetractStates.RETRACT_INTAKE_ARM;
                     break;
 

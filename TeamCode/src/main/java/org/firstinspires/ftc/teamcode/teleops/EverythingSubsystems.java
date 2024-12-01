@@ -153,7 +153,7 @@ public class EverythingSubsystems extends OpMode
                     break;
 
                 case RETRACT_INTAKE_ARM:
-                    if (triggerToggle(g2_l_trigger, g2_l_trigger_last)) {
+                    if (justPressed(g2_y, g2_y_last)) {
                         autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
                         break;
                     }
@@ -167,7 +167,7 @@ public class EverythingSubsystems extends OpMode
                     break;
 
                 case TRANSFER_INTO_STORAGE:
-                    if (triggerToggle(g2_l_trigger, g2_l_trigger_last)) {
+                    if (justPressed(g2_y, g2_y_last)) {
                         autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
                         break;
                     }
@@ -180,7 +180,7 @@ public class EverythingSubsystems extends OpMode
                     break;
 
                 case GRAB_BLOCK_FROM_STORAGE:
-                    if (triggerToggle(g2_l_trigger, g2_l_trigger_last)) {
+                    if (justPressed(g2_y, g2_y_last)) {
                         autoRetract = AutoRetractStates.WAIT_FOR_INPUT;
                         break;
                     }

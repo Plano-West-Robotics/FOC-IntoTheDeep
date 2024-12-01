@@ -140,7 +140,7 @@ public class EverythingSubsystems extends OpMode
 
         // IntakeArm
         {
-            if (justPressed(g2_b, g2_b_last))
+            if (triggerToggle(g2_l_trigger, g2_l_trigger_last))
             {
                 iArm.switchPositions(); // makes it so the intake arm extends if it's retracted and retracts if it's extended
             }
@@ -148,7 +148,7 @@ public class EverythingSubsystems extends OpMode
             switch (autoRetract)
             {
                 case WAIT_FOR_INPUT:
-                    if (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArm.isExtended)
+                    if (justPressed(g2_y, g2_y_last) && iArm.isExtended && !oArm.isExtended)
                         autoRetract = AutoRetractStates.RETRACT_INTAKE_ARM;
                     break;
 
@@ -190,49 +190,6 @@ public class EverythingSubsystems extends OpMode
             {
                 iArm.extendIfPossible();
             }
-
-            /*
-            if (triggerToggle(g2_r_trigger, g2_r_trigger_last) && iArm.isExtended && !oArm.isExtended)
-            {
-                    iSwivel.moveTo(0.5);
-                    autoOuttakeSequenceTimer.reset();
-                    iArmAutoRetractTriggered = true;
-                    iArm.retractIfPossible();
-                    oClaw.openIfPossible();
-            }
-
-
-
-            // If the auto retract was triggered and it has been 1.3 seconds, set the wheels to eject mode
-            if (boolLogic.timerStageMS(1300, iArmAutoRetractTriggered, autoOuttakeSequenceTimer))
-            {
-                iArmAutoRetractTriggered = false;
-                iWheelsAutoEjectTriggered = true;
-                iClaw.open();
-            }
-
-            // If it has been 2.1 seconds since the auto retract was triggered and the block was ejected from the intake arm,
-            // extend the intake so it doesn't get in the way and close the claw to hold the block,
-
-            else if (boolLogic.timerStageMS(2100, iWheelsAutoEjectTriggered, autoOuttakeSequenceTimer))
-            {
-                iWheelsAutoEjectTriggered = false;
-                oArmAutoExtendTriggered = true;
-                iArm.extendIfPossible();
-                oClaw.close();
-            }
-
-            // If it has been 3 seconds since the auto retract was triggered and the outtake claw has been closed,
-            // extend the arm
-            else if (boolLogic.timerStageMS(3000, oArmAutoExtendTriggered, autoOuttakeSequenceTimer))
-            {
-                oArmAutoExtendTriggered = false;
-                oArm.extendIfPossible();
-            }
-
-
-             */
-
         }
 
         // IntakeSlides
@@ -271,7 +228,7 @@ public class EverythingSubsystems extends OpMode
 
         // OuttakeArm
         {
-            if (justPressed(g2_y, g2_y_last))
+            if (triggerToggle(g2_r_trigger, g2_r_trigger_last))
             {
                 oArm.switchStates();
             }

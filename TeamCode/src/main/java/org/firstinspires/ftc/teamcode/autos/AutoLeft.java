@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -62,12 +62,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutoRight")
-public class AutoRight extends LinearOpMode {
+@Autonomous(name="AutoLeft")
+public class AutoLeft extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private DcMotor         leftDrive   = null;
-    private DcMotor         rightDrive  = null;
+
 
     private ElapsedTime     runtime = new ElapsedTime();
 
@@ -97,16 +96,17 @@ public class AutoRight extends LinearOpMode {
 
     public Servo oClaw;
     public double oClawClosePosition, oClawOpenPosition;
+    public boolean oClawIsOpen;
 
     @Override
     public void runOpMode() {
 
         iArmL = hardwareMap.get(Servo.class, "L1");
         iArmR = hardwareMap.get(Servo.class, "R1");
-        iArmLExtendPosition = 0.08;
-        iArmRExtendPosition = 0.92;
-        iArmLRetractPosition = 0.96;
-        iArmRRetractPosition = 0.04;
+        iArmLExtendPosition = 0.057;
+        iArmRExtendPosition = 0.943;
+        iArmLRetractPosition = 0.87;
+        iArmRRetractPosition = 0.13;
 
         // Initialize the drive system variables.
         fr = hardwareMap.get(DcMotor.class, "fr");
@@ -141,8 +141,8 @@ public class AutoRight extends LinearOpMode {
         MECANUM_DRIVE_TURN_SPEED = 0.7;
 
         oClaw = hardwareMap.get(Servo.class, "oClaw");
-        oClawClosePosition = 0.16;
-        oClawOpenPosition = 0.035;
+        oClawClosePosition = 0.55;
+        oClawOpenPosition = 0.4;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -181,7 +181,7 @@ public class AutoRight extends LinearOpMode {
         fl.setPower(0.1);
         br.setPower(0.1);
         bl.setPower(0.1);
-        sleep(700);
+        sleep(400);
         fr.setPower(0);
         fl.setPower(0);
         br.setPower(0);
@@ -189,10 +189,10 @@ public class AutoRight extends LinearOpMode {
     }
 
     public void strafeRight() {
-        fr.setPower(-0.5);
-        fl.setPower(0.5);
-        br.setPower(0.5);
-        bl.setPower(-0.5);
+        fr.setPower(0.5);
+        fl.setPower(-0.5);
+        br.setPower(-0.5);
+        bl.setPower(0.5);
         sleep(1100);
         fr.setPower(0);
         fl.setPower(0);

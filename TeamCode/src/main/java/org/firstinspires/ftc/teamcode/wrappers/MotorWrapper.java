@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.wrappers;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Motor
+public class MotorWrapper
 {
     public DcMotor motor;
 
-    public Motor(HardwareMap hardwareMap, String name)
+    public MotorWrapper(HardwareMap hardwareMap, String name)
     {
         motor = hardwareMap.get(DcMotor.class, name);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

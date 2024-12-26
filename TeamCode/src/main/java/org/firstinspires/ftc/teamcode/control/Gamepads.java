@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class Gamepads
 {
-    Gamepad currGP1, prevGP1, currGP2, prevGP2;
+    public Gamepad currGP1, prevGP1, currGP2, prevGP2;
 
     public Gamepads(Gamepad gp1, Gamepad gp2)
     {

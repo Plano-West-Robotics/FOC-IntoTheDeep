@@ -1,41 +1,18 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.teamcode.wrappers.MotorWrapper;
+import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.hardware.Hardware;
 
 public class TeleDrive
 {
-    public MotorWrapper fr, fl, br, bl;
+    public Drivetrain drivetrain;
     public double speed, turnSpeed;
     public boolean slowMode;
 
-    public TeleDrive(HardwareMap hardwareMap)
+    public TeleDrive(Hardware hardware)
     {
-        fr = new MotorWrapper(hardwareMap, "fr");
-        fl = new MotorWrapper(hardwareMap, "fl");
-        br = new MotorWrapper(hardwareMap, "br");
-        bl = new MotorWrapper(hardwareMap, "bl");
-
-        fl.reverse();
-        bl.reverse();
-
-        fr.resetEncoder(true);
-        fl.resetEncoder(true);
-        br.resetEncoder(true);
-        bl.resetEncoder(true);
-
-        fr.stop();
-        fl.stop();
-        br.stop();
-        bl.stop();
-
+        drivetrain = hardware.drivetrain;
         regularSpeed();
-    }
-
-    public void stop()
-    {
-        drive(0, 0, 0);
     }
 
     public void drive(double drive, double strafe, double turn)
@@ -55,10 +32,12 @@ public class TeleDrive
         brPower *= speed;
         blPower *= speed;
 
-        fr.setPower(frPower);
-        fl.setPower(flPower);
-        br.setPower(brPower);
-        bl.setPower(blPower);
+        drivetrain.setPower(frPower, flPower, brPower, blPower);
+    }
+
+    public void stop()
+    {
+        drivetrain.setPower(0, 0, 0, 0);
     }
 
     public void toggleSlowMode()

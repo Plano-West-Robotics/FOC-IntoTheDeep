@@ -46,6 +46,7 @@ public class Gamepads
             case GP1_RIGHT_STICK_Y -> -gp1.right_stick_y;
             case GP1_LEFT_TRIGGER -> gp1.left_trigger;
             case GP1_RIGHT_TRIGGER -> gp1.right_trigger;
+
             case GP2_LEFT_STICK_X -> gp2.left_stick_x;
             case GP2_LEFT_STICK_Y -> -gp2.left_stick_y;
             case GP2_RIGHT_STICK_X -> gp2.right_stick_x;
@@ -86,6 +87,7 @@ public class Gamepads
             case GP1_DPAD_DOWN -> gp1.dpad_down;
             case GP1_DPAD_LEFT -> gp1.dpad_left;
             case GP1_DPAD_RIGHT -> gp1.dpad_right;
+
             case GP2_A -> gp2.a;
             case GP2_X -> gp2.x;
             case GP2_B -> gp2.b;

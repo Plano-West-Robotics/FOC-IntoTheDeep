@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class MotorWrapper
+public class Motor
 {
     public DcMotor motor;
 
-    public MotorWrapper(HardwareMap hardwareMap, String name)
+    public Motor(HardwareMap hardwareMap, String name)
     {
         motor = hardwareMap.get(DcMotor.class, name);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

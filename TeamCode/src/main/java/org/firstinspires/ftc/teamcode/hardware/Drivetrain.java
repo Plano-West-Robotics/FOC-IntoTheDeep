@@ -2,18 +2,18 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.wrappers.MotorWrapper;
+import org.firstinspires.ftc.teamcode.wrappers.Motor;
 
 public class Drivetrain
 {
-    public MotorWrapper fr, fl, br, bl;
+    public Motor fr, fl, br, bl;
 
     public Drivetrain(HardwareMap hardwareMap)
     {
-        fr = new MotorWrapper(hardwareMap, "fr");
-        fl = new MotorWrapper(hardwareMap, "fl");
-        br = new MotorWrapper(hardwareMap, "br");
-        bl = new MotorWrapper(hardwareMap, "bl");
+        fr = new Motor(hardwareMap, "fr");
+        fl = new Motor(hardwareMap, "fl");
+        br = new Motor(hardwareMap, "br");
+        bl = new Motor(hardwareMap, "bl");
 
         fl.reverse();
         bl.reverse();

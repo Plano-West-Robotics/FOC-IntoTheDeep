@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.wrappers;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class ExtendoPair
+public class MotorPair
 {
     public Motor leftMotor, rightMotor;
 
-    public ExtendoPair(HardwareMap hardwareMap, String leftMotorName, String rightMotorName)
+    public MotorPair(HardwareMap hardwareMap, String leftMotorName, String rightMotorName)
     {
         leftMotor = new Motor(hardwareMap, leftMotorName);
         rightMotor = new Motor(hardwareMap, rightMotorName);
@@ -126,5 +126,15 @@ public class ExtendoPair
     public int[] getPosition()
     {
         return new int[] {leftMotor.getPosition(), rightMotor.getPosition()};
+    }
+
+    public Motor getLeft()
+    {
+        return leftMotor;
+    }
+
+    public Motor getRight()
+    {
+        return rightMotor;
     }
 }

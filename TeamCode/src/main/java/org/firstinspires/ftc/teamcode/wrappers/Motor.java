@@ -11,7 +11,9 @@ public class Motor
     public Motor(HardwareMap hardwareMap, String name)
     {
         motor = hardwareMap.get(DcMotor.class, name);
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        resetEncoder(true);
+        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        stop();
     }
 
     public void forward()

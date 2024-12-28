@@ -17,16 +17,6 @@ public class Drivetrain
 
         fl.reverse();
         bl.reverse();
-
-        fr.resetEncoder(true);
-        fl.resetEncoder(true);
-        br.resetEncoder(true);
-        bl.resetEncoder(true);
-
-        fr.stop();
-        fl.stop();
-        br.stop();
-        bl.stop();
     }
 
     public void setPower(double frPower, double flPower, double brPower, double blPower)

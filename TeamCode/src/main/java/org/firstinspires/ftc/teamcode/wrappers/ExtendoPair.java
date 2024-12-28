@@ -1,15 +1,16 @@
 package org.firstinspires.ftc.teamcode.wrappers;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ExtendoPair
 {
     public Motor leftMotor, rightMotor;
 
-    public ExtendoPair(Motor leftMotor, Motor rightMotor)
+    public ExtendoPair(HardwareMap hardwareMap, String leftMotorName, String rightMotorName)
     {
-        this.leftMotor = leftMotor;
-        this.rightMotor = rightMotor;
+        leftMotor = new Motor(hardwareMap, leftMotorName);
+        rightMotor = new Motor(hardwareMap, rightMotorName);
     }
 
     public void stop()

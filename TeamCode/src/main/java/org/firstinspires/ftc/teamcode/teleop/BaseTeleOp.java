@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.wrappers;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 
-public abstract class OpModeWrapper extends OpMode
+public abstract class BaseTeleOp extends OpMode
 {
     public Hardware hardware;
     public Gamepads gamepads;

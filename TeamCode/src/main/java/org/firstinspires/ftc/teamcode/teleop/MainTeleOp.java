@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
-import org.firstinspires.ftc.teamcode.wrappers.OpModeWrapper;
 
-public class MainTeleOp extends OpModeWrapper
+public class MainTeleOp extends BaseTeleOp
 {
     TeleDrive teleDrive;
 

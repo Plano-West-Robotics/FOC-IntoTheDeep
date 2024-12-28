@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.wrappers;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.control.Gamepads;
@@ -15,6 +17,7 @@ public abstract class OpModeWrapper extends OpMode
     {
         hardware = new Hardware(hardwareMap);
         gamepads = new Gamepads(gamepad1, gamepad2);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         setup();
     }
 
@@ -24,6 +27,7 @@ public abstract class OpModeWrapper extends OpMode
     public final void loop()
     {
         gamepads.update(gamepad1, gamepad2);
+        telemetry.update();
         run();
     }
 

@@ -20,6 +20,12 @@ public class TeleDrive implements Subsystem
 
     public void drive(double drive, double strafe, double turn)
     {
+        if (drive == 0 && strafe == 0 & turn == 0)
+        {
+            halt();
+            return;
+        }
+
         double frPower = drive - strafe;
         double flPower = drive + strafe;
         double brPower = drive + strafe;
@@ -38,7 +44,7 @@ public class TeleDrive implements Subsystem
         drivetrain.setPower(frPower, flPower, brPower, blPower);
     }
 
-    public void stop()
+    public void halt()
     {
         drivetrain.setPower(0, 0, 0, 0);
     }

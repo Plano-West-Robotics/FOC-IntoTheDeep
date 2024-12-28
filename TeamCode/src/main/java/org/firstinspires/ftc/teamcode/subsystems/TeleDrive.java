@@ -20,7 +20,7 @@ public class TeleDrive implements Subsystem
 
     public void drive(double drive, double strafe, double turn)
     {
-        if (drive == 0 && strafe == 0 & turn == 0)
+        if (drive == 0 && strafe == 0 && turn == 0)
         {
             halt();
             return;

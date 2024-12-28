@@ -12,41 +12,41 @@ public class TeleDrive implements Subsystem
     public double speed, turnSpeed;
     public boolean slowMode;
 
+    public double frPower, flPower, brPower, blPower;
+    public boolean toggleRequested;
+
     public TeleDrive(Hardware hardware)
     {
         drivetrain = hardware.drivetrain;
         regularSpeed();
+        zeroPower();
     }
 
-    public void drive(double drive, double strafe, double turn)
+    public void calculatePower(double drive, double strafe, double turn)
     {
-        if (drive == 0 && strafe == 0 && turn == 0)
+        if (drive == 0 && strafe == 0 && turn == 0) zeroPower();
+        else
         {
-            halt();
-            return;
+            frPower = drive - strafe;
+            flPower = drive + strafe;
+            brPower = drive + strafe;
+            blPower = drive - strafe;
+
+            frPower -= turn * turnSpeed;
+            brPower -= turn * turnSpeed;
+            flPower += turn * turnSpeed;
+            blPower += turn * turnSpeed;
+
+            frPower *= speed;
+            flPower *= speed;
+            brPower *= speed;
+            blPower *= speed;
         }
-
-        double frPower = drive - strafe;
-        double flPower = drive + strafe;
-        double brPower = drive + strafe;
-        double blPower = drive - strafe;
-
-        frPower -= turn * turnSpeed;
-        brPower -= turn * turnSpeed;
-        flPower += turn * turnSpeed;
-        blPower += turn * turnSpeed;
-
-        frPower *= speed;
-        flPower *= speed;
-        brPower *= speed;
-        blPower *= speed;
-
-        drivetrain.setPower(frPower, flPower, brPower, blPower);
     }
 
-    public void halt()
+    public void zeroPower()
     {
-        drivetrain.setPower(0, 0, 0, 0);
+        frPower = flPower = brPower = blPower = 0;
     }
 
     public void toggleSlowMode()
@@ -69,15 +69,25 @@ public class TeleDrive implements Subsystem
         slowMode = true;
     }
 
+    public boolean isSlowMode()
+    {
+        return slowMode;
+    }
+
     @Override
     public void update(Gamepads gamepads)
     {
-        if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) toggleSlowMode();
+        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
+        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
+        double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
+        calculatePower(drive, strafe, turn);
+        toggleRequested = gamepads.justPressed(Button.GP1_RIGHT_BUMPER);
+    }
 
-        drive(
-                gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y),
-                gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X),
-                gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X)
-        );
+    @Override
+    public void operate()
+    {
+        drivetrain.setPower(frPower, flPower, brPower, blPower);
+        if (toggleRequested) toggleSlowMode();
     }
 }

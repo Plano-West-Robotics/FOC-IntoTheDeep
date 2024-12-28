@@ -7,23 +7,16 @@ public class ServoWrapper
 {
     public Servo servo;
 
-    public ServoWrapper(HardwareMap hardwareMap, String name, double minPosition, double maxPosition, boolean isForward)
+    public ServoWrapper(HardwareMap hardwareMap, String name)
+    {
+        this(hardwareMap, name, true);
+    }
+
+    public ServoWrapper(HardwareMap hardwareMap, String name, boolean isForward)
     {
         servo = hardwareMap.get(Servo.class, name);
-        servo.scaleRange(minPosition, maxPosition);
-        // Order is important; setDirection() must be called AFTER servo.scaleRange().
         if (isForward) setDirection(Servo.Direction.FORWARD);
         else setDirection(Servo.Direction.REVERSE);
-    }
-
-    public void min()
-    {
-        setPosition(0);
-    }
-
-    public void max()
-    {
-        setPosition(1);
     }
 
     /**

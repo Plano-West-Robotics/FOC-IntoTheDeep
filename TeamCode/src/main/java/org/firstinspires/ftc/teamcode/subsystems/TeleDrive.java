@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import org.firstinspires.ftc.teamcode.control.Analog;
+import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 
-public class TeleDrive
+public class TeleDrive implements Subsystem
 {
     public Drivetrain drivetrain;
     public double speed, turnSpeed;
@@ -58,5 +60,15 @@ public class TeleDrive
         speed = 0.1;
         turnSpeed = 0.4;
         slowMode = true;
+    }
+
+    @Override
+    public void update(Gamepads gamepads)
+    {
+        drive(
+                gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y),
+                gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X),
+                gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X)
+        );
     }
 }

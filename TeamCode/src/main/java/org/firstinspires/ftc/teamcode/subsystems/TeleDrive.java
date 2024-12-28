@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import org.firstinspires.ftc.teamcode.control.Analog;
+import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
@@ -65,6 +66,8 @@ public class TeleDrive implements Subsystem
     @Override
     public void update(Gamepads gamepads)
     {
+        if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) toggleSlowMode();
+
         drive(
                 gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y),
                 gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X),

@@ -1,6 +1,14 @@
-package org.firstinspires.ftc.teamcode.hardware.concrete;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.hardware.BackArm;
+import org.firstinspires.ftc.teamcode.hardware.BackClaw;
+import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.hardware.FrontArm;
+import org.firstinspires.ftc.teamcode.hardware.FrontClaw;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalExtendo;
+import org.firstinspires.ftc.teamcode.hardware.VerticalExtendo;
 
 public class Hardware
 {

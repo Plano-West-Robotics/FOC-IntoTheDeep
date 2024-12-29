@@ -21,7 +21,5 @@ public class MainTeleOp extends BaseTeleOp
     public void run()
     {
         for (Subsystem subsystem : subsystems) subsystem.update(gamepads);
-
-        teleDrive.operate();
     }
 }

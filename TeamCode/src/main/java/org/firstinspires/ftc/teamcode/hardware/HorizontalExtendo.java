@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.hardware.concrete;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.hardware.Extendo;
+import org.firstinspires.ftc.teamcode.hardware.base.Extendo;
 
 public class HorizontalExtendo extends Extendo
 {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.base;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -23,10 +23,22 @@ public abstract class Extendo extends MotorPair
         this.k = k;
         this.maxPosition = maxPosition;
 
-        Utils.validate(minPower > 0 && minPower < 1, "minPower must be greater than 0 but less than 1.");
-        Utils.validate(maxPower > 0 && maxPower < 1, "maxPower must be greater than 0 but less than 1.");
-        Utils.validate(minPower <= maxPower, "minPower must be less than or equal to maxPower.");
-        Utils.validate(maxPosition > 0, "maxPosition must be positive.");
+        Utils.validate(
+                minPower > 0 && minPower < 1,
+                "minPower must be greater than 0 but less than 1."
+        );
+        Utils.validate(
+                maxPower > 0 && maxPower < 1,
+                "maxPower must be greater than 0 but less than 1."
+        );
+        Utils.validate(
+                minPower <= maxPower,
+                "minPower must be less than or equal to maxPower."
+        );
+        Utils.validate(
+                maxPosition > 0,
+                "maxPosition must be positive."
+        );
     }
 
     /**

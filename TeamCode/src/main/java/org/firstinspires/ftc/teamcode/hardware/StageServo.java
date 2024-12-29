@@ -8,21 +8,8 @@ import java.util.EnumMap;
 
 public class StageServo<T extends Enum<T>> extends Servo
 {
+    public T stage;
     public EnumMap<T, Double> positionMap;
-
-    public StageServo(StageServoBuilder<T> stageServoBuilder)
-    {
-        super(stageServoBuilder.hardwareMap, stageServoBuilder.name);
-        positionMap = stageServoBuilder.positionMap;
-    }
-
-    public void setPosition(T stage)
-    {
-        if (!positionMap.containsKey(stage))
-            throw new RuntimeException("Tried to index positionMap with a nonexistent key.");
-        double position = positionMap.get(stage);
-        setPosition(position);
-    }
 
     public static class StageServoBuilder<T extends Enum<T>>
     {
@@ -49,5 +36,32 @@ public class StageServo<T extends Enum<T>> extends Servo
         {
             return new StageServo<>(this);
         }
+    }
+
+    public StageServo(StageServoBuilder<T> stageServoBuilder)
+    {
+        super(stageServoBuilder.hardwareMap, stageServoBuilder.name);
+        positionMap = stageServoBuilder.positionMap;
+    }
+
+    public T getStage()
+    {
+        return stage;
+    }
+
+    public void setStage(T stage)
+    {
+        if (!positionMap.containsKey(stage))
+        {
+            throw new RuntimeException(
+                    String.format(
+                            "The stage (\"%s\") does not exist in the servo's (\"%s\") positionMap (\"%s\").",
+                            stage, servo.getDeviceName(), positionMap
+                    )
+            );
+        }
+        double position = positionMap.get(stage);
+        setPosition(position);
+        this.stage = stage;
     }
 }

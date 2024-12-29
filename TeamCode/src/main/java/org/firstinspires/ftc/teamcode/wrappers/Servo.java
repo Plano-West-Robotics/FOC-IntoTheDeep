@@ -41,4 +41,9 @@ public class Servo
     {
         servo.setDirection(direction);
     }
+
+    public String getName()
+    {
+        return servo.getDeviceName();
+    }
 }

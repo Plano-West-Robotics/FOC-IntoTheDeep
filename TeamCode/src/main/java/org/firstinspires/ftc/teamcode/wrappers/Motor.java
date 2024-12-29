@@ -112,4 +112,9 @@ public class Motor
     {
         return motor.getCurrentPosition();
     }
+
+    public String getName()
+    {
+        return motor.getDeviceName();
+    }
 }

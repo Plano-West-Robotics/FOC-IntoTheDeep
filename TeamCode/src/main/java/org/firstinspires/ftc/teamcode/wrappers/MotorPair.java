@@ -13,7 +13,7 @@ public class MotorPair
         rightMotor = new Motor(hardwareMap, rightMotorName);
     }
 
-    public void stop()
+    public void zeroPower()
     {
         setPower(0);
     }

@@ -29,8 +29,13 @@ public class Gamepads
 
     public boolean justExitedThreshold(Analog analog, double threshold)
     {
-        return (getAnalogValue(analog, currGP1, currGP2) <= threshold)
-                && (getAnalogValue(analog, prevGP1, prevGP2) > threshold);
+        return (getAnalogValue(analog, currGP1, currGP2) < threshold)
+                && (getAnalogValue(analog, prevGP1, prevGP2) >= threshold);
+    }
+
+    public double getPrevAnalogValue(Analog analog)
+    {
+        return getAnalogValue(analog, prevGP1, prevGP2);
     }
 
     public double getAnalogValue(Analog analog)
@@ -66,6 +71,11 @@ public class Gamepads
     public boolean justReleased(Button button)
     {
         return !isPressed(button, currGP1, currGP2) && isPressed(button, prevGP1, prevGP2);
+    }
+
+    public boolean prevPressed(Button button)
+    {
+        return isPressed(button, prevGP1, prevGP2);
     }
 
     public boolean isPressed(Button button)

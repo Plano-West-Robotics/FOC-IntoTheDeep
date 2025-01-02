@@ -19,4 +19,13 @@ public class FrontClaw extends StageServoMono<FrontClaw.Stage>
                 .add(Stage.CLOSE, 0.456)
         );
     }
+
+    public void toggle()
+    {
+        switch (getStage())
+        {
+            case OPEN -> setStage(Stage.CLOSE);
+            case CLOSE -> setStage(Stage.OPEN);
+        }
+    }
 }

@@ -9,8 +9,8 @@ public class HorizontalExtendo extends Extendo
     public HorizontalExtendo(HardwareMap hardwareMap)
     {
         super(
-                hardwareMap, "hl", "hr", 30,
-                0.2, 0.6, 0.005, 1100
+                hardwareMap, "hl", "hr", 30, 0.2,
+                0.6, 0.005, 1100
         );
         getLeftMotor().forward();
         getRightMotor().reverse();

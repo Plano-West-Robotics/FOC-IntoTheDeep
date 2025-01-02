@@ -1,86 +1,85 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.control.Analog;
+import org.firstinspires.ftc.teamcode.control.Button;
+import org.firstinspires.ftc.teamcode.control.Gamepads;
+import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 
 public class TeleDrive
 {
-    public DcMotor fr, fl, br, bl;
-    public double frPower, flPower, brPower, blPower;
-    public boolean slowModeActivated;
-    public double SPEED_MULTIPLIER, TURN_SPEED_MULTIPLIER;
+    public Drivetrain drivetrain;
+    public double frPower, flPower, brPower, blPower, speed, turnSpeed;
+    public boolean slowMode;
 
-    public TeleDrive(HardwareMap hardwareMap)
+    public TeleDrive(Hardware hardware)
     {
-        fr = hardwareMap.get(DcMotor.class, "fr");
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        br = hardwareMap.get(DcMotor.class, "br");
-        bl = hardwareMap.get(DcMotor.class, "bl");
-
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        fr.setPower(0);
-        fl.setPower(0);
-        br.setPower(0);
-        bl.setPower(0);
-
-        slowModeActivated = false;
-        SPEED_MULTIPLIER = 0.5;
-        TURN_SPEED_MULTIPLIER = 0.7;
+        drivetrain = hardware.drivetrain;
+        regularSpeed();
     }
 
-    public void updateMotorPowers(double drive, double strafe, double turn)
+    public void drive(double drive, double strafe, double turn)
     {
-        frPower = drive - strafe;
-        flPower = drive + strafe;
-        brPower = drive + strafe;
-        blPower = drive - strafe;
+        if (drive == 0 && strafe == 0 && turn == 0) zeroPower();
 
-        frPower -= turn * TURN_SPEED_MULTIPLIER;
-        brPower -= turn * TURN_SPEED_MULTIPLIER;
-        flPower += turn * TURN_SPEED_MULTIPLIER;
-        blPower += turn * TURN_SPEED_MULTIPLIER;
+        else
+        {
+            frPower = drive - strafe;
+            flPower = drive + strafe;
+            brPower = drive + strafe;
+            blPower = drive - strafe;
 
-        frPower *= SPEED_MULTIPLIER;
-        flPower *= SPEED_MULTIPLIER;
-        brPower *= SPEED_MULTIPLIER;
-        blPower *= SPEED_MULTIPLIER;
+            frPower -= turn * turnSpeed;
+            brPower -= turn * turnSpeed;
+            flPower += turn * turnSpeed;
+            blPower += turn * turnSpeed;
 
-        fr.setPower(frPower);
-        fl.setPower(flPower);
-        br.setPower(brPower);
-        bl.setPower(blPower);
+            frPower *= speed;
+            flPower *= speed;
+            brPower *= speed;
+            blPower *= speed;
+        }
+
+        drivetrain.setPower(frPower, flPower, brPower, blPower);
+    }
+
+    public void zeroPower()
+    {
+        frPower = flPower = brPower = blPower = 0;
     }
 
     public void toggleSlowMode()
     {
-        if (slowModeActivated)
-        {
-            SPEED_MULTIPLIER = 0.5;
-            TURN_SPEED_MULTIPLIER = 0.7;
-        }
-        else
-        {
-            SPEED_MULTIPLIER = 0.1;
-            TURN_SPEED_MULTIPLIER = 0.4;
-        }
-        slowModeActivated = !slowModeActivated;
+        if (slowMode) regularSpeed();
+        else slowSpeed();
+    }
+
+    public void regularSpeed()
+    {
+        speed = 0.5;
+        turnSpeed = 0.7;
+        slowMode = false;
+    }
+
+    public void slowSpeed()
+    {
+        speed = 0.1;
+        turnSpeed = 0.4;
+        slowMode = true;
+    }
+
+    public boolean isSlowMode()
+    {
+        return slowMode;
+    }
+
+    public void update(Gamepads gamepads)
+    {
+        if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) toggleSlowMode();
+
+        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
+        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
+        double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
+        drive(drive, strafe, turn);
     }
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.base;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Utils;
 import org.firstinspires.ftc.teamcode.wrappers.MotorPair;
@@ -10,14 +11,15 @@ public abstract class Extendo extends MotorPair
     public final double minPosition;
     public final double halfPosition;
 
-    // Parameters associated with each Extendo's calculateAllowedPower method.
+    // Parameters associated with an Extendo's calculateAllowedPower method.
     public final double minPower; // the minimum value the method may return
     public final double maxPower; // the maximum value the method may return
     public final double k; // a constant that adjusts the steepness of the curve
     public final double maxPosition; // the motors' encoder value at the slides' maximum extension
 
     public Extendo(HardwareMap hardwareMap, String leftMotorName, String rightMotorName,
-                   double minPosition, double minPower, double maxPower, double k, double maxPosition)
+                   double minPosition, double minPower, double maxPower, double k,
+                   double maxPosition)
     {
         super(hardwareMap, leftMotorName, rightMotorName);
 
@@ -66,14 +68,14 @@ public abstract class Extendo extends MotorPair
         }
 
         double maxAllowedPower = calculateAllowedPower();
-        if (atUpperHalf() && power > maxAllowedPower) setPower(maxAllowedPower);
-        else if (atLowerHalf() && power < -maxAllowedPower) setPower(-maxAllowedPower);
-        else setPower(power);
+        double targetPower;
+        if (atUpperHalf()) targetPower = Range.clip(power, -maxPower, maxAllowedPower);
+        else targetPower = Range.clip(power, -maxAllowedPower, maxPower);
     }
 
     /**
-     * Calculates the maximum power value that can safely be used in a setPower call for a motor
-     * which drives a linear slide. The graph of this function, where the x-axis is
+     * Calculates the magnitude of the maximum power value that can safely be used in a setPower
+     * call for a motor which drives a linear slide. The graph of this function, where the x-axis is
      * {@code currentPosition} and the y-axis is the return value, tapers down to
      * y = {@code minPower} near x = 0 and x = {@code maxPosition}, approaches y = {@code maxPower}
      * in for x-values in the middle, and uses a reflection at x = 0 and x = {@code maxPosition}

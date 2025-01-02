@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 
+@TeleOp(name = "Main")
 public class MainTeleOp extends BaseTeleOp
 {
     public TeleDrive drive;
@@ -98,20 +100,21 @@ public class MainTeleOp extends BaseTeleOp
                     .onEnter( () -> intake.extendArm())
                     .loop( () -> {
                         intake.updateExtendoPower(gamepads);
-                        intake.updateSwivel(gamepads);
                         intake.updateClaw(gamepads);
+                        intake.updateSwivel(gamepads);
                     })
                     .transition( () -> intake.inRetractZone(), IntakeState.RETRACT)
                     .transition( () ->
                         gamepads.getAnalogValue(Analog.GP2_LEFT_TRIGGER) >= triggerThreshold,
-                        IntakeState.PROBE)
+                        IntakeState.PROBE
+                    )
 
                     .state(IntakeState.PROBE)
                     .onEnter( () -> intake.probeArm())
                     .loop( () -> {
                         intake.updateExtendoPower(gamepads);
-                        intake.updateSwivel(gamepads);
                         intake.updateClaw(gamepads);
+                        intake.updateSwivel(gamepads);
                     })
                     .transition( () -> intake.inRetractZone(), IntakeState.RETRACT)
                     .transition( () ->
@@ -124,6 +127,7 @@ public class MainTeleOp extends BaseTeleOp
         // Outtake FSM.
         {
             outtakeFSM = new StateMachineBuilder()
+                    // Refer to enum state definition for purpose of INIT.
                     .state(OuttakeState.INIT)
                     .transition( () -> outtake.clawIsClosed(), OuttakeState.HOLD)
                     .transition( () -> outtake.clawIsOpen(), OuttakeState.RELEASE)
@@ -236,29 +240,29 @@ public class MainTeleOp extends BaseTeleOp
                     transitions are declared.
                      */
                     .transition( () ->
-                                    // If this boolean evaluates to true, fsm will transition to a different state.
-                                    intakeFSM.getState() == IntakeState.RETRACT
-                                            && gamepads.getAnalogValue(Analog.GP2_RIGHT_TRIGGER) >= triggerThreshold
-                                            && gamepads.isPressed(Button.GP2_Y),
-
-                            RobotState.TRANSFER // The next state to transition to.
+                        // If this evaluates to true, robotFSM will transition to a different state.
+                        intakeFSM.getState() == IntakeState.RETRACT
+                        && gamepads.getAnalogValue(Analog.GP2_RIGHT_TRIGGER) >= triggerThreshold
+                        && gamepads.isPressed(Button.GP2_Y),
+                        RobotState.TRANSFER // The next state to transition to.
                     )
                     .transition( () ->
-                                    intakeFSM.getState() == IntakeState.RETRACT
-                                            && gamepads.isPressed(Button.GP2_Y),
-
-                            RobotState.INTAKE_TO_OUTTAKE
+                        intakeFSM.getState() == IntakeState.RETRACT
+                        && gamepads.isPressed(Button.GP2_Y),
+                        RobotState.INTAKE_TO_OUTTAKE
                     )
                     .onExit( () -> {
+                        intake.stopSlides();
                         intakeFSM.reset();
                         intakeFSM.stop();
-                        intake.stopSlides();
                     })
 
                     .state(RobotState.OUTTAKE)
                     .onEnter( () -> outtakeFSM.start())
                     .loop( () -> outtakeFSM.update())
-                    .transition( () -> gamepads.isPressed(Button.GP2_Y), RobotState.OUTTAKE_TO_INTAKE)
+                    .transition( () ->
+                        gamepads.isPressed(Button.GP2_Y),
+                        RobotState.OUTTAKE_TO_INTAKE)
                     .onExit( () -> {
                         outtake.stopSlides();
                         outtakeFSM.reset();
@@ -268,7 +272,9 @@ public class MainTeleOp extends BaseTeleOp
                     .state(RobotState.INTAKE_TO_OUTTAKE)
                     .onEnter( () -> ioFSM.start())
                     .loop( () -> ioFSM.update())
-                    .transition( () -> ioFSM.getState() == IntakeToOuttakeState.DONE, RobotState.OUTTAKE)
+                    .transition( () ->
+                        ioFSM.getState() == IntakeToOuttakeState.DONE,
+                        RobotState.OUTTAKE)
                     .onExit( () -> {
                         ioFSM.reset();
                         ioFSM.stop();
@@ -277,7 +283,9 @@ public class MainTeleOp extends BaseTeleOp
                     .state(RobotState.OUTTAKE_TO_INTAKE)
                     .onEnter( () -> oiFSM.start())
                     .loop( () -> oiFSM.update())
-                    .transition( () -> oiFSM.getState() == OuttakeToIntakeState.DONE, RobotState.INTAKE)
+                    .transition( () ->
+                        oiFSM.getState() == OuttakeToIntakeState.DONE,
+                        RobotState.INTAKE)
                     .onExit( () -> {
                         oiFSM.reset();
                         oiFSM.stop();
@@ -286,7 +294,9 @@ public class MainTeleOp extends BaseTeleOp
                     .state(RobotState.TRANSFER)
                     .onEnter( () -> transferFSM.start())
                     .loop( () -> transferFSM.update())
-                    .transition( () -> transferFSM.getState() == TransferState.DONE, RobotState.OUTTAKE)
+                    .transition( () ->
+                        transferFSM.getState() == TransferState.DONE,
+                        RobotState.OUTTAKE)
                     .onExit( () -> {
                         transferFSM.reset();
                         transferFSM.stop();
@@ -299,12 +309,13 @@ public class MainTeleOp extends BaseTeleOp
     @Override
     public void start()
     {
+        // Starting pose.
+        intake.retractArm();
         intake.openClaw();
-
+        intake.centerSwivel();
         outtake.retractArm();
         outtake.restElbow();
         outtake.openClaw();
-
         robotFSM.start();
     }
 
@@ -312,7 +323,6 @@ public class MainTeleOp extends BaseTeleOp
     public void run()
     {
         drive.update(gamepads);
-
         robotFSM.update();
     }
 }

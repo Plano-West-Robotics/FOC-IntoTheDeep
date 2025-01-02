@@ -8,14 +8,14 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
 {
     public enum Stage
     {
-        DEFAULT,
+        REST,
         SCORE // 45 degrees up from DEFAULT.
     }
 
     public BackElbow(HardwareMap hardwareMap)
     {
         super(new StageServoMonoBuilder<>(hardwareMap, "be", Stage.class)
-                .add(Stage.DEFAULT, 0.123)
+                .add(Stage.REST, 0.123)
                 .add(Stage.SCORE, 0.456)
         );
     }

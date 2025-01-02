@@ -59,13 +59,15 @@ public abstract class Extendo extends MotorPair
 
     public void setPower(double power, boolean limitPower)
     {
-        if (limitPower)
+        if (!limitPower)
         {
-            double maxAllowedPower = calculateAllowedPower();
-            if (atUpperHalf() && power > maxAllowedPower) setPower(maxAllowedPower);
-            else if (atLowerHalf() && power < -maxAllowedPower) setPower(-maxAllowedPower);
-            else setPower(power);
+            super.setPower(power);
+            return;
         }
+
+        double maxAllowedPower = calculateAllowedPower();
+        if (atUpperHalf() && power > maxAllowedPower) setPower(maxAllowedPower);
+        else if (atLowerHalf() && power < -maxAllowedPower) setPower(-maxAllowedPower);
         else setPower(power);
     }
 

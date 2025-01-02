@@ -7,6 +7,9 @@ import org.firstinspires.ftc.teamcode.wrappers.MotorPair;
 
 public abstract class Extendo extends MotorPair
 {
+    public final double minPosition;
+    public final double halfPosition;
+
     // Parameters associated with each Extendo's calculateAllowedPower method.
     public final double minPower; // the minimum value the method may return
     public final double maxPower; // the maximum value the method may return
@@ -14,15 +17,22 @@ public abstract class Extendo extends MotorPair
     public final double maxPosition; // the motors' encoder value at the slides' maximum extension
 
     public Extendo(HardwareMap hardwareMap, String leftMotorName, String rightMotorName,
-                   double minPower, double maxPower, double k, double maxPosition)
+                   double minPosition, double minPower, double maxPower, double k, double maxPosition)
     {
         super(hardwareMap, leftMotorName, rightMotorName);
+
+        this.minPosition = minPosition;
+        this.halfPosition = Math.round((minPosition + maxPosition) / 2.0);
 
         this.minPower = minPower;
         this.maxPower = maxPower;
         this.k = k;
         this.maxPosition = maxPosition;
 
+        Utils.validate(
+                minPosition < maxPosition,
+                "minPosition must be less than maxPosition."
+        );
         Utils.validate(
                 minPower > 0 && minPower < 1,
                 "minPower must be greater than 0 but less than 1."
@@ -41,6 +51,24 @@ public abstract class Extendo extends MotorPair
         );
     }
 
+    @Override
+    public void setPower(double power)
+    {
+        setPower(power, true);
+    }
+
+    public void setPower(double power, boolean limitPower)
+    {
+        if (limitPower)
+        {
+            double maxAllowedPower = calculateAllowedPower();
+            if (atUpperHalf() && power > maxAllowedPower) setPower(maxAllowedPower);
+            else if (atLowerHalf() && power < -maxAllowedPower) setPower(-maxAllowedPower);
+            else setPower(power);
+        }
+        else setPower(power);
+    }
+
     /**
      * Calculates the maximum power value that can safely be used in a setPower call for a motor
      * which drives a linear slide. The graph of this function, where the x-axis is
@@ -51,12 +79,37 @@ public abstract class Extendo extends MotorPair
      * power value when x is not within the domain [0, {@code maxPosition}].
      * @return the maximum power value that can safely be used given the current average position
      */
-    public double calculateAllowedPower() throws IllegalArgumentException
+    public double calculateAllowedPower()
     {
         double currentPosition = getAveragePosition();
         double a = Math.tanh(k * currentPosition);
         double b = Math.tanh(k * (currentPosition - maxPosition));
         double c = (maxPower - minPower) * (a - b) + 2 * minPower - maxPower;
         return Math.abs(c - minPower) + minPower;
+    }
+
+    public boolean atLowerHalf()
+    {
+        return getAveragePosition() < halfPosition;
+    }
+
+    public boolean atUpperHalf()
+    {
+        return getAveragePosition() > halfPosition;
+    }
+
+    public boolean isRetracted()
+    {
+        return getAveragePosition() <= minPosition;
+    }
+
+    public boolean isExtended()
+    {
+        return getAveragePosition() >= maxPosition;
+    }
+
+    public int getHalfPosition()
+    {
+        return (int) Math.round(halfPosition);
     }
 }

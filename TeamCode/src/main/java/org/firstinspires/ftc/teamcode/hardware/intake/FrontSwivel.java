@@ -26,11 +26,6 @@ public class FrontSwivel extends StageServoMono<FrontSwivel.Stage>
         );
     }
 
-    public void center()
-    {
-        setStage(Stage.NORTH);
-    }
-
     public void rotateCCW()
     {
         Stage newStage = switch (getStage())

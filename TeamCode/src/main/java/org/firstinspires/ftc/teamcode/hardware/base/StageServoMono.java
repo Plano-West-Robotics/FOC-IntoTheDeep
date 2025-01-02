@@ -46,7 +46,7 @@ public abstract class StageServoMono<T extends Enum<T>> extends StageServo<T>
     }
 
     @Override
-    public void applyPosition(double position)
+    public void setPosition(double position)
     {
         servo.setPosition(position);
     }

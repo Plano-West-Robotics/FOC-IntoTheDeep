@@ -27,9 +27,9 @@ public abstract class StageServo<T extends Enum<T>>
                     )
             );
         double position = positionMap.get(stage);
-        applyPosition(position);
+        setPosition(position);
         this.stage = stage;
     }
 
-    public abstract void applyPosition(double position);
+    public abstract void setPosition(double position);
 }

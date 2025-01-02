@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.hardware.intake.FrontArm;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontClaw;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontSwivel;
 import org.firstinspires.ftc.teamcode.hardware.intake.HorizontalExtendo;
-import org.firstinspires.ftc.teamcode.hardware.outtake.BackClaw;
 import org.firstinspires.ftc.teamcode.wrappers.MotorPair;
 
 public class Intake

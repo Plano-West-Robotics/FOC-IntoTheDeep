@@ -24,13 +24,13 @@ public abstract class StageServoPair<T extends Enum<T>> extends StageServo<T>
             this.positionMap = new EnumMap<>(enumClass);
         }
 
-        public StageServoPairBuilder<T> add(T stage, double position)
+        public StageServoPairBuilder<T> add(T stage, double leftServoPosition)
         {
-            if (position < 0 || position > 1)
+            if (leftServoPosition < 0 || leftServoPosition > 1)
                 throw new IllegalArgumentException(
                         "Servo position values cannot be outside the range [0, 1]."
                 );
-            positionMap.put(stage, position);
+            positionMap.put(stage, leftServoPosition);
             return this;
         }
     }

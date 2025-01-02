@@ -128,12 +128,12 @@ public class MotorPair
         return new int[] {leftMotor.getPosition(), rightMotor.getPosition()};
     }
 
-    public Motor getLeft()
+    public Motor getLeftMotor()
     {
         return leftMotor;
     }
 
-    public Motor getRight()
+    public Motor getRightMotor()
     {
         return rightMotor;
     }

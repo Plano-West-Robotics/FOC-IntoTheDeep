@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.outtake;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -9,8 +9,10 @@ public class VerticalExtendo extends Extendo
     public VerticalExtendo(HardwareMap hardwareMap)
     {
         super(
-                hardwareMap, "vl", "vr",
+                hardwareMap, "vl", "vr", 45,
                 0.3, 0.8, 0.0025, 3800
         );
+        getLeftMotor().reverse();
+        getRightMotor().forward();
     }
 }

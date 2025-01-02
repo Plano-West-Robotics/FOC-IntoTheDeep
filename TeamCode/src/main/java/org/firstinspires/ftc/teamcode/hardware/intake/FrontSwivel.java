@@ -2,51 +2,36 @@ package org.firstinspires.ftc.teamcode.hardware.intake;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.hardware.base.StageServoMono;
+import org.firstinspires.ftc.teamcode.wrappers.Servo;
 
-public class FrontSwivel extends StageServoMono<FrontSwivel.Stage>
+public class FrontSwivel extends Servo
 {
-    public enum Stage
-    {
-        WEST,
-        NORTHWEST,
-        NORTH,
-        NORTHEAST,
-        EAST
-    }
+    public double positionIncrement;
+    public boolean initialized;
 
     public FrontSwivel(HardwareMap hardwareMap)
     {
-        super(new StageServoMonoBuilder<>(hardwareMap, "fs", Stage.class)
-                .add(Stage.WEST, 0)
-                .add(Stage.NORTHWEST, 0.25)
-                .add(Stage.NORTH, 0.5)
-                .add(Stage.NORTHEAST, 0.75)
-                .add(Stage.EAST, 1)
-        );
+        super(hardwareMap, "fs");
+        servo.scaleRange(0.123, 0.456);
+        positionIncrement = 0.25;
+        initialized = false;
+    }
+
+    public void center()
+    {
+        setPosition(0.5);
+        initialized = true;
     }
 
     public void rotateCCW()
     {
-        Stage newStage = switch (getStage())
-        {
-            case WEST, NORTHWEST -> Stage.WEST;
-            case NORTH -> Stage.NORTHWEST;
-            case NORTHEAST -> Stage.NORTH;
-            case EAST -> Stage.NORTHEAST;
-        };
-        setStage(newStage);
+        if (!initialized) center();
+        if (getPosition() >= positionIncrement) setPosition(getPosition() - positionIncrement);
     }
 
     public void rotateCW()
     {
-        Stage newStage = switch (getStage())
-        {
-            case WEST -> Stage.NORTHWEST;
-            case NORTHWEST -> Stage.NORTH;
-            case NORTH -> Stage.NORTHEAST;
-            case NORTHEAST, EAST -> Stage.EAST;
-        };
-        setStage(newStage);
+        if (!initialized) center();
+        if (getPosition() <= 1 - positionIncrement) setPosition(getPosition() + positionIncrement);
     }
 }

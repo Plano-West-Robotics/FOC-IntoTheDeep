@@ -8,8 +8,8 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
 {
     public enum Stage
     {
-        REST,
-        SCORE // 45 degrees up from DEFAULT.
+        REST, // Position when transferring a sample.
+        SCORE // Position when scoring a sample/specimen; 45 degrees off from REST.
     }
 
     public BackElbow(HardwareMap hardwareMap)

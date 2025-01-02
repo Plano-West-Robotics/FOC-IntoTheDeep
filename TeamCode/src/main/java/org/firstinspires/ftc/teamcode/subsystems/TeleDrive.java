@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 
-public class TeleDrive implements Subsystem
+public class TeleDrive
 {
     public Drivetrain drivetrain;
     public double frPower, flPower, brPower, blPower, speed, turnSpeed;
@@ -73,7 +73,6 @@ public class TeleDrive implements Subsystem
         return slowMode;
     }
 
-    @Override
     public void update(Gamepads gamepads)
     {
         if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) toggleSlowMode();

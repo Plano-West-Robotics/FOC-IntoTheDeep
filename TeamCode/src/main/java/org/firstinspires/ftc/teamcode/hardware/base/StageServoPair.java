@@ -16,7 +16,8 @@ public abstract class StageServoPair<T extends Enum<T>> extends StageServo<T>
         public String leftServoName, rightServoName;
         public EnumMap<T, Double> positionMap;
 
-        public StageServoPairBuilder(HardwareMap hardwareMap, String leftServoName, String rightServoName, Class<T> enumClass)
+        public StageServoPairBuilder(HardwareMap hardwareMap, String leftServoName,
+                                     String rightServoName, Class<T> enumClass)
         {
             this.hardwareMap = hardwareMap;
             this.leftServoName = leftServoName;
@@ -38,7 +39,9 @@ public abstract class StageServoPair<T extends Enum<T>> extends StageServo<T>
     public StageServoPair(StageServoPairBuilder<T> builder)
     {
         super(builder.positionMap);
-        servoPair = new ServoPair(builder.hardwareMap, builder.leftServoName, builder.rightServoName);
+        servoPair = new ServoPair(
+                builder.hardwareMap, builder.leftServoName,builder.rightServoName
+        );
     }
 
     public ServoPair getServoPair()

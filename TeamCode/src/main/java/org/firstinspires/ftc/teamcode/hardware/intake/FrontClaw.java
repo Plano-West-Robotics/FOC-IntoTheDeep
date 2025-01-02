@@ -9,7 +9,7 @@ public class FrontClaw extends StageServoMono<FrontClaw.Stage>
     public enum Stage
     {
         OPEN,
-        CLOSE // Not maximum clamping force; should allow sample to slide back and forth.
+        CLOSE // Not maximum clamping force; should allow sample/specimen to slide back and forth.
     }
 
     public FrontClaw(HardwareMap hardwareMap)
@@ -18,14 +18,5 @@ public class FrontClaw extends StageServoMono<FrontClaw.Stage>
                 .add(Stage.OPEN, 0.123)
                 .add(Stage.CLOSE, 0.456)
         );
-    }
-
-    public void toggle()
-    {
-        switch (getStage())
-        {
-            case OPEN -> setStage(Stage.CLOSE);
-            case CLOSE -> setStage(Stage.OPEN);
-        }
     }
 }

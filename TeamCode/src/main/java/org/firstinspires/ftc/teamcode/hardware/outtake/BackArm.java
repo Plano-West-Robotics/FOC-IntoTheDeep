@@ -8,16 +8,16 @@ public class BackArm extends StageServoMono<BackArm.Stage>
 {
     public enum Stage
     {
-        RETRACT, // Above the two C-channels that house the outtake arm.
-        PERPENDICULAR, // 180 degrees from RETRACT.
-        EXTEND // 45 degrees beyond PERPENDICULAR; position for scoring.
+        RETRACT, // Rest position; 90 degrees above HANDOVER.
+        HANDOVER, // Position when transferring a sample.
+        EXTEND // Position when scoring a sample/specimen; 135 degrees below HANDOVER.
     }
 
     public BackArm(HardwareMap hardwareMap)
     {
         super(new StageServoMonoBuilder<>(hardwareMap, "ba", Stage.class)
                 .add(Stage.RETRACT, 0.123)
-                .add(Stage.PERPENDICULAR, 0.456)
+                .add(Stage.HANDOVER, 0.456)
                 .add(Stage.EXTEND, 0.789)
         );
     }

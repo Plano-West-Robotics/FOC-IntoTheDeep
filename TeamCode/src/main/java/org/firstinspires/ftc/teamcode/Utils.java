@@ -8,4 +8,9 @@ public final class Utils
     {
         if (!condition) throw new RuntimeException(message);
     }
+
+    public static double inRad(double degrees)
+    {
+        return Math.toRadians(degrees);
+    }
 }

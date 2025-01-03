@@ -21,8 +21,13 @@ public abstract class Extendo extends MotorPair
     public final double maxPosition; // the motors' encoder value at the slides' maximum extension
 
     public Extendo(HardwareMap hardwareMap, String leftMotorName, String rightMotorName,
-                   int minPosition, double minPower, double maxPower, double k,
-                   int maxPosition, double p, double i, double d, double f)
+                   int minPosition, int maxPosition,
+                   double minPower, double maxPower,
+                   double k,
+                   double p,
+                   double i,
+                   double d,
+                   double f)
     {
         super(hardwareMap, leftMotorName, rightMotorName);
 

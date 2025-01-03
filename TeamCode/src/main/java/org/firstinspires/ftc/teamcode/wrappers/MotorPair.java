@@ -118,9 +118,9 @@ public class MotorPair
         return leftMotor.getPosition() - rightMotor.getPosition();
     }
 
-    public double getAveragePosition()
+    public int getAveragePosition()
     {
-        return (leftMotor.getPosition() + rightMotor.getPosition()) / 2.0;
+        return (int) Math.round((leftMotor.getPosition() + rightMotor.getPosition()) / 2.0);
     }
 
     public int[] getPosition()

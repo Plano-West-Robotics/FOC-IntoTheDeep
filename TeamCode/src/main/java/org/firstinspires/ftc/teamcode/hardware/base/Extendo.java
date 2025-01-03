@@ -9,10 +9,11 @@ import org.firstinspires.ftc.teamcode.wrappers.MotorPair;
 
 public abstract class Extendo extends MotorPair
 {
-    public PIDFController controller;
+    public final PIDFController controller;
 
     public final double minPosition;
     public final double halfPosition;
+    public final double gravityFeedforward;
 
     // Parameters associated with an Extendo's calculateAllowedPower method.
     public final double minPower; // the minimum value the method may return
@@ -27,12 +28,14 @@ public abstract class Extendo extends MotorPair
                    double p,
                    double i,
                    double d,
-                   double f)
+                   double f,
+                   double gravityFeedforward)
     {
         super(hardwareMap, leftMotorName, rightMotorName);
 
         this.minPosition = minPosition;
         this.halfPosition = Math.round((minPosition + maxPosition) / 2.0);
+        this.gravityFeedforward = gravityFeedforward;
 
         this.minPower = minPower;
         this.maxPower = maxPower;
@@ -73,7 +76,7 @@ public abstract class Extendo extends MotorPair
     {
         if (!limitPower)
         {
-            super.setPower(power);
+            super.setPower(power + gravityFeedforward);
             return;
         }
 
@@ -81,7 +84,7 @@ public abstract class Extendo extends MotorPair
         double targetPower;
         if (atUpperHalf()) targetPower = Range.clip(power, -maxPower, maxAllowedPower);
         else targetPower = Range.clip(power, -maxAllowedPower, maxPower);
-        super.setPower(targetPower);
+        super.setPower(targetPower + gravityFeedforward);
     }
 
     /**

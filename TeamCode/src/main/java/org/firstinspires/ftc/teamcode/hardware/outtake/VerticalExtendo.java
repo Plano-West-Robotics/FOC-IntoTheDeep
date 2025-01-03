@@ -10,7 +10,7 @@ public class VerticalExtendo extends Extendo
     {
         super(
                 hardwareMap, "vl", "vr", 45, 0.3,
-                0.8, 0.0025, 3800
+                0.8, 0.0025, 3800, 0, 0, 0, 0
         );
         getLeftMotor().reverse();
         getRightMotor().forward();

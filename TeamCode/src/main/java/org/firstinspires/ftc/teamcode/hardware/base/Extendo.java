@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.base;
 
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -8,6 +9,8 @@ import org.firstinspires.ftc.teamcode.wrappers.MotorPair;
 
 public abstract class Extendo extends MotorPair
 {
+    public PIDFController controller;
+
     public final double minPosition;
     public final double halfPosition;
 
@@ -18,8 +21,8 @@ public abstract class Extendo extends MotorPair
     public final double maxPosition; // the motors' encoder value at the slides' maximum extension
 
     public Extendo(HardwareMap hardwareMap, String leftMotorName, String rightMotorName,
-                   double minPosition, double minPower, double maxPower, double k,
-                   double maxPosition)
+                   int minPosition, double minPower, double maxPower, double k,
+                   int maxPosition, double p, double i, double d, double f)
     {
         super(hardwareMap, leftMotorName, rightMotorName);
 
@@ -30,6 +33,8 @@ public abstract class Extendo extends MotorPair
         this.maxPower = maxPower;
         this.k = k;
         this.maxPosition = maxPosition;
+
+        controller = new PIDFController(p, i, d, f);
 
         Utils.validate(
                 minPosition < maxPosition,
@@ -71,6 +76,7 @@ public abstract class Extendo extends MotorPair
         double targetPower;
         if (atUpperHalf()) targetPower = Range.clip(power, -maxPower, maxAllowedPower);
         else targetPower = Range.clip(power, -maxAllowedPower, maxPower);
+        super.setPower(targetPower);
     }
 
     /**
@@ -90,6 +96,25 @@ public abstract class Extendo extends MotorPair
         double b = Math.tanh(k * (currentPosition - maxPosition));
         double c = (maxPower - minPower) * (a - b) + 2 * minPower - maxPower;
         return Math.abs(c - minPower) + minPower;
+    }
+
+    public double calculateControllerPower(int targetPosition)
+    {
+        Utils.validate(
+                targetPosition >= minPosition,
+                "targetPosition must be greater than or equal to minPosition."
+        );
+        Utils.validate(
+                targetPosition <= maxPosition,
+                "targetPosition must be less than or equal to maxPosition."
+        );
+        double currentPosition = getAveragePosition();
+        return controller.calculate(currentPosition, targetPosition);
+    }
+
+    public boolean atPosition(int targetPosition, int errorMargin)
+    {
+        return Math.abs(getAveragePosition() - targetPosition) <= Math.abs(errorMargin);
     }
 
     public boolean atLowerHalf()

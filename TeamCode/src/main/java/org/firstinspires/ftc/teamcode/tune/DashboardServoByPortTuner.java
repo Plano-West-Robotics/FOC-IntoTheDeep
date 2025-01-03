@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.ServoConfigurationType;
 
-@TeleOp(group = "tune")
+@TeleOp(group = "Tune")
 public class DashboardServoByPortTuner extends OpMode {
     @Override
     public void init() {

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-@TeleOp(group = "tune")
+@TeleOp(group = "Tune")
 public class DashboardServoTuner extends OpMode {
     @Override
     public void init() {

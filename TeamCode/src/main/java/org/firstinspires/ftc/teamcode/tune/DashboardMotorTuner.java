@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.ArrayList;
 
-@TeleOp(group = "tune")
+@TeleOp(group = "Tune")
 public class DashboardMotorTuner extends OpMode {
     ArrayList<Pair<String, DcMotorEx>> motors = new ArrayList<>();
 

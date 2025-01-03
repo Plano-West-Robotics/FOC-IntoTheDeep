@@ -252,7 +252,7 @@ public class MainTeleOp extends BaseTeleOp
                         RobotState.INTAKE_TO_OUTTAKE
                     )
                     .onExit( () -> {
-                        intake.stopSlides();
+                        intake.haltSlides();
                         intakeFSM.reset();
                         intakeFSM.stop();
                     })
@@ -264,7 +264,7 @@ public class MainTeleOp extends BaseTeleOp
                         gamepads.isPressed(Button.GP2_Y),
                         RobotState.OUTTAKE_TO_INTAKE)
                     .onExit( () -> {
-                        outtake.stopSlides();
+                        outtake.haltSlides();
                         outtakeFSM.reset();
                         outtakeFSM.stop();
                     })

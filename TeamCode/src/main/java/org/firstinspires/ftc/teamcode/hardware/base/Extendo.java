@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.hardware.base;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
@@ -106,7 +110,7 @@ public abstract class Extendo extends MotorPair
         return Math.abs(c - minPower) + minPower;
     }
 
-    public double calculateControllerPower(int targetPosition)
+    public double calculatePIDFControllerPower(int targetPosition)
     {
         Utils.validate(
                 targetPosition >= minPosition,
@@ -116,6 +120,7 @@ public abstract class Extendo extends MotorPair
                 targetPosition <= maxPosition,
                 "targetPosition must be less than or equal to maxPosition."
         );
+
         double currentPosition = getAveragePosition();
         return controller.calculate(currentPosition, targetPosition);
     }
@@ -148,5 +153,24 @@ public abstract class Extendo extends MotorPair
     public int getHalfPosition()
     {
         return (int) Math.round(halfPosition);
+    }
+
+    public Action getSlideAction(int targetPosition, int errorMargin)
+    {
+        return new Action()
+        {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket)
+            {
+                double power = calculatePIDFControllerPower(targetPosition);
+                setPower(power, false);
+                if (atPosition(targetPosition, errorMargin))
+                {
+                    setPower(0, false);
+                    return false;
+                }
+                return true;
+            }
+        };
     }
 }

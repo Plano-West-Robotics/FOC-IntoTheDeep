@@ -157,11 +157,11 @@ public class Outtake
 
     public boolean clawIsOpen()
     {
-        return claw.isStage(BackClaw.Stage.OPEN);
+        return claw.atStage(BackClaw.Stage.OPEN);
     }
 
     public boolean clawIsClosed()
     {
-        return claw.isStage(BackClaw.Stage.CLOSE);
+        return claw.atStage(BackClaw.Stage.CLOSE);
     }
 }

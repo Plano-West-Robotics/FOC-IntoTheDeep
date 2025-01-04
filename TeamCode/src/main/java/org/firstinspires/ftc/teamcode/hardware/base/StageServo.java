@@ -12,7 +12,7 @@ public abstract class StageServo<T extends Enum<T>>
         this.positionMap = positionMap;
     }
 
-    public boolean isStage(T stage)
+    public boolean atStage(T stage)
     {
         return stage == this.stage;
     }

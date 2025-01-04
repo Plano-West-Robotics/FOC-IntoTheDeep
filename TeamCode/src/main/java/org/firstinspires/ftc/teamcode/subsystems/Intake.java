@@ -137,12 +137,12 @@ public class Intake
 
     public boolean clawIsOpen()
     {
-        return claw.isStage(FrontClaw.Stage.OPEN);
+        return claw.atStage(FrontClaw.Stage.OPEN);
     }
 
     public boolean clawIsClosed()
     {
-        return claw.isStage(FrontClaw.Stage.CLOSE);
+        return claw.atStage(FrontClaw.Stage.CLOSE);
     }
 
     public void updateSwivel(Gamepads gamepads)

@@ -15,7 +15,6 @@ public abstract class Extendo extends MotorPair
 {
     public final PIDFController controller;
 
-    public final double halfPosition;
     public final double gravityFeedforward;
 
     // Parameters used in the calculateAllowedPower method.
@@ -38,7 +37,6 @@ public abstract class Extendo extends MotorPair
     {
         super(hardwareMap, leftMotorName, rightMotorName);
 
-        this.halfPosition = Math.round((minPosition + maxPosition) / 2.0);
         this.gravityFeedforward = gravityFeedforward;
 
         this.minPosition = minPosition;
@@ -128,19 +126,14 @@ public abstract class Extendo extends MotorPair
         return controller.calculate(currentPosition, targetPosition);
     }
 
-    public boolean atPosition(int targetPosition, int errorMargin)
-    {
-        return Math.abs(getAveragePosition() - targetPosition) <= Math.abs(errorMargin);
-    }
-
     public boolean atLowerHalf()
     {
-        return getAveragePosition() < halfPosition;
+        return getAveragePosition() < getHalfPosition();
     }
 
     public boolean atUpperHalf()
     {
-        return getAveragePosition() > halfPosition;
+        return getAveragePosition() > getHalfPosition();
     }
 
     public boolean isRetracted()
@@ -155,7 +148,7 @@ public abstract class Extendo extends MotorPair
 
     public int getHalfPosition()
     {
-        return (int) Math.round(halfPosition);
+        return (int) Math.round((minPosition + maxPosition) / 2.0);
     }
 
     public Action getSlideAction(int targetPosition)

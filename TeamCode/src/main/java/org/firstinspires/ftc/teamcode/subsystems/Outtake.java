@@ -22,7 +22,6 @@ public class Outtake
     public static final int HC_POSITION = 456; // High chamber.
     public static final int LR_POSITION = 567; // Low rung.
     public static final int HR_POSITION = 678; // High rung.
-    public static final int POSITION_ERROR_MARGIN = 35;
 
     public VerticalExtendo extendo;
     public BackArm arm;
@@ -49,32 +48,32 @@ public class Outtake
 
     public Action slidesToLowBasket()
     {
-        return extendo.getSlideAction(LB_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(LB_POSITION);
     }
 
     public Action slidesToHighBasket()
     {
-        return extendo.getSlideAction(HB_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(HB_POSITION);
     }
 
     public Action slidesToLowChamber()
     {
-        return extendo.getSlideAction(LC_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(LC_POSITION);
     }
 
     public Action slidesToHighChamber()
     {
-        return extendo.getSlideAction(HC_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(HC_POSITION);
     }
 
     public Action slidesToLowRung()
     {
-        return extendo.getSlideAction(LR_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(LR_POSITION);
     }
 
     public Action slidesToHighRung()
     {
-        return extendo.getSlideAction(HR_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(HR_POSITION);
     }
 
     public void retractArm()

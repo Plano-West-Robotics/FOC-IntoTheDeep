@@ -15,15 +15,15 @@ public abstract class Extendo extends MotorPair
 {
     public final PIDFController controller;
 
-    public final double minPosition;
     public final double halfPosition;
     public final double gravityFeedforward;
 
-    // Parameters associated with an Extendo's calculateAllowedPower method.
+    // Parameters used in the calculateAllowedPower method.
+    public final double minPosition; // the motors' encoder value at the slides' minimum extension
+    public final double maxPosition; // the motors' encoder value at the slides' maximum extension
     public final double minPower; // the minimum value the method may return
     public final double maxPower; // the maximum value the method may return
     public final double k; // a constant that adjusts the steepness of the curve
-    public final double maxPosition; // the motors' encoder value at the slides' maximum extension
 
     public Extendo(HardwareMap hardwareMap, String leftMotorName, String rightMotorName,
                    int minPosition, int maxPosition,
@@ -33,20 +33,22 @@ public abstract class Extendo extends MotorPair
                    double i,
                    double d,
                    double f,
+                   double positionErrorTolerance,
                    double gravityFeedforward)
     {
         super(hardwareMap, leftMotorName, rightMotorName);
 
-        this.minPosition = minPosition;
         this.halfPosition = Math.round((minPosition + maxPosition) / 2.0);
         this.gravityFeedforward = gravityFeedforward;
 
+        this.minPosition = minPosition;
+        this.maxPosition = maxPosition;
         this.minPower = minPower;
         this.maxPower = maxPower;
         this.k = k;
-        this.maxPosition = maxPosition;
 
         controller = new PIDFController(p, i, d, f);
+        controller.setTolerance(positionErrorTolerance);
 
         Utils.validate(
                 minPosition < maxPosition,
@@ -95,16 +97,17 @@ public abstract class Extendo extends MotorPair
      * Calculates the magnitude of the maximum power value that can safely be used in a setPower
      * call for a motor which drives a linear slide. The graph of this function, where the x-axis is
      * {@code currentPosition} and the y-axis is the return value, tapers down to
-     * y = {@code minPower} near x = 0 and x = {@code maxPosition}, approaches y = {@code maxPower}
-     * in for x-values in the middle, and uses a reflection at x = 0 and x = {@code maxPosition}
-     * (accomplished with the local double {@code c}) so that the method still returns a reasonable
-     * power value when x is not within the domain [0, {@code maxPosition}].
+     * y = {@code minPower} near x = {@code minPosition} and x = {@code maxPosition}, approaches
+     * y = {@code maxPower} in for x-values in the middle, and uses a reflection at
+     * x = {@code minPosition} and x = {@code maxPosition} (accomplished with the local double
+     * {@code c}) so that the method still returns a reasonable power value when x is not within the
+     * domain [0, {@code maxPosition}].
      * @return the maximum power value that can safely be used given the current average position
      */
     public double calculateAllowedPower()
     {
         double currentPosition = getAveragePosition();
-        double a = Math.tanh(k * currentPosition);
+        double a = Math.tanh(k * (currentPosition - minPosition));
         double b = Math.tanh(k * (currentPosition - maxPosition));
         double c = (maxPower - minPower) * (a - b) + 2 * minPower - maxPower;
         return Math.abs(c - minPower) + minPower;
@@ -155,7 +158,7 @@ public abstract class Extendo extends MotorPair
         return (int) Math.round(halfPosition);
     }
 
-    public Action getSlideAction(int targetPosition, int errorMargin)
+    public Action getSlideAction(int targetPosition)
     {
         return new Action()
         {
@@ -164,7 +167,7 @@ public abstract class Extendo extends MotorPair
             {
                 double power = calculatePIDFControllerPower(targetPosition);
                 setPower(power, false);
-                if (atPosition(targetPosition, errorMargin))
+                if (controller.atSetPoint())
                 {
                     setPower(0, false);
                     return false;

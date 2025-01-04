@@ -17,6 +17,7 @@ public class VerticalExtendo extends Extendo
                 0,
                 0,
                 0,
+                45,
                 0.0005
         );
         getLeft().reverse();

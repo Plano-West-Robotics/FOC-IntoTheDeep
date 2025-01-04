@@ -22,7 +22,6 @@ public class Intake
     // Auto HorizontalExtendo parameters.
     public static final int RETRACT_POSITION = 200;
     public static final int EXTEND_POSITION = 800;
-    public static final int POSITION_ERROR_MARGIN = 20;
 
     public HorizontalExtendo extendo;
     public FrontArm arm;
@@ -49,12 +48,12 @@ public class Intake
 
     public Action retractSlides()
     {
-        return extendo.getSlideAction(RETRACT_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(RETRACT_POSITION);
     }
 
     public Action extendSlides()
     {
-        return extendo.getSlideAction(EXTEND_POSITION, POSITION_ERROR_MARGIN);
+        return extendo.getSlideAction(EXTEND_POSITION);
     }
 
     public boolean inRetractZone()

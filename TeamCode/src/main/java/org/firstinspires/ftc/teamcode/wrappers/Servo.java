@@ -8,14 +8,17 @@ public class Servo
 
     public Servo(HardwareMap hardwareMap, String name)
     {
-        this(hardwareMap, name, true);
+        servo = hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, name);
     }
 
-    public Servo(HardwareMap hardwareMap, String name, boolean isForward)
+    public void forward()
     {
-        servo = hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, name);
-        if (isForward) setDirection(com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD);
-        else setDirection(com.qualcomm.robotcore.hardware.Servo.Direction.REVERSE);
+        setDirection(com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD);
+    }
+
+    public void reverse()
+    {
+        setDirection(com.qualcomm.robotcore.hardware.Servo.Direction.REVERSE);
     }
 
     /**

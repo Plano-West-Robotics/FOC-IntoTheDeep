@@ -21,10 +21,10 @@ public class ExtendoDebug extends OpMode
     {
         horizontalExtendo = new HorizontalExtendo(hardwareMap);
         verticalExtendo = new VerticalExtendo(hardwareMap);
-        hl = horizontalExtendo.getLeftMotor();
-        hr = horizontalExtendo.getRightMotor();
-        vl = verticalExtendo.getLeftMotor();
-        vr = verticalExtendo.getRightMotor();
+        hl = horizontalExtendo.getLeft();
+        hr = horizontalExtendo.getRight();
+        vl = verticalExtendo.getLeft();
+        vr = verticalExtendo.getRight();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 

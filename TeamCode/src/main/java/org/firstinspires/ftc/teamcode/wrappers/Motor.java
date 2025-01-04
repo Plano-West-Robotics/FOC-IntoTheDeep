@@ -10,14 +10,7 @@ public class Motor
 
     public Motor(HardwareMap hardwareMap, String name)
     {
-        this(hardwareMap, name, true);
-    }
-
-    public Motor(HardwareMap hardwareMap, String name, boolean isForward)
-    {
         motor = hardwareMap.get(DcMotor.class, name);
-        if (isForward) forward();
-        else reverse();
         resetEncoder(true);
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         zeroPower();

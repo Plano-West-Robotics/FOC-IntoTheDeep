@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class MotorPair
 {
-    public Motor leftMotor, rightMotor;
+    public Motor left, right;
 
     public MotorPair(HardwareMap hardwareMap, String leftMotorName, String rightMotorName)
     {
-        leftMotor = new Motor(hardwareMap, leftMotorName);
-        rightMotor = new Motor(hardwareMap, rightMotorName);
+        left = new Motor(hardwareMap, leftMotorName);
+        right = new Motor(hardwareMap, rightMotorName);
     }
 
     public void zeroPower()
@@ -49,7 +49,7 @@ public class MotorPair
 
     public boolean isBusy()
     {
-        return leftMotor.isBusy() || rightMotor.isBusy();
+        return left.isBusy() || right.isBusy();
     }
 
     /**
@@ -58,17 +58,17 @@ public class MotorPair
      */
     public double getDiffPower()
     {
-        return leftMotor.getPower() - rightMotor.getPower();
+        return left.getPower() - right.getPower();
     }
 
     public double getAveragePower()
     {
-        return (leftMotor.getPower() + rightMotor.getPower()) / 2.0;
+        return (left.getPower() + right.getPower()) / 2.0;
     }
 
     public double[] getPower()
     {
-        return new double[] {leftMotor.getPower(), rightMotor.getPower()};
+        return new double[] {left.getPower(), right.getPower()};
     }
 
     public void setPower(double power)
@@ -78,24 +78,24 @@ public class MotorPair
 
     public void setPower(double leftPower, double rightPower)
     {
-        leftMotor.setPower(leftPower);
-        rightMotor.setPower(rightPower);
+        left.setPower(leftPower);
+        right.setPower(rightPower);
     }
 
     public DcMotor.RunMode[] getMode()
     {
-        return new DcMotor.RunMode[] {leftMotor.getMode(), rightMotor.getMode()};
+        return new DcMotor.RunMode[] {left.getMode(), right.getMode()};
     }
 
     public void setMode(DcMotor.RunMode mode)
     {
-        leftMotor.setMode(mode);
-        rightMotor.setMode(mode);
+        left.setMode(mode);
+        right.setMode(mode);
     }
 
     public int[] getTarget()
     {
-        return new int[] {leftMotor.getTarget(), rightMotor.getTarget()};
+        return new int[] {left.getTarget(), right.getTarget()};
     }
 
     public void setTarget(double target)
@@ -105,8 +105,8 @@ public class MotorPair
 
     public void setTarget(double leftTarget, double rightTarget)
     {
-        leftMotor.setTarget(leftTarget);
-        rightMotor.setTarget(rightTarget);
+        left.setTarget(leftTarget);
+        right.setTarget(rightTarget);
     }
 
     /**
@@ -115,26 +115,26 @@ public class MotorPair
      */
     public int getDiffPosition()
     {
-        return leftMotor.getPosition() - rightMotor.getPosition();
+        return left.getPosition() - right.getPosition();
     }
 
     public int getAveragePosition()
     {
-        return (int) Math.round((leftMotor.getPosition() + rightMotor.getPosition()) / 2.0);
+        return (int) Math.round((left.getPosition() + right.getPosition()) / 2.0);
     }
 
     public int[] getPosition()
     {
-        return new int[] {leftMotor.getPosition(), rightMotor.getPosition()};
+        return new int[] {left.getPosition(), right.getPosition()};
     }
 
-    public Motor getLeftMotor()
+    public Motor getLeft()
     {
-        return leftMotor;
+        return left;
     }
 
-    public Motor getRightMotor()
+    public Motor getRight()
     {
-        return rightMotor;
+        return right;
     }
 }

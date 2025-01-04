@@ -4,12 +4,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ServoPair
 {
-    public Servo leftServo, rightServo;
+    public Servo left, right;
 
     public ServoPair(HardwareMap hardwareMap, String leftServoName, String rightServoName)
     {
-        leftServo = new Servo(hardwareMap, leftServoName);
-        rightServo = new Servo(hardwareMap, rightServoName);
+        left = new Servo(hardwareMap, leftServoName);
+        right = new Servo(hardwareMap, rightServoName);
     }
 
     /**
@@ -18,7 +18,7 @@ public class ServoPair
      */
     public double[] getPosition()
     {
-        return new double[] {leftServo.getPosition(), rightServo.getPosition()};
+        return new double[] {left.getPosition(), right.getPosition()};
     }
 
     public void setPosition(double position)
@@ -28,17 +28,17 @@ public class ServoPair
 
     public void setPosition(double leftPosition, double rightPosition)
     {
-        leftServo.setPosition(leftPosition);
-        rightServo.setPosition(rightPosition);
+        left.setPosition(leftPosition);
+        right.setPosition(rightPosition);
     }
 
     public Servo getLeft()
     {
-        return leftServo;
+        return left;
     }
 
     public Servo getRight()
     {
-        return rightServo;
+        return right;
     }
 }

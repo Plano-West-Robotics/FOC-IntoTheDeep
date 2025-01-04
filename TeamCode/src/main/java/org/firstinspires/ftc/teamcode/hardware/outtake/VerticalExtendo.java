@@ -19,7 +19,7 @@ public class VerticalExtendo extends Extendo
                 0,
                 0.0005
         );
-        getLeftMotor().reverse();
-        getRightMotor().forward();
+        getLeft().reverse();
+        getRight().forward();
     }
 }

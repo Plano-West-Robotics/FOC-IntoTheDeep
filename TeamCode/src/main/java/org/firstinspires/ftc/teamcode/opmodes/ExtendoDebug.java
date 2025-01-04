@@ -4,12 +4,13 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.intake.HorizontalExtendo;
 import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 import org.firstinspires.ftc.teamcode.wrappers.Motor;
 
-@TeleOp(name = "Extendo", group = "Debug")
+@TeleOp(name = "ExtendoDebug", group = "Debug")
 public class ExtendoDebug extends OpMode
 {
     public HorizontalExtendo horizontalExtendo;
@@ -25,6 +26,17 @@ public class ExtendoDebug extends OpMode
         hr = horizontalExtendo.getRight();
         vl = verticalExtendo.getLeft();
         vr = verticalExtendo.getRight();
+
+        hl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        hr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        vl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        vr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        hl.zeroPower();
+        hr.zeroPower();
+        vl.zeroPower();
+        vr.zeroPower();
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 

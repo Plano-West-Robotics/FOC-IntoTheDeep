@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 @TeleOp(group = "Tune")
 public class VerticalExtendoPIDFTuner extends OpMode
 {
-    public static double p = 0, i = 0, d = 0, f = 0;
+    public static double p = 0.0015, i = 0, d = 0.0002, f = 0;
     public static int targetPosition = 0;
 
     public PIDFController controller;
@@ -35,5 +35,9 @@ public class VerticalExtendoPIDFTuner extends OpMode
         currentPosition = extendo.getAveragePosition();
         controllerOutput = controller.calculate(currentPosition, targetPosition);
         extendo.setPower(controllerOutput, false);
+
+        telemetry.addData("Current", currentPosition);
+        telemetry.addData("Target", targetPosition);
+        telemetry.update();
     }
 }

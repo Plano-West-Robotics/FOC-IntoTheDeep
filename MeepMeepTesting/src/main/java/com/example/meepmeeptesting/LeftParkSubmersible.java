@@ -22,7 +22,7 @@ public class LeftParkSubmersible
                 .setConstraints(50, 15, inRad(135), inRad(135), 15)
                 .build();
 
-        Pose2d initPose = new Pose2d(-32, -62, inRad(90));
+        Pose2d initPose = new Pose2d(-32, -61, inRad(90));
 
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
                 .splineToConstantHeading(new Vector2d(-36, -12), inRad(90))

@@ -23,7 +23,7 @@ public class LeftBucketPreloadOnly
                 .setConstraints(50, 15, Math.toRadians(135), Math.toRadians(135), 15)
                 .build();
 
-        Pose2d initPose = new Pose2d(-24, -62, inRad(90));
+        Pose2d initPose = new Pose2d(-24, -61, inRad(90));
 
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
 

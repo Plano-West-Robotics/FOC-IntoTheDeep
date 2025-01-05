@@ -10,7 +10,7 @@ public class HorizontalExtendo extends Extendo
     {
         super(
                 hardwareMap, "hl", "hr",
-                30, 1100,
+                30, 1000,
                 0.2, 0.6,
                 0.005,
                 0,

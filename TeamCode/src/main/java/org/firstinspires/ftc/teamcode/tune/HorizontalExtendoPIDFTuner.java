@@ -35,5 +35,11 @@ public class HorizontalExtendoPIDFTuner extends OpMode
         currentPosition = extendo.getAveragePosition();
         controllerOutput = controller.calculate(currentPosition, targetPosition);
         extendo.setPower(controllerOutput, false);
+
+        telemetry.addData("Current (Average)", currentPosition);
+        telemetry.addData("Left", extendo.getLeft().getPosition());
+        telemetry.addData("Right", extendo.getRight().getPosition());
+        telemetry.addData("Target", targetPosition);
+        telemetry.update();
     }
 }

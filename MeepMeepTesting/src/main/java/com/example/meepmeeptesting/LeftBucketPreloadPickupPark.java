@@ -44,8 +44,7 @@ public class LeftBucketPreloadPickupPark
 
                 .strafeTo(new Vector2d(-25, -12))
 
-                .build()
-        );
+                .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .addEntity(myBot)

@@ -22,7 +22,7 @@ public class RightPark
                 .setConstraints(50, 15, inRad(135), inRad(135), 15)
                 .build();
 
-        Pose2d initPose = new Pose2d(15, -62, inRad(90));
+        Pose2d initPose = new Pose2d(24, -62, inRad(90));
 
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
                 .setTangent(45)

@@ -160,12 +160,19 @@ public abstract class Extendo extends MotorPair
             {
                 double power = calculatePIDFControllerPower(targetPosition);
                 setPower(power, false);
+
+                /*
+                controller.atSetPoint() returns true when the controller's position error is less
+                than or equal to its position error tolerance. False is returned because this tells
+                Road Runner that this action is complete (extendo has reached its target position).
+                 */
                 if (controller.atSetPoint())
                 {
-                    setPower(0, false);
+                    setPower(0, false); // Holds extendo at target position.
                     return false;
                 }
-                return true;
+
+                return true; // when controller is not at set point.
             }
         };
     }

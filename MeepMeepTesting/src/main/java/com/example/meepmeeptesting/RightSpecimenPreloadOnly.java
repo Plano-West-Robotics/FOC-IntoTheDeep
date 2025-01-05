@@ -25,9 +25,9 @@ public class RightSpecimenPreloadOnly
         Pose2d initPose = new Pose2d(24, -61, inRad(90));
 
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
-                .splineToConstantHeading(new Vector2d(-36, -12), inRad(90))
-                .turnTo(inRad(180))
-                .strafeTo(new Vector2d(-25, -12))
+                .splineToConstantHeading(new Vector2d(10, -35), inRad(90))
+                //.turnTo(inRad(180))
+                //.strafeTo(new Vector2d(-25, -12))
                 .build()
         );
 

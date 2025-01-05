@@ -1,12 +1,11 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class LeftBucket
+public class LeftBucketPreloadOnly
 {
     public static double inRad(double degrees)
     {
@@ -25,17 +24,22 @@ public class LeftBucket
         Pose2d initPose = new Pose2d(-24, -62, inRad(90));
 
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
+
+                .splineToSplineHeading(new Pose2d(-56, -56, inRad(45)), inRad(225))
+
+                .waitSeconds(2)
+
                 // Move to pick up right sample.
-                .strafeTo(new Vector2d(-48, -48))
+                //.strafeTo(new Vector2d(-48, -48))
 
                 // Move to basket to score sample.
-                .strafeToLinearHeading(new Vector2d(-56, -56), inRad(45))
+                //.strafeToLinearHeading(new Vector2d(-56, -56), inRad(45))
 
                 // Move to pick up middle sample.
-                .strafeToLinearHeading(new Vector2d(-58, -48), inRad(90))
+                //.strafeToLinearHeading(new Vector2d(-58, -48), inRad(90))
 
                 // Move to basket to score sample.
-                .strafeToLinearHeading(new Vector2d(-56, -56), inRad(45))
+                //.strafeToLinearHeading(new Vector2d(-56, -56), inRad(45))
 
                 .build()
         );

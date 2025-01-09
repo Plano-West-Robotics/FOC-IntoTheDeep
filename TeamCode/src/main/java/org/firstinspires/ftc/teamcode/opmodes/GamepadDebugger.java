@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
 
-@TeleOp(name = "ControllerDebug", group = "Debug")
-public class GamepadDebug extends OpMode
+@TeleOp(name = "ControllerDebugger", group = "Debug")
+public class GamepadDebugger extends OpMode
 {
     public Gamepads gamepads;
 

@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.hardware.intake.HorizontalExtendo;
 import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 import org.firstinspires.ftc.teamcode.wrappers.Motor;
 
-@TeleOp(name = "ExtendoDebug", group = "Debug")
-public class ExtendoDebug extends OpMode
+@TeleOp(name = "ExtendoDebugger", group = "Debug")
+public class ExtendoDebugger extends OpMode
 {
     public HorizontalExtendo horizontalExtendo;
     public VerticalExtendo verticalExtendo;

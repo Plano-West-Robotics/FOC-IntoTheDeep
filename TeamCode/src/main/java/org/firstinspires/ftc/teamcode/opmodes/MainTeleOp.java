@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
 
 @Photon
-@TeleOp(name = "Main", group = "TeleOp")
+@TeleOp(name = "MainTeleOp", group = "TeleOp")
 public class MainTeleOp extends BaseTeleOp
 {
     public TeleDrive drive;

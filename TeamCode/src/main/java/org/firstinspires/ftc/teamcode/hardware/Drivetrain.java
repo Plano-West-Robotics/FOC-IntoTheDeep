@@ -17,6 +17,11 @@ public class Drivetrain
 
         fl.reverse();
         bl.reverse();
+
+        fr.noEncoder();
+        fl.noEncoder();
+        br.noEncoder();
+        bl.noEncoder();
     }
 
     public void setPower(double frPower, double flPower, double brPower, double blPower)

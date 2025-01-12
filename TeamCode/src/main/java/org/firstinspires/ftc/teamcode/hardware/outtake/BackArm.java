@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.hardware.base.StageServoPair;
 
 public class BackArm extends StageServoPair<BackArm.Stage>
 {
+    public static final double POSITION_DIFF = 0; // Not a placeholder.
+
     public enum Stage
     {
         RETRACT, // Rest position; 90 degrees above HANDOVER.
@@ -16,7 +18,7 @@ public class BackArm extends StageServoPair<BackArm.Stage>
     public BackArm(HardwareMap hardwareMap)
     {
         super(new StageServoPair.StageServoPairBuilder<>(hardwareMap, "bal",
-                "bar", Stage.class, 0.08)
+                "bar", Stage.class, POSITION_DIFF)
                 .add(Stage.RETRACT, 0.123)
                 .add(Stage.HANDOVER, 0.456)
                 .add(Stage.EXTEND, 0.789)

@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.hardware.base.StageServoPair;
 
 public class FrontArm extends StageServoPair<FrontArm.Stage>
 {
+    public static final double POSITION_DIFF = 0.02;
+
     public enum Stage
     {
         CLEAR, // Below parallel with the ground; arm makes clearance for outtake.
@@ -17,7 +19,7 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
     public FrontArm(HardwareMap hardwareMap)
     {
         super(new StageServoPairBuilder<>
-                (hardwareMap, "fal", "far", Stage.class, 0.02)
+                (hardwareMap, "fal", "far", Stage.class, POSITION_DIFF)
                 .add(Stage.CLEAR, 0.123)
                 .add(Stage.RETRACT, 0.456)
                 .add(Stage.EXTEND, 0.789)

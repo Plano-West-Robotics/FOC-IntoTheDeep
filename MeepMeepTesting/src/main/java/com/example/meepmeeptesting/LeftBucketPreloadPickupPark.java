@@ -25,8 +25,9 @@ public class LeftBucketPreloadPickupPark
         Pose2d initPose = new Pose2d(-24, -61, iR(90));
 
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
+                .setTangent(iR(135))
 
-                .splineToSplineHeading(new Pose2d(-56, -56, iR(45)), iR(225))
+                .splineToLinearHeading(new Pose2d(-56, -56, iR(45)), iR(225))
 
                 .waitSeconds(2)
 

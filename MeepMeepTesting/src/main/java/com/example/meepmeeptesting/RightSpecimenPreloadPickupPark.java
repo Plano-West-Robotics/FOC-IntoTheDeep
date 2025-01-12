@@ -24,6 +24,32 @@ public class RightSpecimenPreloadPickupPark
 
         Pose2d initPose = new Pose2d(24, -61, inRad(90));
 
+        /*
+         On init: the outtake arm of the robot should be retracted (to fit in the limit)
+         and the outtake claw should clamp down on the sample that a human will hold
+
+         On start:
+         as it moves towards the bar the outtake arm should extend
+         to its forward outward position (the special mechanism),
+         the slides should move to the bar position
+
+         it should then move up the v slides to hook the specimen from upside down
+         then it should open the outtake claw and reset the outtake arm
+
+         as the robot moves to the first pickup position, the outtake arm should be
+         extended backwards and the slides should lower to the pickup position
+
+         when it reaches the pickup position the outtake claw should close
+
+         as it moves to the bar again it should extend the outtake arm forward, move the
+         slides to the bar position,
+
+         same as above: it should then move up the v slides to hook the specimen from upside down
+         then it should open the outtake claw and reset the outtake arm
+
+         then it'll just strafe to the parking zone
+
+         */
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
                 .splineToConstantHeading(new Vector2d(10, -35), inRad(90))
                         .waitSeconds(2)

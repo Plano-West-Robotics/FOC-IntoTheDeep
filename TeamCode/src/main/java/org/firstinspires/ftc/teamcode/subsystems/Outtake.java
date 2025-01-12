@@ -22,6 +22,7 @@ public class Outtake
     public static final int HC_POSITION = 456; // High chamber.
     public static final int LR_POSITION = 567; // Low rung.
     public static final int HR_POSITION = 678; // High rung.
+    public static final int PK_POSITION = 300; // Wall pickup.
 
     public VerticalExtendo extendo;
     public BackArm arm;

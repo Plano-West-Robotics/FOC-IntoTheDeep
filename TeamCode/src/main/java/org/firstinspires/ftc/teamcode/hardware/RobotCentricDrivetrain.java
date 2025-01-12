@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.wrappers.Motor;
 public class RobotCentricDrivetrain
 {
     public Motor fr, fl, br, bl;
+    public Motor[] motors;
 
     public RobotCentricDrivetrain(HardwareMap hardwareMap)
     {
@@ -18,10 +19,9 @@ public class RobotCentricDrivetrain
         fl.reverse();
         bl.reverse();
 
-        fr.noEncoder();
-        fl.noEncoder();
-        br.noEncoder();
-        bl.noEncoder();
+        motors = new Motor[] {fr, fl, br, bl};
+
+        for (Motor motor : motors) motor.noEncoder();
     }
 
     public void setPower(double frPower, double flPower, double brPower, double blPower)

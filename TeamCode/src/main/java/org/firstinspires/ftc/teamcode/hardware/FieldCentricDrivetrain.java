@@ -17,6 +17,9 @@ public class FieldCentricDrivetrain
         br = new Motor(hardwareMap, "br", Motor.GoBILDA.RPM_312);
         bl = new Motor(hardwareMap, "bl", Motor.GoBILDA.RPM_312);
 
+        fl.setInverted(true);
+        bl.setInverted(true);
+
         motors = new Motor[] {fr, fl, br, bl};
 
         for (Motor motor : motors)
@@ -25,9 +28,6 @@ public class FieldCentricDrivetrain
             motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
             motor.stopMotor();
         }
-
-        fl.setInverted(true);
-        bl.setInverted(true);
 
         imu = new RevIMU(hardwareMap);
         imu.init();

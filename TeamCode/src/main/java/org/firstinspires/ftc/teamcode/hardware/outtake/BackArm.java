@@ -16,7 +16,7 @@ public class BackArm extends StageServoPair<BackArm.Stage>
     public BackArm(HardwareMap hardwareMap)
     {
         super(new StageServoPair.StageServoPairBuilder<>(hardwareMap, "bal",
-                "bar", Stage.class, 0)
+                "bar", Stage.class, 0.08)
                 .add(Stage.RETRACT, 0.123)
                 .add(Stage.HANDOVER, 0.456)
                 .add(Stage.EXTEND, 0.789)

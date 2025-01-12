@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class ServoPair
 {
     public Servo left, right;
-    public final double positionDiff;
+    public double positionDiff;
 
     public ServoPair(HardwareMap hardwareMap, String leftServoName, String rightServoName,
                      double positionDiff)
@@ -48,5 +48,15 @@ public class ServoPair
     public Servo getRight()
     {
         return right;
+    }
+
+    public double getPositionDiff()
+    {
+        return positionDiff;
+    }
+
+    public void setPositionDiff(double positionDiff)
+    {
+        this.positionDiff = positionDiff;
     }
 }

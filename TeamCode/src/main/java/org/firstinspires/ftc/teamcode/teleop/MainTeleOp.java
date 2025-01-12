@@ -9,13 +9,13 @@ import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.TeleDrive;
+import org.firstinspires.ftc.teamcode.subsystems.RobotCentricDrive;
 
 @Photon
 @TeleOp
 public class MainTeleOp extends BaseTeleOp
 {
-    public TeleDrive drive;
+    public RobotCentricDrive drive;
     public Intake intake;
     public Outtake outtake;
 
@@ -83,7 +83,7 @@ public class MainTeleOp extends BaseTeleOp
     @Override
     public void setup()
     {
-        drive = new TeleDrive(hardware);
+        drive = new RobotCentricDrive(hardware);
         intake = new Intake(hardware);
         outtake = new Outtake(hardware);
 

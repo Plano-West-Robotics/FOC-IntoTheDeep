@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.hardware.FieldCentricDrivetrain;
+import org.firstinspires.ftc.teamcode.hardware.RobotCentricDrivetrain;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontArm;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontClaw;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontSwivel;
@@ -14,7 +15,8 @@ import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 
 public class Hardware
 {
-    public Drivetrain drivetrain;
+    public RobotCentricDrivetrain rDrivetrain;
+    public FieldCentricDrivetrain fDrivetrain;
 
     // Intake.
     public HorizontalExtendo horizontalExtendo;
@@ -30,7 +32,9 @@ public class Hardware
 
     public Hardware(HardwareMap hardwareMap)
     {
-        drivetrain = new Drivetrain(hardwareMap);
+        // TODO: Pick one drivetrain out of the two.
+        rDrivetrain = new RobotCentricDrivetrain(hardwareMap);
+        // fDrivetrain = new FieldCentricDrivetrain(hardwareMap);
 
         horizontalExtendo = new HorizontalExtendo(hardwareMap);
         frontArm = new FrontArm(hardwareMap);

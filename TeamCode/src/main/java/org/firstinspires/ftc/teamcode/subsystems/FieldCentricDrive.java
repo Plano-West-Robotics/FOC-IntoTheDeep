@@ -1,51 +1,47 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.hardware.FieldCentricDrivetrain;
 
-public class TeleDrive
+public class FieldCentricDrive
 {
-    public Drivetrain drivetrain;
-    public double frPower, flPower, brPower, blPower, speed, turnSpeed;
+    public FieldCentricDrivetrain drivetrain;
+    public MecanumDrive inner;
     public boolean slowMode;
 
-    public TeleDrive(Hardware hardware)
+    public FieldCentricDrive(Hardware hardware)
     {
-        drivetrain = hardware.drivetrain;
+        drivetrain = hardware.fDrivetrain;
+        inner = new MecanumDrive(
+                false,
+                drivetrain.fl,
+                drivetrain.fr,
+                drivetrain.bl,
+                drivetrain.br
+        );
+        if (drivetrain == null) throw new RuntimeException("No field centric drivetrain given.");
         regularSpeed();
     }
 
     public void drive(double drive, double strafe, double turn)
     {
-        if (drive == 0 && strafe == 0 && turn == 0) zeroPower();
+        if (strafe == 0 && drive == 0 && turn == 0) inner.stop();
 
         else
         {
-            frPower = drive - strafe;
-            flPower = drive + strafe;
-            brPower = drive + strafe;
-            blPower = drive - strafe;
-
-            frPower -= turn * turnSpeed;
-            brPower -= turn * turnSpeed;
-            flPower += turn * turnSpeed;
-            blPower += turn * turnSpeed;
-
-            frPower *= speed;
-            flPower *= speed;
-            brPower *= speed;
-            blPower *= speed;
+            inner.driveFieldCentric(
+                    strafe,
+                    drive,
+                    turn,
+                    drivetrain.getImu().getRotation2d().getDegrees(),
+                    true
+            );
         }
-
-        drivetrain.setPower(frPower, flPower, brPower, blPower);
-    }
-
-    public void zeroPower()
-    {
-        frPower = flPower = brPower = blPower = 0;
     }
 
     public void toggleSlowMode()
@@ -56,15 +52,13 @@ public class TeleDrive
 
     public void regularSpeed()
     {
-        speed = 0.5;
-        turnSpeed = 0.7;
+        inner.setMaxSpeed(0.6);
         slowMode = false;
     }
 
     public void slowSpeed()
     {
-        speed = 0.1;
-        turnSpeed = 0.4;
+        inner.setMaxSpeed(0.2);
         slowMode = true;
     }
 
@@ -82,4 +76,6 @@ public class TeleDrive
         double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
         drive(drive, strafe, turn);
     }
+
+
 }

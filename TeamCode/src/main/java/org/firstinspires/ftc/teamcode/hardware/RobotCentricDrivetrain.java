@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.wrappers.Motor;
 
-public class Drivetrain
+public class RobotCentricDrivetrain
 {
     public Motor fr, fl, br, bl;
 
-    public Drivetrain(HardwareMap hardwareMap)
+    public RobotCentricDrivetrain(HardwareMap hardwareMap)
     {
         fr = new Motor(hardwareMap, "fr");
         fl = new Motor(hardwareMap, "fl");

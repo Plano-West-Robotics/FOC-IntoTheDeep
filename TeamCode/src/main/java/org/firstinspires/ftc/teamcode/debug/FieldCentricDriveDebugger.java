@@ -1,26 +1,24 @@
 package org.firstinspires.ftc.teamcode.debug;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.FieldTeleDrive;
+import org.firstinspires.ftc.teamcode.subsystems.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.teleop.BaseTeleOp;
 
 @TeleOp(group = "Debug")
-public class FieldCentricDriveDebugger extends OpMode
+public class FieldCentricDriveDebugger extends BaseTeleOp
 {
-    public FieldTeleDrive drive;
+    public FieldCentricDrive drive;
 
     @Override
-    public void init()
+    public void setup()
     {
-        drive = new FieldTeleDrive(hardwareMap, gamepad1);
+        drive = new FieldCentricDrive(hardware);
     }
 
     @Override
-    public void loop()
+    public void run()
     {
-        drive.drive();
+        drive.update(gamepads);
     }
-
 }

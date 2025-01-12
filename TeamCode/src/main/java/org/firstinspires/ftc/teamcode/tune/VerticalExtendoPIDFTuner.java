@@ -7,13 +7,17 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.hardware.intake.HorizontalExtendo;
 import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 
 @Config
 @TeleOp(group = "Tune")
 public class VerticalExtendoPIDFTuner extends OpMode
 {
-    public static double p = 0.0015, i = 0, d = 0.0002, f = 0;
+    public static double p = VerticalExtendo.P;
+    public static double i = VerticalExtendo.I;
+    public static double d = VerticalExtendo.D;
+    public static double f = VerticalExtendo.F;
     public static int targetPosition = 0;
 
     public PIDFController controller;

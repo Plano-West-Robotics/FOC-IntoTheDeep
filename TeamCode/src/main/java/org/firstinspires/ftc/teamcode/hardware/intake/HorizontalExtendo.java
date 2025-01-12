@@ -6,6 +6,11 @@ import org.firstinspires.ftc.teamcode.hardware.base.Extendo;
 
 public class HorizontalExtendo extends Extendo
 {
+    public static final double P = 0.0001;
+    public static final double I = 0;
+    public static final double D = 0.00002;
+    public static final double F = 0;
+
     public HorizontalExtendo(HardwareMap hardwareMap)
     {
         super(
@@ -13,11 +18,8 @@ public class HorizontalExtendo extends Extendo
                 30, 1000,
                 0.2, 0.6,
                 0.005,
-                0,
-                0,
-                0,
-                0,
-                25,
+                P, I, D, F,
+                15,
                 0
         );
         getLeft().forward();

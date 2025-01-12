@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.intake.HorizontalExtendo;
 
@@ -14,21 +13,20 @@ import org.firstinspires.ftc.teamcode.hardware.intake.HorizontalExtendo;
 @TeleOp(group = "Tune")
 public class HorizontalExtendoPIDFTuner extends OpMode
 {
-    public static double p = 0.0001, i = 0, d = 0.00002, f = 0;
-    public static double pSync = 0.0005, maxCorrection = 0.1;
+    public static double p = HorizontalExtendo.P;
+    public static double i = HorizontalExtendo.I;
+    public static double d = HorizontalExtendo.D;
+    public static double f = HorizontalExtendo.F;
     public static int targetPosition = 0;
 
-    public PIDFController leftController, rightController;
+    public PIDFController controller;
     public HorizontalExtendo extendo;
-    public double leftPosition, rightPosition;
-    public double leftOutput, rightOutput;
-    public double syncError, syncCorrection;
+    public double currentPosition, controllerOutput;
 
     @Override
     public void init()
     {
-        leftController = new PIDFController(p, i, d, f);
-        rightController = new PIDFController(p, i, d, f);
+        controller = new PIDFController(p, i, d, f);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         extendo = new HorizontalExtendo(hardwareMap);
     }
@@ -36,24 +34,13 @@ public class HorizontalExtendoPIDFTuner extends OpMode
     @Override
     public void loop()
     {
-        leftController.setPIDF(p, i, d, f);
-        rightController.setPIDF(p, i, d, f);
+        controller.setPIDF(p, i, d, f);
+        currentPosition = extendo.getAveragePosition();
+        controllerOutput = controller.calculate(currentPosition, targetPosition);
+        extendo.setPower(controllerOutput, false);
 
-        leftPosition = extendo.getLeft().getPosition();
-        rightPosition = extendo.getRight().getPosition();
-
-        leftOutput = leftController.calculate(leftPosition, targetPosition);
-        rightOutput = rightController.calculate(rightPosition, targetPosition);
-
-        syncError = leftPosition - rightPosition;
-        syncCorrection = Range.clip(syncError * pSync, -maxCorrection, maxCorrection);
-
-        extendo.setPower(leftOutput - syncCorrection, rightOutput + syncCorrection);
-
-        telemetry.addData("Left Position", leftPosition);
-        telemetry.addData("Right Position", rightPosition);
-        telemetry.addData("Sync Error", syncError);
-        telemetry.addData("Sync Correction", syncCorrection);
+        telemetry.addData("Current", currentPosition);
+        telemetry.addData("Target", targetPosition);
         telemetry.update();
     }
 }

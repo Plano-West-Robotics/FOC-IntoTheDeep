@@ -19,9 +19,6 @@ android {
     namespace = 'org.firstinspires.ftc.teamcode'
 
     packagingOptions {
-        jniLibs {
-            pickFirsts += ['**/*.so']
-        }
         jniLibs.useLegacyPackaging true
     }
 }
@@ -40,7 +37,6 @@ dependencies {
     implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
     implementation 'org.ftclib.ftclib:core:2.1.1'
     implementation 'com.github.Eeshwar-Krishnan:PhotonFTC:v3.0.3-ALPHA'
-    implementation 'org.ftclib.ftclib:core:2.1.1'
 }
 
 

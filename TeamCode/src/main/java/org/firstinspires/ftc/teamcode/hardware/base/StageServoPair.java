@@ -8,7 +8,7 @@ import java.util.EnumMap;
 
 public abstract class StageServoPair<T extends Enum<T>> extends StageServo<T>
 {
-    public ServoPair servoPair;
+    public ServoPair inner;
 
     public static class StageServoPairBuilder<T extends Enum<T>>
     {
@@ -41,7 +41,7 @@ public abstract class StageServoPair<T extends Enum<T>> extends StageServo<T>
     public StageServoPair(StageServoPairBuilder<T> builder)
     {
         super(builder.positionMap);
-        servoPair = new ServoPair(
+        inner = new ServoPair(
                 builder.hardwareMap, builder.leftServoName, builder.rightServoName,
                 builder.positionDiff
         );
@@ -49,12 +49,12 @@ public abstract class StageServoPair<T extends Enum<T>> extends StageServo<T>
 
     public ServoPair getServoPair()
     {
-        return servoPair;
+        return inner;
     }
 
     @Override
     public void setPosition(double position)
     {
-        servoPair.setPosition(position);
+        inner.setPosition(position);
     }
 }

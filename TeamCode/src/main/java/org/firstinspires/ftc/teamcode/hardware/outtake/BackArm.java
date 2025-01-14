@@ -10,18 +10,20 @@ public class BackArm extends StageServoPair<BackArm.Stage>
 
     public enum Stage
     {
-        RETRACT, // Rest position; 90 degrees above HANDOVER.
-        HANDOVER, // Position when transferring a sample.
-        EXTEND // Position when scoring a sample/specimen; 135 degrees below HANDOVER.
+        BUCKET, // From above.
+        REST, // Perpendicular to ground.
+        TRANSFER,
+        CLIP // From under.
     }
 
     public BackArm(HardwareMap hardwareMap)
     {
         super(new StageServoPair.StageServoPairBuilder<>(hardwareMap, "bal",
                 "bar", Stage.class, POSITION_DIFF)
-                .add(Stage.RETRACT, 0.123)
-                .add(Stage.HANDOVER, 0.456)
-                .add(Stage.EXTEND, 0.789)
+                .add(Stage.BUCKET, 0.03)
+                .add(Stage.REST, 0.314)
+                .add(Stage.TRANSFER, 0.485)
+                .add(Stage.CLIP, 0.975)
         );
     }
 }

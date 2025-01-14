@@ -12,7 +12,7 @@ public class FrontSwivel extends Servo
     public FrontSwivel(HardwareMap hardwareMap)
     {
         super(hardwareMap, "fs");
-        servo.scaleRange(0.123, 0.456);
+        servo.scaleRange(0.18, 0.86);
         positionIncrement = 0.25;
         initialized = false;
     }
@@ -23,15 +23,15 @@ public class FrontSwivel extends Servo
         initialized = true;
     }
 
-    public void rotateCCW()
-    {
-        if (!initialized) center();
-        if (getPosition() >= positionIncrement) setPosition(getPosition() - positionIncrement);
-    }
-
-    public void rotateCW()
+    public void rotateCCW() // Rotate from right to left.
     {
         if (!initialized) center();
         if (getPosition() <= 1 - positionIncrement) setPosition(getPosition() + positionIncrement);
+    }
+
+    public void rotateCW() // Rotate from left to right.
+    {
+        if (!initialized) center();
+        if (getPosition() >= positionIncrement) setPosition(getPosition() - positionIncrement);
     }
 }

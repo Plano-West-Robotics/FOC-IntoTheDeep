@@ -9,14 +9,14 @@ public class BackClaw extends StageServoMono<BackClaw.Stage>
     public enum Stage
     {
         OPEN,
-        CLOSE // Not maximum clamping force; should allow sample/specimen to slide back and forth.
+        CLOSE
     }
 
     public BackClaw(HardwareMap hardwareMap)
     {
         super(new StageServoMonoBuilder<>(hardwareMap, "bc", Stage.class)
-                .add(Stage.OPEN, 0.54)
-                .add(Stage.CLOSE, 0.77)
+                .add(Stage.OPEN, 0.35)
+                .add(Stage.CLOSE, 0.08)
         );
     }
 }

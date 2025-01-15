@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.control.Analog;
+import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
+import org.firstinspires.ftc.teamcode.hardware.intake.FrontClaw;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackArm;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackClaw;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackElbow;
@@ -26,6 +28,15 @@ public class Outtake
     public void updateExtendoPower(Gamepads gamepads)
     {
         extendo.setPower(gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y));
+    }
+
+    public void updateClaw(Gamepads gamepads)
+    {
+        if (gamepads.justPressed(Button.GP2_X))
+        {
+            if (claw.atStage(BackClaw.Stage.OPEN)) claw.close();
+            else if (claw.atStage(BackClaw.Stage.CLOSE)) claw.open();
+        }
     }
 
     public VerticalExtendo getExtendo()

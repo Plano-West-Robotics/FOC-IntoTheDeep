@@ -19,64 +19,56 @@ public class MainTeleOp extends BaseTeleOp
     public Intake intake;
     public Outtake outtake;
 
-    // io --> "intake to outtake" ; oi --> "outtake to intake"
     public StateMachine robotFSM, intakeFSM, outtakeFSM, ioFSM, oiFSM, transferFSM;
 
-    public double triggerThreshold = 0.65;
+    public double triggerThreshold = 0.75;
 
     public enum RobotState
     {
         INTAKE,
         OUTTAKE,
-        INTAKE_TO_OUTTAKE, // When switching from intake to outtake but no sample is present.
-        OUTTAKE_TO_INTAKE, // When switching from outtake to intake but no sample is present.
-        TRANSFER // When the intake hands a sample to the outtake.
+        INTAKE_TO_OUTTAKE,
+        OUTTAKE_TO_INTAKE,
+        TRANSFER
     }
 
     public enum IntakeState
     {
-        RETRACT,
+        PROBE,
         EXTEND,
-        PROBE
+        RETRACT
     }
 
     public enum OuttakeState
     {
-        /*
-        outtakeFSM starts with INIT state before moving on to HOLD or RELEASE, because the outtake
-        claw could be either state at start
-        (e.x., TRANSFER -> OUTTAKE, claw is closed; INTAKE_TO_OUTTAKE -> OUTTAKE, claw is open)
-         */
-        INIT,
-        HOLD,
-        RELEASE
+        BUCKET,
+        REST,
+        CLIP
     }
 
     public enum IntakeToOuttakeState
     {
-        CLEAR_INTAKE,
-        EXTEND_OUTTAKE,
-        SCORE_ELBOW,
+        CLEAR_FRONT_ARM,
+        CLIP_BACK_ARM,
+        CLIP_BACK_ELBOW,
         DONE
     }
 
     public enum OuttakeToIntakeState
     {
-        RELEASE,
-        RETRACT_OUTTAKE,
-        REST_ELBOW,
-        UNCLEAR_INTAKE,
+        RETRACT_FRONT_ARM,
         DONE
     }
 
     public enum TransferState
     {
-        DESCEND_OUTTAKE, // Outtake claw opens; outtake arm descends parallel with ground.
-        CLAMP_OUTTAKE, // Outtake claw closes.
-        RELEASE_INTAKE, // Intake claw opens.
-        CLEAR_INTAKE, // Intake arm goes below parallel with ground to give outtake clearance.
-        DELIVER_OUTTAKE, // Outtake swoops underneath and gets next to vertical linear slides.
-        SCORE_ELBOW, // Previous state is running, outtake elbow positions for scoring.
+        OPEN_BACK_CLAW,
+        TRANSFER_BACK_ARM,
+        CLOSE_BACK_CLAW,
+        OPEN_FRONT_CLAW,
+        CLEAR_FRONT_ARM,
+        CLIP_BACK_ARM,
+        CLIP_BACK_ELBOW,
         DONE
     }
 
@@ -86,150 +78,6 @@ public class MainTeleOp extends BaseTeleOp
         drive = new RobotCentricDrive(hardware);
         intake = new Intake(hardware);
         outtake = new Outtake(hardware);
-
-        // Intake FSM.
-        {
-            intakeFSM = new StateMachineBuilder()
-                    .state(IntakeState.RETRACT)
-                    .onEnter( () -> {
-                        intake.retractArm();
-                        intake.centerSwivel();
-                    })
-                    .loop( () -> intake.updateExtendoPower(gamepads))
-                    .transition( () -> intake.inExtendZone(), IntakeState.EXTEND)
-
-                    .state(IntakeState.EXTEND)
-                    .onEnter( () -> intake.extendArm())
-                    .loop( () -> {
-                        intake.updateExtendoPower(gamepads);
-                        intake.updateClaw(gamepads);
-                        intake.updateSwivel(gamepads);
-                    })
-                    .transition( () -> intake.inRetractZone(), IntakeState.RETRACT)
-                    .transition( () ->
-                        gamepads.getAnalogValue(Analog.GP2_LEFT_TRIGGER) >= triggerThreshold,
-                        IntakeState.PROBE
-                    )
-
-                    .state(IntakeState.PROBE)
-                    .onEnter( () -> intake.probeArm())
-                    .loop( () -> {
-                        intake.updateExtendoPower(gamepads);
-                        intake.updateClaw(gamepads);
-                        intake.updateSwivel(gamepads);
-                    })
-                    .transition( () -> intake.inRetractZone(), IntakeState.RETRACT)
-                    .transition( () ->
-                        gamepads.getAnalogValue(Analog.GP2_LEFT_TRIGGER) < triggerThreshold,
-                        IntakeState.EXTEND)
-
-                    .build();
-        }
-
-        // Outtake FSM.
-        {
-            outtakeFSM = new StateMachineBuilder()
-                    // Refer to enum state definition for purpose of INIT.
-                    .state(OuttakeState.INIT)
-                    .transition( () -> outtake.clawIsClosed(), OuttakeState.HOLD)
-                    .transition( () -> outtake.clawIsOpen(), OuttakeState.RELEASE)
-
-                    .state(OuttakeState.HOLD)
-                    .onEnter( () -> outtake.closeClaw())
-                    .loop( () -> outtake.updateExtendoPower(gamepads))
-                    .transition( () -> gamepads.isPressed(Button.GP2_X), OuttakeState.RELEASE)
-
-                    .state(OuttakeState.RELEASE)
-                    .onEnter( () -> outtake.openClaw())
-                    .loop( () -> outtake.updateExtendoPower(gamepads))
-                    .transition( () -> gamepads.isPressed(Button.GP2_X), OuttakeState.HOLD)
-
-                    .minimumTransitionTimed(0.2, 2, 3)
-
-                    .build();
-        }
-
-        // IntakeToOuttakeFSM.
-        {
-            ioFSM = new StateMachineBuilder()
-                    .state(IntakeToOuttakeState.CLEAR_INTAKE)
-                    .onEnter( () -> intake.clearArm())
-                    .transitionTimed(1)
-
-                    .state(IntakeToOuttakeState.EXTEND_OUTTAKE)
-                    .onEnter( () -> {
-                        outtake.extendArm();
-                        outtake.openClaw();
-                    })
-                    .transitionTimed(0.2)
-
-                    .state(IntakeToOuttakeState.SCORE_ELBOW)
-                    .onEnter( () -> outtake.scoreElbow())
-                    .transitionTimed(1.8)
-
-                    .state(IntakeToOuttakeState.DONE)
-
-                    .build();
-        }
-
-        // OuttakeToIntakeFSM.
-        {
-            oiFSM = new StateMachineBuilder()
-                    .state(OuttakeToIntakeState.RELEASE)
-                    .onEnter( () -> outtake.openClaw())
-                    .transitionTimed(1)
-
-                    .state(OuttakeToIntakeState.RETRACT_OUTTAKE)
-                    .onEnter( () -> outtake.retractArm())
-                    .transitionTimed(0.2)
-
-                    .state(OuttakeToIntakeState.REST_ELBOW)
-                    .onEnter( () -> outtake.restElbow())
-                    .transitionTimed(1.8)
-
-                    .state(OuttakeToIntakeState.UNCLEAR_INTAKE)
-                    .onEnter( () -> intake.retractArm())
-                    .transitionTimed(1)
-
-                    .state(OuttakeToIntakeState.DONE)
-
-                    .build();
-        }
-
-        // TransferFSM.
-        {
-            transferFSM = new StateMachineBuilder()
-                    .state(TransferState.DESCEND_OUTTAKE)
-                    .onEnter( () -> {
-                        outtake.openClaw();
-                        outtake.handoverArm();
-                    })
-                    .transitionTimed(1)
-
-                    .state(TransferState.CLAMP_OUTTAKE)
-                    .onEnter( () -> outtake.closeClaw())
-                    .transitionTimed(1)
-
-                    .state(TransferState.RELEASE_INTAKE)
-                    .onEnter( () -> intake.openClaw())
-                    .transitionTimed(1)
-
-                    .state(TransferState.CLEAR_INTAKE)
-                    .onEnter( () -> intake.clearArm())
-                    .transitionTimed(1)
-
-                    .state(TransferState.DELIVER_OUTTAKE)
-                    .onEnter( () -> outtake.extendArm())
-                    .transitionTimed(0.2)
-
-                    .state(TransferState.SCORE_ELBOW)
-                    .onEnter( () -> outtake.scoreElbow())
-                    .transitionTimed(1.8)
-
-                    .state(TransferState.DONE)
-
-                    .build();
-        }
 
         // Robot FSM.
         {
@@ -254,7 +102,7 @@ public class MainTeleOp extends BaseTeleOp
                         RobotState.INTAKE_TO_OUTTAKE
                     )
                     .onExit( () -> {
-                        intake.haltSlides();
+                        intake.getExtendo().halt();
                         intakeFSM.reset();
                         intakeFSM.stop();
                     })
@@ -263,10 +111,12 @@ public class MainTeleOp extends BaseTeleOp
                     .onEnter( () -> outtakeFSM.start())
                     .loop( () -> outtakeFSM.update())
                     .transition( () ->
-                        gamepads.isPressed(Button.GP2_Y),
-                        RobotState.OUTTAKE_TO_INTAKE)
+                        outtakeFSM.getState() == OuttakeState.REST
+                        && gamepads.isPressed(Button.GP2_Y),
+                        RobotState.OUTTAKE_TO_INTAKE
+                    )
                     .onExit( () -> {
-                        outtake.haltSlides();
+                        outtake.getExtendo().halt();
                         outtakeFSM.reset();
                         outtakeFSM.stop();
                     })
@@ -276,7 +126,8 @@ public class MainTeleOp extends BaseTeleOp
                     .loop( () -> ioFSM.update())
                     .transition( () ->
                         ioFSM.getState() == IntakeToOuttakeState.DONE,
-                        RobotState.OUTTAKE)
+                        RobotState.OUTTAKE
+                    )
                     .onExit( () -> {
                         ioFSM.reset();
                         ioFSM.stop();
@@ -287,7 +138,8 @@ public class MainTeleOp extends BaseTeleOp
                     .loop( () -> oiFSM.update())
                     .transition( () ->
                         oiFSM.getState() == OuttakeToIntakeState.DONE,
-                        RobotState.INTAKE)
+                        RobotState.INTAKE
+                    )
                     .onExit( () -> {
                         oiFSM.reset();
                         oiFSM.stop();
@@ -298,7 +150,8 @@ public class MainTeleOp extends BaseTeleOp
                     .loop( () -> transferFSM.update())
                     .transition( () ->
                         transferFSM.getState() == TransferState.DONE,
-                        RobotState.OUTTAKE)
+                        RobotState.OUTTAKE
+                    )
                     .onExit( () -> {
                         transferFSM.reset();
                         transferFSM.stop();
@@ -306,25 +159,13 @@ public class MainTeleOp extends BaseTeleOp
 
                     .build();
         }
-    }
 
-    @Override
-    public void start()
-    {
-        // Starting pose.
-        intake.retractArm();
-        intake.openClaw();
-        intake.centerSwivel();
-        outtake.retractArm();
-        outtake.restElbow();
-        outtake.openClaw();
-        robotFSM.start();
+
     }
 
     @Override
     public void run()
     {
-        drive.update(gamepads);
-        robotFSM.update();
+
     }
 }

@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware.intake;
 
+import static org.firstinspires.ftc.teamcode.Utils.getTimedAction;
+
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.base.StageServoPair;
@@ -27,5 +30,55 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
                 .add(Stage.RETRACT, 0.79)
                 .add(Stage.CLEAR, 0.84)
         );
+    }
+
+    public void probe()
+    {
+        setStage(Stage.PROBE);
+    }
+
+    public void extend()
+    {
+        setStage(Stage.EXTEND);
+    }
+
+    public void upright()
+    {
+        setStage(Stage.UPRIGHT);
+    }
+
+    public void retract()
+    {
+        setStage(Stage.RETRACT);
+    }
+
+    public void clear()
+    {
+        setStage(Stage.CLEAR);
+    }
+
+    public Action probe(int timeInMilliseconds)
+    {
+        return getTimedAction(this::probe, timeInMilliseconds);
+    }
+
+    public Action extend(int timeInMilliseconds)
+    {
+        return getTimedAction(this::extend, timeInMilliseconds);
+    }
+
+    public Action upright(int timeInMilliseconds)
+    {
+        return getTimedAction(this::upright, timeInMilliseconds);
+    }
+
+    public Action retract(int timeInMilliseconds)
+    {
+        return getTimedAction(this::retract, timeInMilliseconds);
+    }
+
+    public Action clear(int timeInMilliseconds)
+    {
+        return getTimedAction(this::clear, timeInMilliseconds);
     }
 }

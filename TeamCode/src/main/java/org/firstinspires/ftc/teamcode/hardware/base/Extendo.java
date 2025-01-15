@@ -70,6 +70,11 @@ public abstract class Extendo extends MotorPair
         );
     }
 
+    public void halt()
+    {
+        setPower(0, false);
+    }
+
     @Override
     public void setPower(double power)
     {

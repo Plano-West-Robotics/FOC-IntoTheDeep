@@ -352,5 +352,18 @@ public class MainTeleOp extends BaseTeleOp
     {
         drive.update(gamepads);
         robotFSM.update();
+
+        telemetry.addData("HL Position", intake.getExtendo().getLeft().getPosition());
+        telemetry.addData("HR Position", intake.getExtendo().getRight().getPosition());
+
+        telemetry.addData("VL Position", outtake.getExtendo().getLeft().getPosition());
+        telemetry.addData("VR Position", outtake.getExtendo().getRight().getPosition());
+
+        telemetry.addData("Robot State", robotFSM.getState());
+        telemetry.addData("Intake State", intakeFSM.getState());
+        telemetry.addData("Outtake State", outtakeFSM.getState());
+        telemetry.addData("Intake to Outtake State", ioFSM.getState());
+        telemetry.addData("Outtake to Intake State", oiFSM.getState());
+        telemetry.addData("Transfer State", transferFSM.getState());
     }
 }

@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.RobotCentricDrive;
 
-@Photon
 @TeleOp
 public class MainTeleOp extends BaseTeleOp
 {
@@ -50,9 +49,10 @@ public class MainTeleOp extends BaseTeleOp
 
     public enum IntakeToOuttakeState
     {
-        CLEAR_FRONT_ARM,
+        UPRIGHT_FRONT_ARM_AND_CLOSE_BACK_CLAW,
         CLIP_BACK_ARM,
         CLIP_BACK_ELBOW,
+        OPEN_BACK_CLAW,
         DONE
     }
 
@@ -133,6 +133,10 @@ public class MainTeleOp extends BaseTeleOp
                         OuttakeState.BUCKET
                     )
                     .transition( () ->
+                        outtake.getArm().atStage(BackArm.Stage.REST),
+                        OuttakeState.REST
+                    )
+                    .transition( () ->
                         outtake.getArm().atStage(BackArm.Stage.CLIP),
                         OuttakeState.CLIP
                     )
@@ -184,17 +188,24 @@ public class MainTeleOp extends BaseTeleOp
         // Intake to Outtake FSM.
         {
             ioFSM = new StateMachineBuilder()
-                    .state(IntakeToOuttakeState.CLEAR_FRONT_ARM)
-                    .onEnter( () -> intake.getArm().clear())
-                    .transitionTimed(1)
+                    .state(IntakeToOuttakeState.UPRIGHT_FRONT_ARM_AND_CLOSE_BACK_CLAW)
+                    .onEnter( () -> {
+                        intake.getArm().upright();
+                        outtake.getClaw().close();
+                    })
+                    .transitionTimed(0.2)
 
                     .state(IntakeToOuttakeState.CLIP_BACK_ARM)
                     .onEnter( () -> outtake.getArm().clip())
-                    .transitionTimed(0.3)
+                    .transitionTimed(0.4)
 
                     .state(IntakeToOuttakeState.CLIP_BACK_ELBOW)
                     .onEnter( () -> outtake.getElbow().clip())
-                    .transitionTimed(0.7)
+                    .transitionTimed(0.4)
+
+                    .state(IntakeToOuttakeState.OPEN_BACK_CLAW)
+                    .onEnter( () -> outtake.getClaw().open())
+                    .transitionTimed(0.2)
 
                     .state(IntakeToOuttakeState.DONE)
 
@@ -332,18 +343,20 @@ public class MainTeleOp extends BaseTeleOp
     }
 
     @Override
+    public void init_loop()
+    {
+        // Starting pose.
+        intake.getArm().retract();
+        intake.getClaw().open();
+        intake.getSwivel().center();
+        outtake.getArm().rest();
+        outtake.getElbow().transfer();
+        outtake.getClaw().open();
+    }
+
+    @Override
     public void start()
     {
-        // Starting pose
-        {
-            intake.getArm().retract();
-            intake.getClaw().open();
-            intake.getSwivel().center();
-            outtake.getArm().rest();
-            outtake.getElbow().transfer();
-            outtake.getClaw().open();
-        }
-
         robotFSM.start();
     }
 

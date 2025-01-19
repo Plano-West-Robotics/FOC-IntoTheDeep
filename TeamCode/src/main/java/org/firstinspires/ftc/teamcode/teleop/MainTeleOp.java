@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackArm;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.OuttakeMachines;
 import org.firstinspires.ftc.teamcode.subsystems.RobotCentricDrive;
 
 @TeleOp
@@ -20,6 +21,7 @@ public class MainTeleOp extends BaseTeleOp
     public Outtake outtake;
 
     public StateMachine robotFSM, intakeFSM, outtakeFSM, ioFSM, oiFSM, transferFSM;
+    public StateMachine brFSM, rbFSM, crFSM, bcFSM, cbFSM;
 
     public double triggerThreshold = 0.75;
 
@@ -44,7 +46,13 @@ public class MainTeleOp extends BaseTeleOp
         INIT, // Immediately transitions to BUCKET or CLIP state.
         BUCKET,
         REST,
-        CLIP
+        CLIP,
+
+        BUCKET_TO_REST,
+        REST_TO_BUCKET,
+        CLIP_TO_REST,
+        BUCKET_TO_CLIP,
+        CLIP_TO_BUCKET
     }
 
     public enum IntakeToOuttakeState
@@ -80,6 +88,12 @@ public class MainTeleOp extends BaseTeleOp
         drive = new RobotCentricDrive(hardware);
         intake = new Intake(hardware);
         outtake = new Outtake(hardware);
+
+        brFSM = OuttakeMachines.getBucketToRestFSM(outtake);
+        rbFSM = OuttakeMachines.getRestToBucketFSM(outtake);
+        crFSM = OuttakeMachines.getClipToRestFSM(outtake);
+        bcFSM = OuttakeMachines.getBucketToClipFSM(outtake);
+        cbFSM = OuttakeMachines.getClipToBucketFSM(outtake);
 
         // Intake FSM.
         {
@@ -142,45 +156,105 @@ public class MainTeleOp extends BaseTeleOp
                     )
 
                     .state(OuttakeState.BUCKET)
-                    .onEnter( () -> {
-                        outtake.getArm().bucket();
-                        outtake.getElbow().bucket();
-                    })
+//                    .onEnter( () -> {
+//                        outtake.getArm().bucket();
+//                        outtake.getElbow().bucket();
+//                    })
                     .loop( () -> outtake.updateClaw(gamepads))
                     .transition( () ->
                         gamepads.justPressed(Button.GP2_B),
-                        OuttakeState.REST
+                        OuttakeState.BUCKET_TO_REST
                     )
                     .transition( () ->
                         gamepads.justEnteredThreshold(Analog.GP2_LEFT_TRIGGER, triggerThreshold),
-                        OuttakeState.CLIP
+                        OuttakeState.BUCKET_TO_CLIP
                     )
 
                     .state(OuttakeState.REST)
-                    .onEnter( () -> {
-                        outtake.getArm().rest();
-                        outtake.getElbow().transfer();
-                    })
+//                    .onEnter( () -> {
+//                        outtake.getArm().rest();
+//                        outtake.getElbow().transfer();
+//                    })
                     .loop( () -> outtake.updateClaw(gamepads))
                     .transition( () ->
                         gamepads.justEnteredThreshold(Analog.GP2_LEFT_TRIGGER, triggerThreshold),
-                        OuttakeState.BUCKET
+                        OuttakeState.REST_TO_BUCKET
                     )
 
                     .state(OuttakeState.CLIP)
-                    .onEnter( () -> {
-                        outtake.getArm().clip();
-                        outtake.getElbow().clip();
-                    })
+//                    .onEnter( () -> {
+//                        outtake.getArm().clip();
+//                        outtake.getElbow().clip();
+//                    })
                     .loop( () -> outtake.updateClaw(gamepads))
                     .transition( () ->
                         gamepads.justPressed(Button.GP2_B),
-                        OuttakeState.REST
+                        OuttakeState.CLIP_TO_REST
                     )
                     .transition( () ->
                         gamepads.justEnteredThreshold(Analog.GP2_LEFT_TRIGGER, triggerThreshold),
+                        OuttakeState.CLIP_TO_BUCKET
+                    )
+
+                    .state(OuttakeState.BUCKET_TO_REST)
+                    .onEnter( () -> brFSM.start())
+                    .loop( () -> brFSM.update())
+                    .transition( () ->
+                        brFSM.getState() == OuttakeMachines.BRState.DONE,
+                        OuttakeState.REST
+                    )
+                    .onExit( () -> {
+                        brFSM.reset();
+                        brFSM.stop();
+                    })
+
+                    .state(OuttakeState.REST_TO_BUCKET)
+                    .onEnter( () -> rbFSM.start())
+                    .loop( () -> rbFSM.update())
+                    .transition( () ->
+                        rbFSM.getState() == OuttakeMachines.RBState.DONE,
                         OuttakeState.BUCKET
                     )
+                    .onExit( () -> {
+                        rbFSM.reset();
+                        rbFSM.stop();
+                    })
+
+                    .state(OuttakeState.CLIP_TO_REST)
+                    .onEnter( () -> crFSM.start())
+                    .loop( () -> crFSM.update())
+                    .transition( () ->
+                        crFSM.getState() == OuttakeMachines.CRState.DONE,
+                        OuttakeState.REST
+                    )
+                    .onExit( () -> {
+                        crFSM.reset();
+                        crFSM.stop();
+                    })
+
+                    .state(OuttakeState.BUCKET_TO_CLIP)
+                    .onEnter( () -> bcFSM.start())
+                    .loop( () -> bcFSM.update())
+                    .transition( () ->
+                        bcFSM.getState() == OuttakeMachines.BCState.DONE,
+                        OuttakeState.CLIP
+                    )
+                    .onExit( () -> {
+                        bcFSM.reset();
+                        bcFSM.stop();
+                    })
+
+                    .state(OuttakeState.CLIP_TO_BUCKET)
+                    .onEnter( () -> cbFSM.start())
+                    .loop( () -> cbFSM.update())
+                    .transition( () ->
+                        cbFSM.getState() == OuttakeMachines.CBState.DONE,
+                        OuttakeState.BUCKET
+                    )
+                    .onExit( () -> {
+                        cbFSM.reset();
+                        cbFSM.stop();
+                    })
 
                     .build();
         }

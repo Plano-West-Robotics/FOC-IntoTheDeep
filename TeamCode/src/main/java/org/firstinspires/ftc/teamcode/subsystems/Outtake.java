@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.hardware.outtake.BackClaw;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackElbow;
 import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 
+import java.util.Objects;
+
 public class Outtake
 {
     public VerticalExtendo extendo;
@@ -34,8 +36,17 @@ public class Outtake
     {
         if (gamepads.justPressed(Button.GP2_X))
         {
-            if (claw.atStage(BackClaw.Stage.OPEN)) claw.close();
-            else if (claw.atStage(BackClaw.Stage.CLOSE)) claw.open();
+            if (arm.atStage(BackArm.Stage.BUCKET))
+            {
+                if (claw.atStage(BackClaw.Stage.BUCKET_OPEN)) claw.close();
+                else if (claw.atStage(BackClaw.Stage.CLOSE)) claw.bucketOpen();
+            }
+
+            else
+            {
+                if (claw.atStage(BackClaw.Stage.OPEN)) claw.close();
+                else if (claw.atStage(BackClaw.Stage.CLOSE)) claw.open();
+            }
         }
     }
 

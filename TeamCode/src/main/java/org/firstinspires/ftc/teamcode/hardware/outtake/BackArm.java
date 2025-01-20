@@ -25,7 +25,7 @@ public class BackArm extends StageServoPair<BackArm.Stage>
                 "bar", Stage.class, POSITION_DIFF)
                 .add(Stage.BUCKET, 0.03)
                 .add(Stage.REST, 0.16)
-                .add(Stage.TRANSFER, 0.485)
+                .add(Stage.TRANSFER, 0.46)
                 .add(Stage.CLIP, 0.975)
         );
     }

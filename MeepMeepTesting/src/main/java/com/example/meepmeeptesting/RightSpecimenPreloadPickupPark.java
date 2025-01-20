@@ -27,13 +27,25 @@ public class RightSpecimenPreloadPickupPark
         /*
          On init: the outtake arm of the robot should be retracted (to fit in the limit)
          and the outtake claw should clamp down on the sample that a human will hold
+         (rest pos? + claw close)
+
+         New plan:
+         go from rest to clip pos
+         as bot moves to bar
+         and slides move up above the bar
+
+         When it reaches the submersible,
+         slides move down to clip
+         Claw opens
+
+
+
 
          On start:
-         as it moves towards the bar the outtake arm should extend
-         to its forward outward position (the special mechanism),
-         the slides should move to the bar position
+         Go from rest to clip position
+         the slides should move to the 2nd bar position
 
-         it should then move up the v slides to hook the specimen from upside down
+         it should then move up the v slides to hook the specimen from above
          then it should open the outtake claw and reset the outtake arm
 
          as the robot moves to the first pickup position, the outtake arm should be

@@ -74,10 +74,8 @@ public class MainTeleOp extends BaseTeleOp
         OPEN_BACK_CLAW_AND_TRANSFER_BACK_ARM,
         CLOSE_BACK_CLAW,
         OPEN_FRONT_CLAW,
-        REST_BACK_ARM,
-        UPRIGHT_FRONT_ARM,
-        CLIP_BACK_ARM,
-        CLIP_BACK_ELBOW,
+        BUCKET_BACK_ARM,
+        BUCKET_BACK_ELBOW_AND_UPRIGHT_FRONT_ARM,
         DONE
     }
 
@@ -155,7 +153,10 @@ public class MainTeleOp extends BaseTeleOp
                     )
 
                     .state(OuttakeState.BUCKET)
-                    .loop( () -> outtake.updateClaw(gamepads))
+                    .loop( () -> {
+                        outtake.updateClaw(gamepads);
+                        outtake.updateExtendoPower(gamepads);
+                    })
                     .transition( () ->
                         gamepads.justPressed(Button.GP2_B),
                         OuttakeState.BUCKET_TO_REST
@@ -166,14 +167,20 @@ public class MainTeleOp extends BaseTeleOp
                     )
 
                     .state(OuttakeState.REST)
-                    .loop( () -> outtake.updateClaw(gamepads))
+                    .loop( () -> {
+                        outtake.updateClaw(gamepads);
+                        outtake.updateExtendoPower(gamepads);
+                    })
                     .transition( () ->
                         gamepads.justEnteredThreshold(Analog.GP2_LEFT_TRIGGER, triggerThreshold),
                         OuttakeState.REST_TO_BUCKET
                     )
 
                     .state(OuttakeState.CLIP)
-                    .loop( () -> outtake.updateClaw(gamepads))
+                    .loop( () -> {
+                        outtake.updateClaw(gamepads);
+                        outtake.updateExtendoPower(gamepads);
+                    })
                     .transition( () ->
                         gamepads.justPressed(Button.GP2_B),
                         OuttakeState.CLIP_TO_REST
@@ -297,27 +304,22 @@ public class MainTeleOp extends BaseTeleOp
 
                     .state(TransferState.CLOSE_BACK_CLAW)
                     .onEnter( () -> outtake.getClaw().close())
-                    .transitionTimed(1)
+                    .transitionTimed(0.2)
 
                     .state(TransferState.OPEN_FRONT_CLAW)
                     .onEnter( () -> intake.getClaw().open())
-                    .transitionTimed(1)
+                    .transitionTimed(0.2)
 
-                    .state(TransferState.REST_BACK_ARM)
-                    .onEnter( () -> outtake.getArm().rest())
-                    .transitionTimed(1)
+                    .state(TransferState.BUCKET_BACK_ARM)
+                    .onEnter( () -> outtake.getArm().bucket())
+                    .transitionTimed(0.1)
 
-                    .state(TransferState.UPRIGHT_FRONT_ARM)
-                    .onEnter( () -> intake.getArm().upright())
-                    .transitionTimed(1)
-
-                    .state(TransferState.CLIP_BACK_ARM)
-                    .onEnter( () -> outtake.getArm().clip())
-                    .transitionTimed(0.4)
-
-                    .state(TransferState.CLIP_BACK_ELBOW)
-                    .onEnter( () -> outtake.getElbow().clip())
-                    .transitionTimed(0.45)
+                    .state(TransferState.BUCKET_BACK_ELBOW_AND_UPRIGHT_FRONT_ARM)
+                    .onEnter( () -> {
+                        outtake.getElbow().bucket();
+                        intake.getArm().upright();
+                    })
+                    .transitionTimed(0.85)
 
                     .state(TransferState.DONE)
 

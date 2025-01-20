@@ -285,7 +285,7 @@ public class MainTeleOp extends BaseTeleOp
             oiFSM = new StateMachineBuilder()
                     .state(OuttakeToIntakeState.RETRACT_FRONT_ARM)
                     .onEnter( () -> intake.getArm().retract())
-                    .transitionTimed(0.4)
+                    .transitionTimed(0.28)
 
                     .state(OuttakeToIntakeState.DONE)
 
@@ -300,15 +300,15 @@ public class MainTeleOp extends BaseTeleOp
                         outtake.getClaw().open();
                         outtake.getArm().transfer();
                     })
-                    .transitionTimed(1)
+                    .transitionTimed(0.37)
 
                     .state(TransferState.CLOSE_BACK_CLAW)
                     .onEnter( () -> outtake.getClaw().close())
-                    .transitionTimed(0.2)
+                    .transitionTimed(0.13)
 
                     .state(TransferState.OPEN_FRONT_CLAW)
                     .onEnter( () -> intake.getClaw().open())
-                    .transitionTimed(0.2)
+                    .transitionTimed(0.13)
 
                     .state(TransferState.BUCKET_BACK_ARM)
                     .onEnter( () -> outtake.getArm().bucket())
@@ -319,7 +319,7 @@ public class MainTeleOp extends BaseTeleOp
                         outtake.getElbow().bucket();
                         intake.getArm().upright();
                     })
-                    .transitionTimed(0.85)
+                    .transitionTimed(0.4)
 
                     .state(TransferState.DONE)
 

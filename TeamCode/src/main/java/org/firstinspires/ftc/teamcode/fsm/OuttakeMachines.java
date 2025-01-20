@@ -1,7 +1,9 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.fsm;
 
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
+
+import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 public final class OuttakeMachines
 {

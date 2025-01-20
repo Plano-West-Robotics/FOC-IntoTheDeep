@@ -4,13 +4,10 @@ import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
-import org.firstinspires.ftc.teamcode.hardware.intake.FrontClaw;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackArm;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackClaw;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackElbow;
 import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
-
-import java.util.Objects;
 
 public class Outtake
 {

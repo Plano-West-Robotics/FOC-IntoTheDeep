@@ -13,6 +13,7 @@ public class FieldCentricDrive
     public FieldCentricDrivetrain drivetrain;
     public MecanumDrive inner;
     public boolean slowMode;
+    public double turnSpeed;
 
     public FieldCentricDrive(Hardware hardware)
     {
@@ -37,7 +38,7 @@ public class FieldCentricDrive
             inner.driveFieldCentric(
                     strafe,
                     drive,
-                    turn,
+                    turn * turnSpeed,
                     drivetrain.getImu().getRotation2d().getDegrees(),
                     true
             );
@@ -52,13 +53,15 @@ public class FieldCentricDrive
 
     public void regularSpeed()
     {
-        inner.setMaxSpeed(0.6);
+        inner.setMaxSpeed(0.85);
+        turnSpeed = 0.7;
         slowMode = false;
     }
 
     public void slowSpeed()
     {
         inner.setMaxSpeed(0.2);
+        turnSpeed = 0.4;
         slowMode = true;
     }
 

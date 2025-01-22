@@ -57,14 +57,14 @@ public class RobotCentricDrive
 
     public void regularSpeed()
     {
-        speed = 0.5;
+        speed = 0.85;
         turnSpeed = 0.7;
         slowMode = false;
     }
 
     public void slowSpeed()
     {
-        speed = 0.1;
+        speed = 0.2;
         turnSpeed = 0.4;
         slowMode = true;
     }

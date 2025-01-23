@@ -17,7 +17,6 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
         EXTEND, // A little above parallel to ground; arm is outside of robot.
         UPRIGHT, // Perpendicular to ground.
         RETRACT, // Parallel to ground; arm is within the robot.
-        CLEAR, // A little below parallel to ground; arm is within the robot.
     }
 
     public FrontArm(HardwareMap hardwareMap)
@@ -28,7 +27,6 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
                 .add(Stage.EXTEND, 0.25)
                 .add(Stage.UPRIGHT, 0.46)
                 .add(Stage.RETRACT, 0.80)
-                .add(Stage.CLEAR, 0.84)
         );
     }
 
@@ -52,11 +50,6 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
         setStage(Stage.RETRACT);
     }
 
-    public void clear()
-    {
-        setStage(Stage.CLEAR);
-    }
-
     public Action probe(int timeInMilliseconds)
     {
         return getTimedAction(this::probe, timeInMilliseconds);
@@ -75,10 +68,5 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
     public Action retract(int timeInMilliseconds)
     {
         return getTimedAction(this::retract, timeInMilliseconds);
-    }
-
-    public Action clear(int timeInMilliseconds)
-    {
-        return getTimedAction(this::clear, timeInMilliseconds);
     }
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+@Config
 @Autonomous
 public class SampleAuto extends BaseAuto
 {
@@ -33,7 +35,7 @@ public class SampleAuto extends BaseAuto
         intake = new Intake(hardware);
         outtake = new Outtake(hardware);
 
-        initialPose = new Pose2d(24, -60, Math.toRadians(90));
+        initialPose = new Pose2d(24, -60, tR(90));
         drive = new MecanumDrive(hardwareMap, initialPose);
 
         spawnToChamber = drive.actionBuilder(initialPose)
@@ -54,6 +56,8 @@ public class SampleAuto extends BaseAuto
         vExtendoToHC = outtake.getExtendo().getSlideAction(VerticalExtendo.HC_POSITION);
         vExtendoToClipHC = outtake.getExtendo().getSlideAction(VerticalExtendo.HC_POSITION - 100);
         vExtendoToRest = outtake.getExtendo().getSlideAction((int) outtake.getExtendo().minPosition);
+
+        Actions.runBlocking(closeBackClaw);
     }
 
     @Override
@@ -66,8 +70,6 @@ public class SampleAuto extends BaseAuto
     @Override
     public void run()
     {
-        outtake.getClaw().close();
-
         Actions.runBlocking(new SequentialAction(
                 spawnToChamber,
                 vExtendoToHC,
@@ -75,4 +77,16 @@ public class SampleAuto extends BaseAuto
                 chamberToPushLeftmostSampleToObservationZone
         ));
     }
+
+    public static double tR(double degrees)
+    { return Math.toRadians(degrees); }
+
 }
+
+
+/* Plan:
+start the back arm in the rest position and close the claw on init & set elbow to transfer
+move the robot to the high bar while moving the back arm to the clip position and the elbow to clip while the robot is moving
+when the bar has been reached, move the vert slides down, let go of the claw, then move the robot to push 2 samples down
+once that is done, go to the pickup zone and close the claw, go to the bar and do the same thing
+ */

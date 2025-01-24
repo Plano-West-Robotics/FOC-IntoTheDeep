@@ -117,10 +117,6 @@ public class QuickAuto extends LinearOpMode {
                         outtake.getArm().clip(200))
         );
 
-        waitForStart();
-
-        if (isStopRequested()) return;
-
         Action act1 = tab1.build();
         Action actInt = tabIntermediate.build();
         Action act2 = tab2.build();
@@ -130,6 +126,11 @@ public class QuickAuto extends LinearOpMode {
         Action act5 = tab5.build();
         Action act6 = tab6.build();
         Action park = tab7.build();
+
+        waitForStart();
+
+        if (isStopRequested()) return;
+
 
         Actions.runBlocking(
                 new SequentialAction(
@@ -152,14 +153,6 @@ public class QuickAuto extends LinearOpMode {
                         outtake.getExtendo().getSlideAction(1000), // lower slides to hook
                         outtake.getClaw().open(100) // release the specimen
                 )
-
-
-                //new ParallelAction(act1, outtake.getExtendo().highChamber());
-
-                //new SequentialAction(act1, outtake.getExtendo().highChamber(), outtake.getArm().clip(600),
-                //        outtake.getElbow().clip(400), actInt, outtake.getExtendo().getSlideAction(1200),
-                //        outtake.getClaw().open(100), act2
-                //
                 );
 
 

@@ -25,7 +25,7 @@ public class VerticalExtendo extends Extendo
     {
         super(
                 hardwareMap, "vl", "vr",
-                40, 4300,
+                10, 4300,
                 0.1, 0.8,
                 0.0025,
                 P, I, D, F,

@@ -13,7 +13,8 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
     {
         TRANSFER,
         CLIP,
-        BUCKET
+        BUCKET,
+        WALL
     }
 
     public BackElbow(HardwareMap hardwareMap)
@@ -22,6 +23,7 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
                 .add(Stage.TRANSFER, 0.37)
                 .add(Stage.CLIP, 0.527)
                 .add(Stage.BUCKET, 0.925)
+                .add(Stage.WALL, 0.68)
         );
     }
 
@@ -40,6 +42,11 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         setStage(Stage.BUCKET);
     }
 
+    public void wall()
+    {
+        setStage(Stage.WALL);
+    }
+
     public Action transfer(int timeInMilliseconds)
     {
         return getTimedAction(this::transfer, timeInMilliseconds);
@@ -53,5 +60,10 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
     public Action bucket(int timeInMilliseconds)
     {
         return getTimedAction(this::bucket, timeInMilliseconds);
+    }
+
+    public Action wall(int timeInMilliseconds)
+    {
+        return getTimedAction(this::wall, timeInMilliseconds);
     }
 }

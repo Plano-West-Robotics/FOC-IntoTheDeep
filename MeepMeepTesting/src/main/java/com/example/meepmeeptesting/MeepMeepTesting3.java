@@ -6,11 +6,11 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class MeepMeepTesting {
+public class MeepMeepTesting3 {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
-        Pose2d initPose = new Pose2d(20, -61, Math.toRadians(270));
+        Pose2d initPose = new Pose2d(20, -61, Math.toRadians(90));
 
         Vector2d firstVector = new Vector2d(10, -34);
         Vector2d secondVector = new Vector2d(25, -40);
@@ -85,7 +85,8 @@ public class MeepMeepTesting {
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
                 .strafeToConstantHeading(new Vector2d(10, -34))
                 .waitSeconds(1)
-                .splineToSplineHeading(new Pose2d(36, -30, ninety), ninety)
+                .setTangent(Math.toRadians(315))
+                .splineToSplineHeading(new Pose2d(36, -40, ninety), ninety)
                 .splineToConstantHeading(new Vector2d(44, -10), 0)
                 .splineToConstantHeading(new Vector2d(48, -14), Math.toRadians(270))
                 .splineToConstantHeading(new Vector2d(48, -46), Math.toRadians(270))
@@ -93,12 +94,14 @@ public class MeepMeepTesting {
                 .splineToConstantHeading(new Vector2d(51, -10), 0)
                 .splineToConstantHeading(new Vector2d(54, -14), twoSeventy)
                 .splineToConstantHeading(new Vector2d(54, -46), twoSeventy)
-                .splineToConstantHeading(new Vector2d(52, -44), twoSeventy)
-                .splineToConstantHeading(new Vector2d(42, -58), Math.toRadians(310))
-                .setTangent(ninety)
-                .splineToLinearHeading(new Pose2d(10, -34, twoSeventy), ninety)
+                .splineToConstantHeading(new Vector2d(42, -58), Math.toRadians(270))
+                .strafeToConstantHeading(new Vector2d(10, -34))
                 .waitSeconds(1)
-                                .splineToSplineHeading(new Pose2d(38, -63, ninety), twoSeventy)
+                .strafeToConstantHeading(new Vector2d(38, -63))
+                .waitSeconds(1)
+                .strafeToConstantHeading(new Vector2d(10, -34))
+                //.waitSeconds(1)
+                //.strafeToConstantHeading(new Vector2d(38, -63))
 
 
                 //.setTangent(ninety)

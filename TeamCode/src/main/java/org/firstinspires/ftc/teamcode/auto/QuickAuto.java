@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 
+import android.util.SparseLongArray;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -82,15 +84,15 @@ public class QuickAuto extends LinearOpMode {
         TrajectoryActionBuilder tabIntermediate = drive.actionBuilder(new Pose2d(0, -31, twoSeventy))
                 .strafeToConstantHeading(new Vector2d(0, -28)); // goes in closer to make sure it will actually hook
 
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(0, -26, twoSeventy))
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(0, -28, twoSeventy))
                 .splineToSplineHeading(new Pose2d(36, -30, ninety), ninety) // intermediate stage in the path to first block
                 .splineToConstantHeading(new Vector2d(42, -10), 0)
-                .splineToConstantHeading(new Vector2d(46, -14), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(46, -34), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(46, -16), ninety)
-                .splineToConstantHeading(new Vector2d(48, -10), 0)
-                .splineToConstantHeading(new Vector2d(51, -14), twoSeventy)
-                .splineToConstantHeading(new Vector2d(51, -34), twoSeventy);
+                .splineToConstantHeading(new Vector2d(44, -14), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(44, -40), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(44, -14), ninety)
+                .splineToConstantHeading(new Vector2d(49, -8), 0)
+                .splineToConstantHeading(new Vector2d(53, -14), twoSeventy)
+                .splineToConstantHeading(new Vector2d(53, -44), twoSeventy);
                 //.splineToConstantHeading(new Vector2d(54, -46), twoSeventy)
                 /*.splineToConstantHeading(new Vector2d(46, -8), 0) // arrives north of the first block
                 .setTangent(ninety)
@@ -100,25 +102,26 @@ public class QuickAuto extends LinearOpMode {
                 .setTangent(ninety)
                 .lineToY(-50); //pushes the second block down into the zone*/
 
-        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(54, -34, ninety))
-                .strafeToConstantHeading(new Vector2d(38, -61)); // goes to the wall pickup position for the first pushed block
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(53, -44, ninety))
+                //.strafeToConstantHeading(new Vector2d(38, -61)); // goes to the wall pickup position for the first pushed block
+                .splineToConstantHeading(new Vector2d(42, -62), twoSeventy);
 
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(38, -62, ninety))
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(42, -62, ninety))
                 .splineToSplineHeading(new Pose2d(-8, -31, twoSeventy), ninety); // goes to hook the first picked up block
 
         TrajectoryActionBuilder tabIntermediate2 = drive.actionBuilder(new Pose2d(-8, -31, twoSeventy))
                 .strafeToConstantHeading(new Vector2d(-8, -28)); // goes in closer to properly hook
 
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-8, -28, twoSeventy))
-                .strafeToSplineHeading(new Vector2d(36, -61), ninety); // goes to the pickup position for the second block
+                .strafeToSplineHeading(new Vector2d(38, -64), ninety); // goes to the pickup position for the second block
 
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(36, -61, ninety))
-                .splineToSplineHeading(new Pose2d(-4, -31, twoSeventy), ninety); // goes to the bar
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(38, -64, ninety))
+                .splineToSplineHeading(new Pose2d(-2, -31, twoSeventy), ninety); // goes to the bar
 
-        TrajectoryActionBuilder tabIntermediate3 = drive.actionBuilder(new Pose2d(-4, -31, twoSeventy))
-                .strafeToConstantHeading(new Vector2d(-4, -28)); // goes in closer to properly hook
+        TrajectoryActionBuilder tabIntermediate3 = drive.actionBuilder(new Pose2d(-2, -31, twoSeventy))
+                .strafeToConstantHeading(new Vector2d(-2, -28)); // goes in closer to properly hook
 
-        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-4, -29, twoSeventy))
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-2, -28, twoSeventy))
                 .strafeTo(new Vector2d(61, -61)); // parks
 
         //init actions - first close the claw around the preload then shift it as necessary when the arm is in position
@@ -158,15 +161,24 @@ public class QuickAuto extends LinearOpMode {
                         // go to pickup position while moving elbow and arm to pickup position
 
                         outtake.getClaw().close(100), // close claw to hold specimen from the wall
-                        new ParallelAction(act4, outtake.getExtendo().getSlideAction(1900), outtake.getElbow().clip(200), outtake.getArm().clip(200)),
+                        new ParallelAction(act4, outtake.getExtendo().highChamber(), outtake.getElbow().clip(200), outtake.getArm().clip(200)),
                         // go to the chamber again while raising the slides and resetting the elbow and arm to clip position
 
                         actInt2, // go in closer to actually be able to clip
-                        outtake.getExtendo().getSlideAction(1200), // lower slides to hook
+                        outtake.getExtendo().getSlideAction(1000), // lower slides to hook
                         outtake.getClaw().open(100), // release the specimen
-                        act5,
-                        act6,
-                        actInt3
+                        new ParallelAction(act5, outtake.getExtendo().getSlideAction(10),
+                                outtake.getElbow().wall(100), outtake.getArm().wall(100)),
+                        outtake.getClaw().close(100),
+                        new ParallelAction(act6, outtake.getExtendo().highChamber(), outtake.getElbow().clip(100), outtake.getArm().clip(100)),
+                        actInt3,
+                        outtake.getExtendo().getSlideAction(1000), // lower slides to hook - should probably add an actual method for this
+                        outtake.getClaw().open(100), // open claw so that the bot can move away
+                        outtake.getExtendo().getSlideAction(10),
+                        intake.getExtendo().retract(),
+                        intake.getArm().upright(400),
+                        outtake.getArm().rest(400),
+                        outtake.getElbow().transfer(200)
                 )
                 );
 

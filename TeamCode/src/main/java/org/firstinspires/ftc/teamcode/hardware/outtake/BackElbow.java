@@ -13,8 +13,9 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
     {
         TRANSFER,
         CLIP,
-        BUCKET,
-        WALL
+        WALL,
+        FRONT_HOOK,
+        BUCKET
     }
 
     public BackElbow(HardwareMap hardwareMap)
@@ -22,8 +23,9 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         super(new StageServoMonoBuilder<>(hardwareMap, "be", Stage.class)
                 .add(Stage.TRANSFER, 0.37)
                 .add(Stage.CLIP, 0.527)
-                .add(Stage.BUCKET, 0.925)
                 .add(Stage.WALL, 0.68)
+                .add(Stage.FRONT_HOOK, 0.7)
+                .add(Stage.BUCKET, 0.925)
         );
     }
 
@@ -37,14 +39,19 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         setStage(Stage.CLIP);
     }
 
-    public void bucket()
-    {
-        setStage(Stage.BUCKET);
-    }
-
     public void wall()
     {
         setStage(Stage.WALL);
+    }
+
+    public void frontHook()
+    {
+        setStage(Stage.FRONT_HOOK);
+    }
+
+    public void bucket()
+    {
+        setStage(Stage.BUCKET);
     }
 
     public Action transfer(int timeInMilliseconds)
@@ -57,13 +64,18 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         return getTimedAction(this::clip, timeInMilliseconds);
     }
 
-    public Action bucket(int timeInMilliseconds)
-    {
-        return getTimedAction(this::bucket, timeInMilliseconds);
-    }
-
     public Action wall(int timeInMilliseconds)
     {
         return getTimedAction(this::wall, timeInMilliseconds);
+    }
+
+    public Action frontHook(int timeInMilliseconds)
+    {
+        return getTimedAction(this::frontHook, timeInMilliseconds);
+    }
+
+    public Action bucket(int timeInMilliseconds)
+    {
+        return getTimedAction(this::bucket, timeInMilliseconds);
     }
 }

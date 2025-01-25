@@ -29,7 +29,7 @@ public class VerticalExtendo extends Extendo
                 0.1, 0.8,
                 0.0025,
                 P, I, D, F,
-                5,
+                50,
                 0.0005
         );
         getLeft().reverse();

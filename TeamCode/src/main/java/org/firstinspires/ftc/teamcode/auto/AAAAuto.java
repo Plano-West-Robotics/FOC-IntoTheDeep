@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 @Config
-@Autonomous(name = "AutoRapido")
-public class QuickAuto extends LinearOpMode {
+@Autonomous
+public class AAAAuto extends LinearOpMode {
 
     Hardware hardware;
 
@@ -40,7 +40,7 @@ public class QuickAuto extends LinearOpMode {
 
         hardware = new Hardware(hardwareMap);
         // instantiate your MecanumDrive at a particular pose.
-        Pose2d initialPose = new Pose2d(24, -61, twoSeventy); // needs manual testing II
+        Pose2d initialPose = new Pose2d(24, -61, ninety); // needs manual testing II
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
@@ -77,7 +77,7 @@ public class QuickAuto extends LinearOpMode {
          */
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .strafeToConstantHeading(new Vector2d(0, -31)); // goes from the start (middle of 2nd tile) to the chambers
+                .strafeToConstantHeading(new Vector2d(0, -29)); // goes from the start (middle of 2nd tile) to the chambers
 
         TrajectoryActionBuilder tabIntermediate = drive.actionBuilder(new Pose2d(0, -31, twoSeventy))
                 .strafeToConstantHeading(new Vector2d(0, -28)); // goes in closer to make sure it will actually hook
@@ -145,32 +145,11 @@ public class QuickAuto extends LinearOpMode {
 
 
         Actions.runBlocking(
-                new SequentialAction(
-                        new ParallelAction(act1, outtake.getExtendo().highChamber()), // go to the chamber while extending slides
 
-                        actInt, // get close enough to hook
-                        outtake.getExtendo().getSlideAction(1200), // lower slides to hook - should probably add an actual method for this
-                        outtake.getClaw().open(100), // open claw so that the bot can move away
-                        new ParallelAction(act2, outtake.getExtendo().getSlideAction(10)), // lower slides to pickup position while
-                        //pushing samples back
-
-                        new ParallelAction(act3, outtake.getArm().wall(100), outtake.getElbow().wall(100)),
-                        // go to pickup position while moving elbow and arm to pickup position
-
-                        outtake.getClaw().close(100), // close claw to hold specimen from the wall
-                        new ParallelAction(act4, outtake.getExtendo().getSlideAction(1900), outtake.getElbow().clip(200), outtake.getArm().clip(200)),
-                        // go to the chamber again while raising the slides and resetting the elbow and arm to clip position
-
-                        actInt2, // go in closer to actually be able to clip
-                        outtake.getExtendo().getSlideAction(1200), // lower slides to hook
-                        outtake.getClaw().open(100), // release the specimen
-                        act5,
-                        act6,
-                        actInt3
-                )
-                );
+                new ParallelAction(act1, outtake.getExtendo().highChamber()) // go to the chamber while extending slides
 
 
+        );
     }
 
 }

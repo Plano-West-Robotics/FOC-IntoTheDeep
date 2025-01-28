@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 @Config
-@Autonomous(name = "AutoRapido")
-public class QuickAuto extends LinearOpMode {
+@Autonomous(name = "SpecimenAuto(choose this)")
+public class LastChanceSpecimenAuto extends LinearOpMode {
 
     Hardware hardware;
 
@@ -93,7 +93,7 @@ public class QuickAuto extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(49, -8), 0)
                 .splineToConstantHeading(new Vector2d(53, -14), twoSeventy)
                 .splineToConstantHeading(new Vector2d(53, -44), twoSeventy);
-                //.splineToConstantHeading(new Vector2d(54, -46), twoSeventy)
+        //.splineToConstantHeading(new Vector2d(54, -46), twoSeventy)
                 /*.splineToConstantHeading(new Vector2d(46, -8), 0) // arrives north of the first block
                 .setTangent(ninety)
                 .lineToY(-50) // pushes the block down into the zone
@@ -180,7 +180,7 @@ public class QuickAuto extends LinearOpMode {
                         outtake.getArm().rest(400),
                         outtake.getElbow().transfer(200)
                 )
-                );
+        );
 
 
     }

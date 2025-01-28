@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Hardware;
@@ -14,9 +15,10 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+@Disabled
 @Config
-@Autonomous(name = "Specimen Auto", group = "CompPrograms")
-public class LastChanceSpecimenAuto extends LinearOpMode {
+@Autonomous(name = "Bucket Auto", group = "CompPrograms")
+public class LastChanceBucketAuto extends LinearOpMode {
 
     Hardware hardware;
 
@@ -33,7 +35,8 @@ public class LastChanceSpecimenAuto extends LinearOpMode {
         hardware = new Hardware(hardwareMap);
 
         /* TODO: if the odo pods get fixed the initial y position should be measured to make sure the center is actually
-                 9 inches from the back of the robot - it probably actually isn't - also look at TODOS in the other class */
+                 9 inches from the back of the robot - it probably actually isn't - also look at TODOS in the other class
+                  also fix the dimensions in MeepMeep too*/
         Pose2d initialPose = new Pose2d(24, -61, Math.toRadians(90));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);

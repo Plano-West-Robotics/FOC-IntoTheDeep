@@ -244,8 +244,11 @@ public class SpecimenAutoActions {
             toPickupFromPushing(),
             atPickup(),
             nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction1),
+            atChamber(),
             toPickupFromChamber(toPickupFromChamberPathAction1),
+            atPickup(),
             nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction2),
+            atChamber(),
             // TODO: ADD 4TH SPECIMEN PICKUP AND HOOK
             resetForTeleOp()
         );

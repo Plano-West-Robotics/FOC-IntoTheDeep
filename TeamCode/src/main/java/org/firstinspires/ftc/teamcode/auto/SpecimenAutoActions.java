@@ -26,16 +26,16 @@ public class SpecimenAutoActions {
         this.initPose = initPose;
     }
 
-    public Action closeBackClaw() { return outtake.getClaw().close(120); };
+    public Action setBackClawClose() { return outtake.getClaw().close(120); };
     public Action setElbowHook(){ return outtake.getElbow().frontHook(300); };
     public Action setArmHook(){ return outtake.getArm().transfer(450); };
     public Action setIntakeUpright(){ return intake.getArm().upright(400); };
-    public Action raiseSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); }; // TODO: TUNE PIDF FOR THE SLIDES TO BE FASTER
-    public Action raiseSlidesToHook(){ return outtake.getExtendo().hc3(); };
-    public Action openBackClaw(){ return outtake.getClaw().open(120); };
+    public Action setSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); }; // TODO: TUNE PIDF FOR THE SLIDES TO BE FASTER
+    public Action setSlidesToAboveChamber(){ return outtake.getExtendo().hc3(); };
+    public Action setBackClawOpen(){ return outtake.getClaw().open(120); };
     public Action setElbowWall(){ return outtake.getElbow().wall(300); };
     public Action setArmWall(){ return outtake.getArm().wall(450); };
-    public Action lowerSlidesToBottom(){ return outtake.getExtendo().lowerFully(); };
+    public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); };
 
     public TrajectoryActionBuilder moveToChamberPath;
     public TrajectoryActionBuilder pushSamplesPath;
@@ -52,9 +52,9 @@ public class SpecimenAutoActions {
     public Action hookFromPickupWithTimedElbowAndArmPathAction2;
 
     // At end of auto, transitioning into TeleOp
-    public Action retractHorizontalSlides(){ return intake.getExtendo().retract(); };
-    public Action retractVerticalSlides(){ return outtake.getExtendo().lowerFully(); };
-    public Action retractIntakeArm(){ return intake.getArm().retract(300); };
+    public Action resetHorizontalSlides(){ return intake.getExtendo().retract(); };
+    public Action resetVerticalSlides(){ return outtake.getExtendo().lowerFully(); };
+    public Action resetIntakeArm(){ return intake.getArm().retract(300); };
     public Action resetOuttakeArm(){ return outtake.getArm().rest(400); };
     public Action resetElbow(){ return outtake.getElbow().transfer(300); };
 
@@ -71,7 +71,7 @@ public class SpecimenAutoActions {
     {
         return new SequentialAction
         (
-            closeBackClaw(), setElbowHook(), setArmHook(), setIntakeUpright()
+            setBackClawClose(), setElbowHook(), setArmHook(), setIntakeUpright()
         );
     }
 
@@ -84,7 +84,7 @@ public class SpecimenAutoActions {
     {
         return new ParallelAction
         (
-                raiseSlidesToUnderChamber(), moveToChamberPathAction
+                setSlidesToUnderChamber(), moveToChamberPathAction
         );
     }
 
@@ -98,7 +98,7 @@ public class SpecimenAutoActions {
     {
         return new SequentialAction
         (
-                raiseSlidesToHook(), openBackClaw()
+                setSlidesToAboveChamber(), setBackClawOpen()
         );
     }
 
@@ -111,7 +111,7 @@ public class SpecimenAutoActions {
     {
         return new ParallelAction
                 (
-                        pushSamplesPathAction, lowerSlidesToBottom(), setElbowWall(), setArmWall()
+                        pushSamplesPathAction, setSlidesToBottom(), setElbowWall(), setArmWall()
                 );
     }
 
@@ -137,7 +137,7 @@ public class SpecimenAutoActions {
     {
         return new SequentialAction
                 (
-                        closeBackClaw()
+                        setBackClawClose()
                 );
     }
 
@@ -151,7 +151,7 @@ public class SpecimenAutoActions {
     {
         return new ParallelAction
                 (
-                        raiseSlidesToUnderChamber(), pathAction
+                        setSlidesToUnderChamber(), pathAction
                 );
     }
 
@@ -164,7 +164,7 @@ public class SpecimenAutoActions {
     {
         return new ParallelAction
                 (
-                        setElbowWall(), setArmWall(), lowerSlidesToBottom(), pathAction
+                        setElbowWall(), setArmWall(), setSlidesToBottom(), pathAction
                 );
     }
 
@@ -178,7 +178,7 @@ public class SpecimenAutoActions {
     {
         return new ParallelAction
                 (
-                        resetElbow(), resetOuttakeArm(), retractIntakeArm(), retractHorizontalSlides(), retractVerticalSlides()
+                        resetElbow(), resetOuttakeArm(), resetIntakeArm(), resetHorizontalSlides(), resetVerticalSlides()
                 );
     }
 

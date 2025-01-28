@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
-public class SpecimenMethods {
+public class SpecimenAutoActions {
 
     public Intake intake;
     public Outtake outtake;
@@ -19,7 +19,7 @@ public class SpecimenMethods {
     public MecanumDrive drive;
     public Pose2d initPose;
 
-    public SpecimenMethods(Intake intake, Outtake outtake, MecanumDrive drive, Pose2d initPose){
+    public SpecimenAutoActions(Intake intake, Outtake outtake, MecanumDrive drive, Pose2d initPose){
         this.intake = intake;
         this.outtake = outtake;
         this.drive = drive;
@@ -210,7 +210,7 @@ public class SpecimenMethods {
 
         hookFromPickupWithTimedElbowAndArmPath1 = drive.actionBuilder(pickupFromPushingPathFinalPose)
                 .strafeToConstantHeading(new Vector2d(-8, -27))
-                .afterTime(400, new ParallelAction(setElbowHook(), setArmHook()));
+                .afterTime(0.4, new ParallelAction(setElbowHook(), setArmHook()));
         Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose1 = new Pose2d(-8, -27, tR(90));
 
         toPickupFromChamberPath1 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose1)
@@ -219,7 +219,7 @@ public class SpecimenMethods {
 
         hookFromPickupWithTimedElbowAndArmPath2 = drive.actionBuilder(toPickupFromChamberPathFinalPose1)
                 .strafeToConstantHeading(new Vector2d(4, -27))
-                .afterTime(400, new ParallelAction(setElbowHook(), setArmHook()));
+                .afterTime(0.4, new ParallelAction(setElbowHook(), setArmHook()));
         Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose2 = new Pose2d(4, -27, tR(90));
 
     }

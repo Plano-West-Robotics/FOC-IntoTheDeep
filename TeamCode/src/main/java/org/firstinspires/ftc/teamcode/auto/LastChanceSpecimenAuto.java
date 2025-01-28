@@ -1,17 +1,10 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 
-import android.util.SparseLongArray;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -48,7 +41,7 @@ public class LastChanceSpecimenAuto extends LinearOpMode {
         intake = new Intake(hardware);
         outtake = new Outtake(hardware);
 
-        SpecimenMethods specMethods = new SpecimenMethods(intake, outtake, drive, initialPose);
+        SpecimenAutoActions specMethods = new SpecimenAutoActions(intake, outtake, drive, initialPose);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 

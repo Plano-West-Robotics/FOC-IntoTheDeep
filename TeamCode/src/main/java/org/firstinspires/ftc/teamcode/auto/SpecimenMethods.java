@@ -30,7 +30,7 @@ public class SpecimenMethods {
     public Action setElbowHook(){ return outtake.getElbow().frontHook(300); };
     public Action setArmHook(){ return outtake.getArm().transfer(450); };
     public Action setIntakeUpright(){ return intake.getArm().upright(400); };
-    public Action raiseSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); };
+    public Action raiseSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); }; // TODO: TUNE PIDF FOR THE SLIDES TO BE FASTER
     public Action raiseSlidesToHook(){ return outtake.getExtendo().hc3(); };
     public Action openBackClaw(){ return outtake.getClaw().open(120); };
     public Action setElbowWall(){ return outtake.getElbow().wall(300); };

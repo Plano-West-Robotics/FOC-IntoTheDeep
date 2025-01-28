@@ -191,6 +191,9 @@ public class SpecimenAutoActions {
         // TODO: MAKE SURE TO TUNE THE Y POSITION OF THE CHAMBER - SHOULD CHANGE IT FOR ALL FOLLOWING TRAJECTORIES TOO
         moveToChamberPath = drive.actionBuilder(initPose).strafeToConstantHeading(new Vector2d(0, -28));
         Pose2d moveToChamberPathFinalPose = new Pose2d(0, -28, tR(90));
+        // TODO: MAKE THE ROBOT GO STRAIGHT TO THE BAR FOR THE PRELOAD HOOK AND
+        //       MAKE THE ROBOT GO AS FAR TO THE RIGHT AS POSSIBLE WITHOUT OVERLAPPING THE HOOKS
+        //       FOR EACH OF THE SPECIMENS (WHEN THE ODO GETS FIXED)
 
         pushSamplesPath = drive.actionBuilder(moveToChamberPathFinalPose)
                 .setTangent(Math.toRadians(315))

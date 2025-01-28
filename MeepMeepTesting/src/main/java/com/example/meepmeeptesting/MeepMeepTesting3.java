@@ -95,11 +95,11 @@ public class MeepMeepTesting3 {
                 .splineToConstantHeading(new Vector2d(54, -14), twoSeventy)
                 .splineToConstantHeading(new Vector2d(54, -46), twoSeventy)
                 .splineToConstantHeading(new Vector2d(42, -58), Math.toRadians(270))
-                .strafeToConstantHeading(new Vector2d(10, -34))
+                .strafeToConstantHeading(new Vector2d(5, -34))
                 .waitSeconds(1)
                 .strafeToConstantHeading(new Vector2d(38, -63))
                 .waitSeconds(1)
-                .strafeToConstantHeading(new Vector2d(10, -34))
+                .strafeToConstantHeading(new Vector2d(0, -34))
                 //.waitSeconds(1)
                 //.strafeToConstantHeading(new Vector2d(38, -63))
 

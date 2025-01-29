@@ -14,6 +14,8 @@ public enum Button
     GP1_DPAD_DOWN,
     GP1_DPAD_LEFT,
     GP1_DPAD_RIGHT,
+    GP1_START,
+    GP1_OPTIONS,
 
     GP2_A,
     GP2_X,
@@ -26,5 +28,7 @@ public enum Button
     GP2_DPAD_UP,
     GP2_DPAD_DOWN,
     GP2_DPAD_LEFT,
-    GP2_DPAD_RIGHT
+    GP2_DPAD_RIGHT,
+    GP2_START,
+    GP2_OPTIONS
 }

@@ -91,6 +91,8 @@ public class Gamepads
             case GP1_DPAD_DOWN: return gp1.dpad_down;
             case GP1_DPAD_LEFT: return gp1.dpad_left;
             case GP1_DPAD_RIGHT: return gp1.dpad_right;
+            case GP1_START: return gp1.start;
+            case GP1_OPTIONS: return gp1.options;
 
             case GP2_A: return gp2.a;
             case GP2_X: return gp2.x;
@@ -104,6 +106,8 @@ public class Gamepads
             case GP2_DPAD_DOWN: return gp2.dpad_down;
             case GP2_DPAD_LEFT: return gp2.dpad_left;
             case GP2_DPAD_RIGHT: return gp2.dpad_right;
+            case GP2_START: return gp2.start;
+            case GP2_OPTIONS: return gp2.options;
 
             default: throw new RuntimeException("Unreachable code entered.");
         }

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontArm;
@@ -14,6 +16,9 @@ import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 
 public class Hardware
 {
+    public IMU imu;
+    public IMU.Parameters imuParameters;
+
     public Drivetrain drivetrain;
 
     // Intake.
@@ -30,6 +35,13 @@ public class Hardware
 
     public Hardware(HardwareMap hardwareMap)
     {
+        imu = hardwareMap.get(IMU.class, "imu");
+        imuParameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
+        ));
+        imu.initialize(imuParameters);
+
         drivetrain = new Drivetrain(hardwareMap);
 
         horizontalExtendo = new HorizontalExtendo(hardwareMap);

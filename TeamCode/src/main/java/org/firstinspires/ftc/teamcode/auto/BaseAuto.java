@@ -21,15 +21,15 @@ public abstract class BaseAuto extends LinearOpMode
 
         waitForStart();
 
-        while (opModeIsActive())
+        if (isStopRequested()) return;
+
+        run();
+
+        while (opModeIsActive() && !isStopRequested())
         {
             log();
             telemetry.update();
         }
-
-        if (isStopRequested()) return;
-
-        run();
     }
 
     public void setup() {}

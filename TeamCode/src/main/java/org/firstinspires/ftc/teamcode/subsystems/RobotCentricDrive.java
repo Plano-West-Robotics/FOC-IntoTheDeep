@@ -4,18 +4,17 @@ import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
-import org.firstinspires.ftc.teamcode.hardware.RobotCentricDrivetrain;
+import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 
 public class RobotCentricDrive
 {
-    public RobotCentricDrivetrain drivetrain;
+    public Drivetrain drivetrain;
     public double frPower, flPower, brPower, blPower, speed, turnSpeed;
     public boolean slowMode;
 
     public RobotCentricDrive(Hardware hardware)
     {
-        drivetrain = hardware.rDrivetrain;
-        if (drivetrain == null) throw new RuntimeException("No robot centric drivetrain given.");
+        drivetrain = hardware.drivetrain;
         regularSpeed();
     }
 

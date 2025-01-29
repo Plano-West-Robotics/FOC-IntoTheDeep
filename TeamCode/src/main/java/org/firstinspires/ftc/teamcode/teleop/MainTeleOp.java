@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.fsm.OuttakeMachines;
 import org.firstinspires.ftc.teamcode.hardware.outtake.BackArm;
 import org.firstinspires.ftc.teamcode.subsystems.Drive;
+import org.firstinspires.ftc.teamcode.subsystems.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.RobotCentricDrive;
@@ -83,7 +84,7 @@ public class MainTeleOp extends BaseTeleOp
     @Override
     public void setup()
     {
-        drive = new RobotCentricDrive(hardware);
+        drive = new FieldCentricDrive(hardware);
         intake = new Intake(hardware);
         outtake = new Outtake(hardware);
 

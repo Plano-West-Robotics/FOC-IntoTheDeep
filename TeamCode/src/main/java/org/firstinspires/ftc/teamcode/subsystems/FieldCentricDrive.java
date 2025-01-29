@@ -35,27 +35,6 @@ public class FieldCentricDrive extends Drive
         drivetrain.setPower(frPower, flPower, brPower, blPower);
     }
 
-    public void toggleSlowMode()
-    {
-        if (slowMode) regularSpeed();
-        else slowSpeed();
-    }
-
-    public void regularSpeed()
-    {
-        speed = 0.85;
-        turnSpeed = 0.7;
-        slowMode = false;
-    }
-
-    public void slowSpeed()
-    {
-        speed = 0.2;
-        turnSpeed = 0.4;
-        slowMode = true;
-    }
-
-
     @Override
     public void update(Gamepads gamepads)
     {

@@ -58,26 +58,12 @@ public class SpecimenAutoActions {
     public Action resetOuttakeArm(){ return outtake.getArm().rest(400); };
     public Action resetElbow(){ return outtake.getElbow().transfer(300); };
 
-    // TODO: REMOVE ENUMS
-    public enum Init_State_Preload
-    {
-        CLOSE_BACK_CLAW,
-        SET_ELBOW_FRONT,
-        SET_ARM_FRONT,
-        SET_INTAKE_UPRIGHT
-    }
-
     public SequentialAction initPreload()
     {
         return new SequentialAction
         (
             setBackClawClose(), setElbowHook(), setArmHook(), setIntakeUpright()
         );
-    }
-
-    public enum Approach_State_Preload
-    {
-        RAISE_SLIDES_TO_UNDER_CHAMBER__MOVE_TO_CHAMBER
     }
 
     public ParallelAction approachChamberPreload()
@@ -88,23 +74,12 @@ public class SpecimenAutoActions {
         );
     }
 
-    public enum At_Chamber_State
-    {
-        RAISE_SLIDES_TO_HOOK,
-        OPEN_CLAW
-    }
-
     public SequentialAction atChamber()
     {
         return new SequentialAction
         (
                 setSlidesToAboveChamber(), setBackClawOpen()
         );
-    }
-
-    public enum Pushing_State
-    {
-        ELBOW_TO_WALL__ARM_TO_WALL__LOWER_SLIDES_TO_BOTTOM__PUSH_SAMPLES_PATH
     }
 
     public ParallelAction pushingActions()
@@ -115,22 +90,12 @@ public class SpecimenAutoActions {
                 );
     }
 
-    public enum Wall_Pickup_State_From_Push
-    {
-        GO_TO_PICKUP_PATH_FROM_PUSH
-    }
-
     public SequentialAction toPickupFromPushing()
     {
         return new SequentialAction
                 (
                         pickupFromPushingPathAction
                 );
-    }
-
-    public enum At_Pickup
-    {
-        CLOSE_CLAW
     }
 
     public SequentialAction atPickup()
@@ -141,12 +106,6 @@ public class SpecimenAutoActions {
                 );
     }
 
-    public enum Hook_Non_Preload
-    {
-        MOVE_SLIDES_UP_TIMED_ACTION__TRAVEL_TO_CHAMBER,
-        MOVE_ARM_HOOK__MOVE_ELBOW_HOOK__TRAVEL_TO_CHAMBER
-    }
-
     public ParallelAction nonPreloadHook(Action pathAction)
     {
         return new ParallelAction
@@ -155,23 +114,12 @@ public class SpecimenAutoActions {
                 );
     }
 
-    public enum To_Pickup_From_Chamber
-    {
-        ELBOW_TO_WALL__ARM_TO_WALL__LOWER_SLIDES_TO_BOTTOM__GO_TO_PICKUP_FROM_CHAMBER_PATH
-    }
-
     public ParallelAction toPickupFromChamber(Action pathAction)
     {
         return new ParallelAction
                 (
                         setElbowWall(), setArmWall(), setSlidesToBottom(), pathAction
                 );
-    }
-
-    public enum Reset_For_Teleop
-    {
-        RETRACT_HORIZONTAL_SLIDES__RETRACT_VERTICAL_SLIDES,
-        INTAKE_ARM_RETRACT__OUTTAKE_ARM_REST__ELBOW_TRANSFER
     }
 
     public ParallelAction resetForTeleOp()

@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 @Config
 @Autonomous(name = "AutoRapido2 (Don't choose)")
-public class AAAAARefinedAuto extends LinearOpMode {
+public class TempForwardHookAuto extends LinearOpMode {
 
     Hardware hardware;
 

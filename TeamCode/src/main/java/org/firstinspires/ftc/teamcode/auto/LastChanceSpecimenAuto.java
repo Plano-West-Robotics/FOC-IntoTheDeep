@@ -35,7 +35,8 @@ public class LastChanceSpecimenAuto extends LinearOpMode {
         hardware = new Hardware(hardwareMap);
 
         /* TODO: if the odo pods get fixed the initial y position should be measured to make sure the center is actually
-                 9 inches from the back of the robot - it probably actually isn't - also look at TODOS in the other class */
+                 9 inches from the back of the robot - it probably actually isn't - also look at TODOS in the
+                 SpecimenAutoActions class */
         initialPose = new Pose2d(24, -61, Math.toRadians(90));
 
         drive = new MecanumDrive(hardwareMap, initialPose);

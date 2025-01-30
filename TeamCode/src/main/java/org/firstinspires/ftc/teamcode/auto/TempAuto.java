@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 @Config
-@Autonomous(name = "AutoRapido")
-public class QuickAuto extends LinearOpMode {
+@Autonomous(name = "TempAuto")
+public class TempAuto extends LinearOpMode {
 
     Hardware hardware;
 

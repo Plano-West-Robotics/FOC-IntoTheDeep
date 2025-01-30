@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 @Config
 @Autonomous(name = "TempAuto")
-public class TempAuto extends LinearOpMode {
+public class TempSpecAuto extends LinearOpMode {
 
     Hardware hardware;
 

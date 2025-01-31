@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+// TODO: COMPLETE ALL THE TODOS EXCEPT SPEC 4 1/31
+
 @Config
 @Autonomous(name = "Specimen Auto", group = "CompPrograms")
 public class LastChanceSpecimenAuto extends LinearOpMode {

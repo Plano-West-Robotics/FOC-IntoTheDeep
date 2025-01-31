@@ -26,32 +26,22 @@ public class BucketAutoActions {
         this.initPose = initPose;
     }
 
-    public Action setBackClawClose() { return outtake.getClaw().close(120); };
-    public Action setElbowHook(){ return outtake.getElbow().frontHook(300); };
-    public Action setArmHook(){ return outtake.getArm().transfer(450); };
-    public Action setIntakeUpright(){ return intake.getArm().upright(400); };
-    public Action setSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); }; // TODO: TUNE PIDF FOR THE SLIDES TO BE FASTER
-    public Action setSlidesToAboveChamber(){ return outtake.getExtendo().hc3(); };
-    public Action setBackClawOpen(){ return outtake.getClaw().open(120); };
-    public Action setElbowWall(){ return outtake.getElbow().wall(300); };
-    public Action setArmWall(){ return outtake.getArm().wall(450); };
-    public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); };
-
-    public Action setIntakeSlidesRetract() {};
-    public Action setIntakeArmUpright() {};
-    public Action setIntakeClawOpen() {};
+    public Action setIntakeSlidesRetract() { return intake.getExtendo().retract(); };
+    public Action setIntakeArmUpright() { return intake.getArm().upright(300); };
+    public Action setIntakeClawOpen() { return intake.getClaw().open(120); };
+    public Action setIntakeSwivelCenter() { return intake.getSwivel().center(250); };
     public Action setOuttakeClawClose() { return outtake.getClaw().close(120); };
-    public Action setOuttakeElbowBucket() {};
-    public Action setOuttakeArmBucket() {};
-    public Action setOuttakeSlidesToBucket() {};
-    public Action setOuttakeClawOpen() {};
+    public Action setOuttakeElbowBucket() { return outtake.getElbow().bucket(250); };
+    public Action setOuttakeArmBucket() { return outtake.getArm().bucket(450); };
+    public Action setOuttakeSlidesToBucket() { return outtake.getExtendo().highBasket(); }; // TODO: TUNE THE OUTTAKE SLIDES TO BE FASTER
+    public Action setOuttakeClawOpen() { return outtake.getClaw().open(120); };
     public Action setOuttakeSlidesToBottom() { return outtake.getExtendo().lowerFully(); };
-    public Action setOuttakeElbowRest() {};
-    public Action setOuttakeArmRest() {};
-    public Action setIntakeArmPickup() {};
-    public Action setIntakeClawClose() {};
-    public Action setIntakeArmTransfer() {};
-    public Action setOuttakeArmTransfer() {};
+    public Action setOuttakeElbowRest() { return outtake.getElbow().transfer(250); };
+    public Action setOuttakeArmRest() { return outtake.getArm().rest(300); };
+    public Action setIntakeArmPickup() { return intake.getArm().probe(350); };
+    public Action setIntakeClawClose() { return intake.getClaw().close(120); };
+    public Action setIntakeArmTransfer() { return intake.getArm().retract(350); };
+    public Action setOuttakeArmTransfer() { return outtake.getArm().transfer(350); };
 
     public TrajectoryActionBuilder preloadToBucketPath;
     public TrajectoryActionBuilder bucketToSample1Path;
@@ -71,19 +61,6 @@ public class BucketAutoActions {
     public Action sample3ToBucketPathAction;
     public Action bucketToParkPathAction;
 
-    public TrajectoryActionBuilder moveToChamberPath;
-    public TrajectoryActionBuilder pushSamplesPath;
-    public TrajectoryActionBuilder pickupFromPushingPath;
-    public TrajectoryActionBuilder hookFromPickupWithTimedElbowAndArmPath1;
-    public TrajectoryActionBuilder toPickupFromChamberPath1;
-    public TrajectoryActionBuilder hookFromPickupWithTimedElbowAndArmPath2;
-
-    public Action moveToChamberPathAction;
-    public Action pushSamplesPathAction;
-    public Action pickupFromPushingPathAction;
-    public Action hookFromPickupWithTimedElbowAndArmPathAction1;
-    public Action toPickupFromChamberPathAction1;
-    public Action hookFromPickupWithTimedElbowAndArmPathAction2;
 
     // At end of auto, transitioning into TeleOp
     public Action resetHorizontalSlides(){ return intake.getExtendo().retract(); };
@@ -93,78 +70,41 @@ public class BucketAutoActions {
     public Action resetElbow(){ return outtake.getElbow().transfer(300); };
 
     // TODO: REMOVE ENUMS
-    public enum Init_State_Preload
-    {
-        CLOSE_BACK_CLAW,
-        SET_ELBOW_FRONT,
-        SET_ARM_FRONT,
-        SET_INTAKE_UPRIGHT
-    }
 
     public SequentialAction initPreload()
     {
         return new SequentialAction
         (
-            setBackClawClose(), setElbowHook(), setArmHook(), setIntakeUpright()
+            new ParallelAction(setIntakeSlidesRetract(), setIntakeArmUpright(), setIntakeClawOpen(), setIntakeSwivelCenter(), setOuttakeClawClose()),
+            setOuttakeElbowBucket(),
+            setOuttakeArmBucket()
         );
     }
 
-    public enum Approach_State_Preload
+    public ParallelAction approachBucketPreload()
     {
-        RAISE_SLIDES_TO_UNDER_CHAMBER__MOVE_TO_CHAMBER
+        return new ParallelAction(setOuttakeSlidesToBucket(), preloadToBucketPathAction);
     }
 
-    public ParallelAction approachChamberPreload()
+    public SequentialAction atBucket()
     {
-        return new ParallelAction
-        (
-                setSlidesToUnderChamber(), moveToChamberPathAction
-        );
+        return new SequentialAction(setOuttakeClawOpen());
     }
 
-    public enum At_Chamber_State
-    {
-        RAISE_SLIDES_TO_HOOK,
-        OPEN_CLAW
-    }
-
-    public SequentialAction atChamber()
-    {
-        return new SequentialAction
-        (
-                setSlidesToAboveChamber(), setBackClawOpen()
-        );
-    }
-
-    public enum Pushing_State
-    {
-        ELBOW_TO_WALL__ARM_TO_WALL__LOWER_SLIDES_TO_BOTTOM__PUSH_SAMPLES_PATH
-    }
-
-    public ParallelAction pushingActions()
+    public ParallelAction pickUpSampleFromBucket(Action toSampleAction)
     {
         return new ParallelAction
                 (
-                        pushSamplesPathAction, setSlidesToBottom(), setElbowWall(), setArmWall()
+                        toSampleAction, setOuttakeSlidesToBottom(), setOuttakeElbowRest(), setOuttakeArmRest()
                 );
     }
 
-    public enum Wall_Pickup_State_From_Push
-    {
-        GO_TO_PICKUP_PATH_FROM_PUSH
-    }
-
-    public SequentialAction toPickupFromPushing()
+    public SequentialAction atSample()
     {
         return new SequentialAction
                 (
-                        pickupFromPushingPathAction
+                        setIntakeArmPickup(), setIntakeClawClose()
                 );
-    }
-
-    public enum At_Pickup
-    {
-        CLOSE_CLAW
     }
 
     public SequentialAction atPickup()
@@ -175,23 +115,12 @@ public class BucketAutoActions {
                 );
     }
 
-    public enum Hook_Non_Preload
-    {
-        MOVE_SLIDES_UP_TIMED_ACTION__TRAVEL_TO_CHAMBER,
-        MOVE_ARM_HOOK__MOVE_ELBOW_HOOK__TRAVEL_TO_CHAMBER
-    }
-
     public ParallelAction nonPreloadHook(Action pathAction)
     {
         return new ParallelAction
                 (
                         setSlidesToUnderChamber(), pathAction
                 );
-    }
-
-    public enum To_Pickup_From_Chamber
-    {
-        ELBOW_TO_WALL__ARM_TO_WALL__LOWER_SLIDES_TO_BOTTOM__GO_TO_PICKUP_FROM_CHAMBER_PATH
     }
 
     public ParallelAction toPickupFromChamber(Action pathAction)
@@ -202,12 +131,6 @@ public class BucketAutoActions {
                 );
     }
 
-    public enum Reset_For_Teleop
-    {
-        RETRACT_HORIZONTAL_SLIDES__RETRACT_VERTICAL_SLIDES,
-        INTAKE_ARM_RETRACT__OUTTAKE_ARM_REST__ELBOW_TRANSFER
-    }
-
     public ParallelAction resetForTeleOp()
     {
         return new ParallelAction
@@ -215,9 +138,6 @@ public class BucketAutoActions {
                         resetElbow(), resetOuttakeArm(), resetIntakeArm(), resetHorizontalSlides(), resetVerticalSlides()
                 );
     }
-
-    //plan - return a sequential action that contains everything - pass in trajectory action
-    // init should have a separate one
 
 
     public void createTrajectories()

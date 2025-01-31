@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware.intake;
 
+import static org.firstinspires.ftc.teamcode.Utils.getTimedAction;
+
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.wrappers.Servo;
@@ -33,5 +36,10 @@ public class FrontSwivel extends Servo
     {
         if (!initialized) center();
         if (getPosition() >= positionIncrement) setPosition(getPosition() - positionIncrement);
+    }
+
+    public Action center(int timeInMilliseconds)
+    {
+        return getTimedAction(this::center, timeInMilliseconds);
     }
 }

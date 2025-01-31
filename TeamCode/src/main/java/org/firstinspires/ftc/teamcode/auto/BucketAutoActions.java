@@ -37,6 +37,15 @@ public class BucketAutoActions {
     public Action setArmWall(){ return outtake.getArm().wall(450); };
     public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); };
 
+    public TrajectoryActionBuilder preloadToBucketPath;
+    public TrajectoryActionBuilder bucketToSample1Path;
+    public TrajectoryActionBuilder sample1ToBucketPath;
+    public TrajectoryActionBuilder bucketToSample2Path;
+    public TrajectoryActionBuilder sample2ToBucketPath;
+    public TrajectoryActionBuilder bucketToSample3Path;
+    public TrajectoryActionBuilder sample3ToBucketPath;
+    public TrajectoryActionBuilder bucketToParkPath;
+
     public TrajectoryActionBuilder moveToChamberPath;
     public TrajectoryActionBuilder pushSamplesPath;
     public TrajectoryActionBuilder pickupFromPushingPath;

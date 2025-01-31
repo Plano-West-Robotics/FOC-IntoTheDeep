@@ -27,30 +27,35 @@ public class LeftBucketHelp
         myBot.runAction(myBot.getDrive().actionBuilder(initPose)
                 .setTangent(iR(135))
 
-                .splineToLinearHeading(new Pose2d(-56, -56, iR(45)), iR(225))
+                .splineToLinearHeading(new Pose2d(-56, -56, iR(45)), iR(225)) // from preload to bucket
 
                 .waitSeconds(1)
 
-                .splineToSplineHeading(new Pose2d(-48, -38, iR(90)), iR(90))
+                .splineToSplineHeading(new Pose2d(-48, -38, iR(90)), iR(90)) // from bucket to first ground sample
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) //at bucket
+                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) // from first ground sample to bucket
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-58, -38), iR(90)) // pickup second
+                .strafeToSplineHeading(new Vector2d(-58, -38), iR(90)) // from bucket to picking up the second ground sample
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) //at bucket
+                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) // from picking up the second sample to the bucket
 
-                /*
-                .splineToConstantHeading(new Vector2d(-36, -12), iR(90))
+                .waitSeconds(1)
 
-                .turnTo(iR(180))
+                .strafeToSplineHeading(new Vector2d(-54, -28), iR(170)) // from the bucket to picking up the third sample
 
-                .strafeTo(new Vector2d(-25, -12))*/
+                .waitSeconds(1)
+
+                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) // from picking up the third sample to the bucket
+
+                .waitSeconds(1)
+
+                .splineTo(new Vector2d(56, -56), 0) // from the bucket to parking
 
                 .build());
 

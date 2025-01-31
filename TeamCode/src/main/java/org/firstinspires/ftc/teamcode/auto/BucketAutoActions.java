@@ -37,6 +37,22 @@ public class BucketAutoActions {
     public Action setArmWall(){ return outtake.getArm().wall(450); };
     public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); };
 
+    public Action setIntakeSlidesRetract() {};
+    public Action setIntakeArmUpright() {};
+    public Action setIntakeClawOpen() {};
+    public Action setOuttakeClawClose() { return outtake.getClaw().close(120); };
+    public Action setOuttakeElbowBucket() {};
+    public Action setOuttakeArmBucket() {};
+    public Action setOuttakeSlidesToBucket() {};
+    public Action setOuttakeClawOpen() {};
+    public Action setOuttakeSlidesToBottom() { return outtake.getExtendo().lowerFully(); };
+    public Action setOuttakeElbowRest() {};
+    public Action setOuttakeArmRest() {};
+    public Action setIntakeArmPickup() {};
+    public Action setIntakeClawClose() {};
+    public Action setIntakeArmTransfer() {};
+    public Action setOuttakeArmTransfer() {};
+
     public TrajectoryActionBuilder preloadToBucketPath;
     public TrajectoryActionBuilder bucketToSample1Path;
     public TrajectoryActionBuilder sample1ToBucketPath;
@@ -45,6 +61,15 @@ public class BucketAutoActions {
     public TrajectoryActionBuilder bucketToSample3Path;
     public TrajectoryActionBuilder sample3ToBucketPath;
     public TrajectoryActionBuilder bucketToParkPath;
+
+    public Action preloadToBucketPathAction;
+    public Action bucketToSample1PathAction;
+    public Action sample1ToBucketPathAction;
+    public Action bucketToSample2PathAction;
+    public Action sample2ToBucketPathAction;
+    public Action bucketToSample3PathAction;
+    public Action sample3ToBucketPathAction;
+    public Action bucketToParkPathAction;
 
     public TrajectoryActionBuilder moveToChamberPath;
     public TrajectoryActionBuilder pushSamplesPath;

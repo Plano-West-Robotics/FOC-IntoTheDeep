@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.Utils;
 
 @Config
 @Autonomous
@@ -26,37 +27,37 @@ public class TestBucketPath extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose); //0, -34
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .setTangent(iR(135))
+                .setTangent(Utils.iR(135))
 
-                .splineToLinearHeading(new Pose2d(-56, -56, iR(45)), iR(225)) // from preload to bucket
-
-                .waitSeconds(1)
-
-                .splineToSplineHeading(new Pose2d(-48, -38, iR(90)), iR(90)) // from bucket to first ground sample
+                .splineToLinearHeading(new Pose2d(-56, -56, Utils.iR(45)), Utils.iR(225)) // from preload to bucket
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) // from first ground sample to bucket
+                .splineToSplineHeading(new Pose2d(-48, -38, Utils.iR(90)), Utils.iR(90)) // from bucket to first ground sample
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-58, -38), iR(90)) // from bucket to picking up the second ground sample
+                .strafeToSplineHeading(new Vector2d(-56, -56), Utils.iR(45)) // from first ground sample to bucket
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) // from picking up the second sample to the bucket
+                .strafeToSplineHeading(new Vector2d(-58, -38), Utils.iR(90)) // from bucket to picking up the second ground sample
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-54, -28), iR(170)) // from the bucket to picking up the third sample
+                .strafeToSplineHeading(new Vector2d(-56, -56), Utils.iR(45)) // from picking up the second sample to the bucket
 
                 .waitSeconds(1)
 
-                .strafeToSplineHeading(new Vector2d(-56, -56), iR(45)) // from picking up the third sample to the bucket
+                .strafeToSplineHeading(new Vector2d(-54, -28), Utils.iR(170)) // from the bucket to picking up the third sample
 
                 .waitSeconds(1)
 
-                .splineTo(new Vector2d(56, -56), 0);
+                .strafeToSplineHeading(new Vector2d(-56, -56), Utils.iR(45)) // from picking up the third sample to the bucket
+
+                .waitSeconds(1)
+
+                .splineTo(new Vector2d(56, -56), 0); // from the bucket to parking
 
         Action tab1Act = tab1.build();
 
@@ -69,8 +70,4 @@ public class TestBucketPath extends LinearOpMode {
         );
     }
 
-    public static double iR(double degrees)
-    {
-        return Math.toRadians(degrees);
-    }
 }

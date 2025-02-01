@@ -50,10 +50,10 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.DriveCommandMessage;
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.MecanumCommandMessage;
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.MecanumLocalizerInputsMessage;
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.PoseMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.DriveCommandMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumCommandMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumLocalizerInputsMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
 
 import java.util.Arrays;
 import java.util.LinkedList;

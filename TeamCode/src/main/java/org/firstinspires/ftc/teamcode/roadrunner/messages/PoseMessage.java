@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.rrmessages;
+package org.firstinspires.ftc.teamcode.roadrunner.messages;
 
 import com.acmerobotics.roadrunner.Pose2d;
 

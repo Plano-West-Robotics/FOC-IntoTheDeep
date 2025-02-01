@@ -46,10 +46,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.DriveCommandMessage;
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.PoseMessage;
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.TankCommandMessage;
-import org.firstinspires.ftc.teamcode.roadrunner.rrmessages.TankLocalizerInputsMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.DriveCommandMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.TankCommandMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.TankLocalizerInputsMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;

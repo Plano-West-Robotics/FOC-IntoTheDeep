@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 
-import android.app.usage.NetworkStats;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;

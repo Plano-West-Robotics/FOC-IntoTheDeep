@@ -28,18 +28,18 @@ public class SpecimenAutoActions {
         this.initPose = initPose;
     }
 
-    public Action setIntakeExtend() { return intake.getArm().extend(250); };
-    public Action setSwivelCenter() { return intake.getSwivel().center(300); };
-    public Action setBackClawClose() { return outtake.getClaw().close(120); };
-    public Action setElbowHook(){ return outtake.getElbow().frontHook(300); };
-    public Action setArmHook(){ return outtake.getArm().transfer(450); };
-    public Action setIntakeRetract(){ return intake.getArm().retract(400); };
-    public Action setSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); }; // TODO: IMPORTANT - TUNE PIDF FOR THE SLIDES TO BE FASTER AND DECREASE THE ERROR TOLERANCE TO 10
-    public Action setSlidesToAboveChamber(){ return outtake.getExtendo().hc3(); };
-    public Action setBackClawOpen(){ return outtake.getClaw().open(120); };
-    public Action setElbowWall(){ return outtake.getElbow().wall(300); };
-    public Action setArmWall(){ return outtake.getArm().wall(450); };
-    public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); };
+    public Action setIntakeExtend() { return intake.getArm().extend(250); }
+    public Action setSwivelCenter() { return intake.getSwivel().center(300); }
+    public Action setBackClawClose() { return outtake.getClaw().close(120); }
+    public Action setElbowHook(){ return outtake.getElbow().frontHook(300); }
+    public Action setArmHook(){ return outtake.getArm().transfer(450); }
+    public Action setIntakeRetract(){ return intake.getArm().retract(400); }
+    public Action setSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); }
+    public Action setSlidesToAboveChamber(){ return outtake.getExtendo().hc3(); }
+    public Action setBackClawOpen(){ return outtake.getClaw().open(120); }
+    public Action setElbowWall(){ return outtake.getElbow().wall(300); }
+    public Action setArmWall(){ return outtake.getArm().wall(450); }
+    public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); }
 
     public TrajectoryActionBuilder moveToChamberPath;
     public TrajectoryActionBuilder pushSamplesPath;
@@ -60,11 +60,11 @@ public class SpecimenAutoActions {
     public Action hookFromPickupWithTimedElbowAndArmPathAction3;
 
     // At end of auto, transitioning into TeleOp
-    public Action resetHorizontalSlides(){ return intake.getExtendo().retract(); };
-    public Action resetVerticalSlides(){ return outtake.getExtendo().lowerFully(); };
-    public Action resetIntakeArm(){ return intake.getArm().retract(300); };
-    public Action resetOuttakeArm(){ return outtake.getArm().rest(400); };
-    public Action resetElbow(){ return outtake.getElbow().transfer(300); };
+    public Action resetHorizontalSlides(){ return intake.getExtendo().retract(); }
+    public Action resetVerticalSlides(){ return outtake.getExtendo().lowerFully(); }
+    public Action resetIntakeArm(){ return intake.getArm().retract(300); }
+    public Action resetOuttakeArm(){ return outtake.getArm().rest(400); }
+    public Action resetElbow(){ return outtake.getElbow().transfer(300); }
 
     public SequentialAction initPreload()
     {
@@ -192,7 +192,7 @@ public class SpecimenAutoActions {
         hookFromPickupWithTimedElbowAndArmPath2 = drive.actionBuilder(toPickupFromChamberPathFinalPose2)
                 .afterTime(1.1, new ParallelAction(setElbowHook(), setArmHook()))
                 .strafeToConstantHeading(new Vector2d(5, -27));
-        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose3 = new Pose2d(5, -27, tR(90));
+        //Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose3 = new Pose2d(5, -27, tR(90));
 
     }
 

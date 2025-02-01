@@ -18,12 +18,12 @@ public class FieldCentricDrive extends Drive
         imu = hardware.imu;
     }
 
-    public void drive(double x, double y, double rx)
+    public void drive(double y, double x, double rx)
     {
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * speed;
         double rotY = (x * Math.sin(-botHeading) + y * Math.cos(-botHeading)) * speed;
+        double rotX = (x * Math.cos(-botHeading) - y * Math.sin(-botHeading)) * speed;
         rx *= turnSpeed;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
@@ -42,8 +42,8 @@ public class FieldCentricDrive extends Drive
 
         if (gamepads.justPressed(Button.GP1_OPTIONS)) imu.resetYaw();
 
-        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
-        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
+        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
+        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
         double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
         drive(drive, strafe, turn);
     }

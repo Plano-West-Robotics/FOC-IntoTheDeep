@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontArm;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontClaw;
 import org.firstinspires.ftc.teamcode.hardware.intake.FrontSwivel;

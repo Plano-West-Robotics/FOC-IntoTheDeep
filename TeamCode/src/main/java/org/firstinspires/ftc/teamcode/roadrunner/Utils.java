@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.roadrunner;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +15,7 @@ public final class Utils
         if (!condition) throw new RuntimeException(message);
     }
 
-    public static double inRad(double degrees)
+    public static double iR(double degrees)
     {
         return Math.toRadians(degrees);
     }

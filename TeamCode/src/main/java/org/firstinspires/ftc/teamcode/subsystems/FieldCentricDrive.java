@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Button;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
+import org.firstinspires.ftc.teamcode.hardware.Hardware;
 
 public class FieldCentricDrive extends Drive
 {
@@ -39,10 +39,11 @@ public class FieldCentricDrive extends Drive
     public void update(Gamepads gamepads)
     {
         if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) toggleSlowMode();
+
         if (gamepads.justPressed(Button.GP1_OPTIONS)) imu.resetYaw();
 
-        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
-        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
+        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
+        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
         double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
         drive(drive, strafe, turn);
     }

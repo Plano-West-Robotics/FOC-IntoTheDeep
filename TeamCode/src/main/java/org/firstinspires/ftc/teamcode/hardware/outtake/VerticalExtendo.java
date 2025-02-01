@@ -18,7 +18,7 @@ public class VerticalExtendo extends Extendo
     public static final int LC_POSITION = 345; // Low chamber.
     public static final int HC_POSITION = 1900; // High chamber.
     public static final int HC2_POSITION = 1600; // High chamber.
-    public static final int HC3_POSITION = 2000; // High chamber.
+    public static final int HC3_POSITION = 2600; // High chamber.
     public static final int LR_POSITION = 567; // Low rung.
     public static final int HR_POSITION = 678; // High rung.
     public static final int WG_POSITION = 10; // Wall grab.
@@ -28,7 +28,7 @@ public class VerticalExtendo extends Extendo
         super(
                 hardwareMap, "vl", "vr",
                 10, 4300,
-                0.1, 1,
+                0.1, 0.95,
                 0.0025,
                 P, I, D, F,
                 50,

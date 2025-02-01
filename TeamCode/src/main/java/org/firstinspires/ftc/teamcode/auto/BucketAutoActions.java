@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.Vector2d;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -107,6 +106,7 @@ public class BucketAutoActions {
                 );
     }
 
+    /*
     public SequentialAction atPickup()
     {
         return new SequentialAction
@@ -213,4 +213,6 @@ public class BucketAutoActions {
     {
         return Math.toRadians(degrees);
     }
+
+     */
 }

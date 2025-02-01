@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.RobotCentricDrive;
 
 @TeleOp (name = "MainTeleOp", group = "CompPrograms")
 public class MainTeleOp extends BaseTeleOp

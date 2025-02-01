@@ -9,7 +9,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.hardware.Hardware;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
@@ -40,7 +40,7 @@ public class LastChanceSpecimenAuto extends LinearOpMode {
                  9 inches from the back of the robot - it probably actually isn't - also look at TODOS in the
                  SpecimenAutoActions class */
 
-        initialPose = new Pose2d(24, -61, Math.toRadians(90));
+        initialPose = new Pose2d(24, -63, Math.toRadians(90));
 
         drive = new MecanumDrive(hardwareMap, initialPose);
 

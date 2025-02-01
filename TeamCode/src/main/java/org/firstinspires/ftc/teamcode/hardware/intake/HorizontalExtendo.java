@@ -14,10 +14,10 @@ public class HorizontalExtendo extends Extendo
 
     // TeleOp positions.
     public static final int RETRACT_THRESHOLD = 350;
-    public static final int EXTEND_THRESHOLD = 600; // Must be greater than RETRACT_THRESHOLD.
+    public static final int EXTEND_THRESHOLD = 430; // Must be greater than RETRACT_THRESHOLD.
 
     // Auto positions.
-    public static final int RETRACT_POSITION = 200;
+    public static final int RETRACT_POSITION = 30;
     public static final int EXTEND_POSITION = 800;
 
     public HorizontalExtendo(HardwareMap hardwareMap)

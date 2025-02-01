@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.messages;
+package org.firstinspires.ftc.teamcode.roadrunner.rrmessages;
 
 public final class MecanumCommandMessage {
     public long timestamp;

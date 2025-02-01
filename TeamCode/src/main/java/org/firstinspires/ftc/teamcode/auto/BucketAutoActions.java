@@ -10,8 +10,20 @@ import com.acmerobotics.roadrunner.Vector2d;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.roadrunner.Utils;
 
 public class BucketAutoActions {
+    /*
+     * Plan:
+     * On init close the claw and set the elbow and arm to the bucket position
+     * Go from the left starting position to the bucket position while extending the slides
+     * Once reached, open the claw,
+     * move back, then lower the slides, move the outtake elbow and arm and slides to rest as you move to to the first sample on the ground
+     * move the intake arm outward, move the elbow down
+     * close the claw, move the arm and elbow into transfer position,
+     * move the back arm and elbow into transfer position, close back claw and open front one
+     * move the back arm and elbow into bucket position, repeat
+     */
 
     public Intake intake;
     public Outtake outtake;
@@ -27,7 +39,7 @@ public class BucketAutoActions {
     }
 
     public Action setIntakeSlidesRetract() { return intake.getExtendo().retract(); };
-    public Action setIntakeArmUpright() { return intake.getArm().upright(300); };
+    public Action setIntakeArmRetract() { return intake.getArm().retract(300); };
     public Action setIntakeClawOpen() { return intake.getClaw().open(120); };
     public Action setIntakeSwivelCenter() { return intake.getSwivel().center(250); };
     public Action setOuttakeClawClose() { return outtake.getClaw().close(120); };
@@ -75,7 +87,7 @@ public class BucketAutoActions {
     {
         return new SequentialAction
         (
-            new ParallelAction(setIntakeSlidesRetract(), setIntakeArmUpright(), setIntakeClawOpen(), setIntakeSwivelCenter(), setOuttakeClawClose()),
+            new ParallelAction(setIntakeSlidesRetract(), setIntakeArmRetract(), setIntakeClawOpen(), setIntakeSwivelCenter(), setOuttakeClawClose()),
             setOuttakeElbowBucket(),
             setOuttakeArmBucket()
         );
@@ -107,35 +119,25 @@ public class BucketAutoActions {
                 );
     }
 
-    public SequentialAction atPickup()
+
+    public ParallelAction fromPickupToBucket(Action pathAction)
     {
-        return new SequentialAction
-                (
-                        setBackClawClose()
-                );
+        return new ParallelAction(pathAction,
+                        new SequentialAction(
+                                        new ParallelAction(setIntakeArmTransfer(), setOuttakeArmTransfer()),
+                                        new ParallelAction(setIntakeClawOpen(), setOuttakeClawClose()),
+                                        new ParallelAction(setOuttakeArmBucket(), setOuttakeSlidesToBucket())
+                                ));
+
+
+
     }
 
-    public ParallelAction nonPreloadHook(Action pathAction)
+    public ParallelAction resetForTeleOp(Action parkAction)
     {
         return new ParallelAction
                 (
-                        setSlidesToUnderChamber(), pathAction
-                );
-    }
-
-    public ParallelAction toPickupFromChamber(Action pathAction)
-    {
-        return new ParallelAction
-                (
-                        setElbowWall(), setArmWall(), setSlidesToBottom(), pathAction
-                );
-    }
-
-    public ParallelAction resetForTeleOp()
-    {
-        return new ParallelAction
-                (
-                        resetElbow(), resetOuttakeArm(), resetIntakeArm(), resetHorizontalSlides(), resetVerticalSlides()
+                        parkAction, resetElbow(), resetOuttakeArm(), resetIntakeArm(), resetHorizontalSlides(), resetVerticalSlides()
                 );
     }
 
@@ -143,68 +145,72 @@ public class BucketAutoActions {
     public void createTrajectories()
     {
         // TODO: MAKE SURE TO TUNE THE Y POSITION OF THE CHAMBER - SHOULD CHANGE IT FOR ALL FOLLOWING TRAJECTORIES TOO
-        moveToChamberPath = drive.actionBuilder(initPose).strafeToConstantHeading(new Vector2d(0, -28));
-        Pose2d moveToChamberPathFinalPose = new Pose2d(0, -28, tR(90));
+        preloadToBucketPath = drive.actionBuilder(initPose)
+                .setTangent(Utils.iR(135))
+                .splineToLinearHeading(new Pose2d(-56, -56, Utils.iR(45)), Utils.iR(225));
+        Pose2d preloadToBucketPathFinalPose = new Pose2d(-56, -56, Utils.iR(45));
 
-        pushSamplesPath = drive.actionBuilder(moveToChamberPathFinalPose)
-                .setTangent(Math.toRadians(315))
-                .splineToSplineHeading(new Pose2d(36, -40, tR(90)), tR(90))
-                .splineToConstantHeading(new Vector2d(42, -10), 0)
-                .splineToConstantHeading(new Vector2d(48, -14), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(48, -46), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(48, -16), tR(90))
-                .splineToConstantHeading(new Vector2d(51, -10), 0)
-                .splineToConstantHeading(new Vector2d(54, -14), tR(270))
-                .splineToConstantHeading(new Vector2d(54, -46), tR(270));
-        Pose2d pushSamplesPathFinalPose = new Pose2d(54, -46, tR(90));
+        bucketToSample1Path = drive.actionBuilder(preloadToBucketPathFinalPose)
+                .splineToSplineHeading(new Pose2d(-48, -38, Utils.iR(90)), Utils.iR(90));
+        Pose2d bucketToSample1PathFinalPose = new Pose2d(-48, -38, Utils.iR(90));
 
-        pickupFromPushingPath = drive.actionBuilder(pushSamplesPathFinalPose)
-                .splineToConstantHeading(new Vector2d(42, -58), Math.toRadians(270));
-        Pose2d pickupFromPushingPathFinalPose = new Pose2d(42, -58, tR(90));
+        sample1ToBucketPath = drive.actionBuilder(bucketToSample1PathFinalPose)
+                .strafeToSplineHeading(new Vector2d(-56, -56), Utils.iR(45));
+        Pose2d sample1ToBucketPathFinalPose = new Pose2d(-56, -56, Utils.iR(45));
 
-        hookFromPickupWithTimedElbowAndArmPath1 = drive.actionBuilder(pickupFromPushingPathFinalPose)
-                .strafeToConstantHeading(new Vector2d(-8, -27))
-                .afterTime(0.4, new ParallelAction(setElbowHook(), setArmHook()));
-        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose1 = new Pose2d(-8, -27, tR(90));
+        bucketToSample2Path = drive.actionBuilder(sample1ToBucketPathFinalPose)
+                .strafeToSplineHeading(new Vector2d(-58, -38), Utils.iR(90));
+        Pose2d bucketToSample2PathFinalPose = new Pose2d(-58, -38, Utils.iR(90));
 
-        toPickupFromChamberPath1 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose1)
-                .strafeToConstantHeading(new Vector2d(38, -63));
-        Pose2d toPickupFromChamberPathFinalPose1 = new Pose2d(38, -63, tR(90));
+        sample2ToBucketPath = drive.actionBuilder(bucketToSample2PathFinalPose)
+                .strafeToSplineHeading(new Vector2d(-56, -56), Utils.iR(45));
+        Pose2d sample2ToBucketPathFinalPose = new Pose2d(-56, -56, Utils.iR(45));
 
-        hookFromPickupWithTimedElbowAndArmPath2 = drive.actionBuilder(toPickupFromChamberPathFinalPose1)
-                .strafeToConstantHeading(new Vector2d(4, -27))
-                .afterTime(0.4, new ParallelAction(setElbowHook(), setArmHook()));
-        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose2 = new Pose2d(4, -27, tR(90));
+        bucketToSample3Path = drive.actionBuilder(sample2ToBucketPathFinalPose)
+                .strafeToSplineHeading(new Vector2d(-54, -28), Utils.iR(170));
+        Pose2d bucketToSample3PathFinalPose = new Pose2d(-54, -28, Utils.iR(170));
+
+        sample3ToBucketPath = drive.actionBuilder(bucketToSample3PathFinalPose)
+                .strafeToSplineHeading(new Vector2d(-56, -56), Utils.iR(45));
+        Pose2d sample3ToBucketPathFinalPose = new Pose2d(-56, -56, Utils.iR(45));
+
+        bucketToParkPath = drive.actionBuilder(sample3ToBucketPathFinalPose)
+                .splineTo(new Vector2d(56, -56), 0);
+        Pose2d bucketToParkPathFinalPose = new Pose2d(56, -56, 0);
 
     }
 
     public void buildPaths()
     {
-        moveToChamberPathAction = moveToChamberPath.build();
-        pushSamplesPathAction = pushSamplesPath.build();
-        pickupFromPushingPathAction = pickupFromPushingPath.build();
-        hookFromPickupWithTimedElbowAndArmPathAction1 = hookFromPickupWithTimedElbowAndArmPath1.build();
-        toPickupFromChamberPathAction1 = toPickupFromChamberPath1.build();
-        hookFromPickupWithTimedElbowAndArmPathAction2 = hookFromPickupWithTimedElbowAndArmPath2.build();
+        preloadToBucketPathAction = preloadToBucketPath.build();
+        bucketToSample1PathAction = bucketToSample1Path.build();
+        sample1ToBucketPathAction = sample1ToBucketPath.build();
+        bucketToSample2PathAction = bucketToSample2Path.build();
+        sample2ToBucketPathAction = sample2ToBucketPath.build();
+        bucketToSample3PathAction = bucketToSample3Path.build();
+        sample3ToBucketPathAction = sample3ToBucketPath.build();
+        bucketToParkPathAction = bucketToParkPath.build();
     }
 
     public SequentialAction fullSequence()
     {
         return new SequentialAction
         (
-            approachChamberPreload(),
-            atChamber(),
-            pushingActions(),
-            toPickupFromPushing(),
-            atPickup(),
-            nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction1),
-            atChamber(),
-            toPickupFromChamber(toPickupFromChamberPathAction1),
-            atPickup(),
-            nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction2),
-            atChamber(),
-            // TODO: ADD 4TH SPECIMEN PICKUP AND HOOK
-            resetForTeleOp()
+            approachBucketPreload(),
+            atBucket(),
+            pickUpSampleFromBucket(bucketToSample1PathAction),
+            atSample(),
+            fromPickupToBucket(sample1ToBucketPathAction),
+            atBucket(),
+            pickUpSampleFromBucket(bucketToSample2PathAction),
+            atSample(),
+            fromPickupToBucket(sample2ToBucketPathAction),
+            atBucket(),
+            pickUpSampleFromBucket(bucketToSample3PathAction),
+            atSample(),
+            fromPickupToBucket(sample3ToBucketPathAction),
+            atBucket(),
+            resetForTeleOp(bucketToParkPathAction)
         );
     }
 
@@ -213,4 +219,6 @@ public class BucketAutoActions {
     {
         return Math.toRadians(degrees);
     }
+
+
 }

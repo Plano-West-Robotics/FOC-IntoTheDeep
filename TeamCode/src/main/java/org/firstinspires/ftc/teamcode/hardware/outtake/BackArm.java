@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.outtake;
 
-import static org.firstinspires.ftc.teamcode.Utils.getTimedAction;
+import static org.firstinspires.ftc.teamcode.roadrunner.Utils.getTimedAction;
 
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -22,7 +22,7 @@ public class BackArm extends StageServoPair<BackArm.Stage>
 
     public BackArm(HardwareMap hardwareMap)
     {
-        super(new StageServoPair.StageServoPairBuilder<>(hardwareMap, "bal",
+        super(new StageServoPairBuilder<>(hardwareMap, "bal",
                 "bar", Stage.class, POSITION_DIFF)
                 .add(Stage.BUCKET, 0.03)
                 .add(Stage.REST, 0.16)

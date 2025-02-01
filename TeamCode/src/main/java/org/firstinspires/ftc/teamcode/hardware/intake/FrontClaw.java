@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.intake;
 
-import static org.firstinspires.ftc.teamcode.Utils.getTimedAction;
+import static org.firstinspires.ftc.teamcode.roadrunner.Utils.getTimedAction;
 
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;

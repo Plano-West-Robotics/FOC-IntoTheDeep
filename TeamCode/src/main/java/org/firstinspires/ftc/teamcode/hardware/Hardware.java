@@ -36,7 +36,7 @@ public class Hardware
     {
         imu = hardwareMap.get(IMU.class, "imu");
         imuParameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
         ));
         imu.initialize(imuParameters);

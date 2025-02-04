@@ -40,6 +40,8 @@ public class SpecimenAutoActions {
     public Action setElbowWall(){ return outtake.getElbow().wall(300); }
     public Action setArmWall(){ return outtake.getArm().wall(450); }
     public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); }
+    public Action setArmHookUp(){ return outtake.getArm().hookUp(100); }
+    public Action setElbowHookUp(){ return outtake.getElbow().hookUp(100); }
 
     public TrajectoryActionBuilder moveToChamberPath;
     public TrajectoryActionBuilder pushSamplesPath;
@@ -88,7 +90,8 @@ public class SpecimenAutoActions {
     {
         return new SequentialAction
         (
-                setSlidesToAboveChamber(), setBackClawOpen()
+                new ParallelAction(setSlidesToAboveChamber(), setArmHookUp(), setElbowHookUp()),
+                setBackClawOpen()
         );
     }
 
@@ -189,7 +192,7 @@ public class SpecimenAutoActions {
                 .strafeToConstantHeading(new Vector2d(38, -64.3));
         Pose2d toPickupFromChamberPathFinalPose2 = new Pose2d(38, -64.3, tR(90));
 
-        hookFromPickupWithTimedElbowAndArmPath2 = drive.actionBuilder(toPickupFromChamberPathFinalPose2)
+        hookFromPickupWithTimedElbowAndArmPath3 = drive.actionBuilder(toPickupFromChamberPathFinalPose2)
                 .afterTime(1.1, new ParallelAction(setElbowHook(), setArmHook()))
                 .strafeToConstantHeading(new Vector2d(5, -27));
         //Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose3 = new Pose2d(5, -27, tR(90));
@@ -226,6 +229,7 @@ public class SpecimenAutoActions {
             toPickupFromChamber(toPickupFromChamberPathAction2),
             atPickup(),
             nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction3),
+            atChamber(),
             resetForTeleOp()
         );
     }

@@ -17,7 +17,8 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         REST, // Perpendicular to ground.
         TRANSFER,
         CLIP, // From under.
-        WALL
+        WALL,
+        HOOK_UP
     }
 
     public BackArm(HardwareMap hardwareMap)
@@ -29,6 +30,7 @@ public class BackArm extends StageServoPair<BackArm.Stage>
                 .add(Stage.TRANSFER, 0.46)
                 .add(Stage.CLIP, 0.975)
                 .add(Stage.WALL, 1)
+                .add(Stage.HOOK_UP, 0.4)
         );
     }
 
@@ -57,6 +59,11 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         setStage(Stage.WALL);
     }
 
+    public void hookUp()
+    {
+        setStage(Stage.HOOK_UP);
+    }
+
     public Action bucket(int timeInMilliseconds)
     {
         return getTimedAction(this::bucket, timeInMilliseconds);
@@ -80,5 +87,10 @@ public class BackArm extends StageServoPair<BackArm.Stage>
     public Action wall(int timeInMilliseconds)
     {
         return getTimedAction(this::wall, timeInMilliseconds);
+    }
+
+    public Action hookUp(int timeInMilliseconds)
+    {
+        return getTimedAction(this::hookUp, timeInMilliseconds);
     }
 }

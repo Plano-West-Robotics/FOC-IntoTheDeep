@@ -13,7 +13,8 @@ public class BackClaw extends StageServoMono<BackClaw.Stage>
     {
         OPEN,
         BUCKET_OPEN,
-        CLOSE
+        CLOSE,
+        TIGHT_CLOSE
     }
 
     public BackClaw(HardwareMap hardwareMap)
@@ -22,6 +23,7 @@ public class BackClaw extends StageServoMono<BackClaw.Stage>
                 .add(Stage.OPEN, 0.35)
                 .add(Stage.BUCKET_OPEN, 0.35)
                 .add(Stage.CLOSE, 0.54)
+                .add(Stage.TIGHT_CLOSE, 0.60)
         );
     }
 
@@ -40,6 +42,11 @@ public class BackClaw extends StageServoMono<BackClaw.Stage>
         setStage(Stage.CLOSE);
     }
 
+    public void tightClose()
+    {
+        setStage(Stage.CLOSE);
+    }
+
     public Action open(int timeInMilliseconds)
     {
         return getTimedAction(this::open, timeInMilliseconds);
@@ -53,5 +60,10 @@ public class BackClaw extends StageServoMono<BackClaw.Stage>
     public Action close(int timeInMilliseconds)
     {
         return getTimedAction(this::close, timeInMilliseconds);
+    }
+
+    public Action tightClose(int timeInMilliseconds)
+    {
+        return getTimedAction(this::tightClose, timeInMilliseconds);
     }
 }

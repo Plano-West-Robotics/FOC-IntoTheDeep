@@ -17,7 +17,7 @@ public class ExperimentalSpecimenSimulation {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(70, 70, Math.toRadians(225), 5, 15)
+                .setConstraints(70, 70, Math.toRadians(225), 5, 12)
             // TODO: minAccel should be less - around -45
                 .build();
 

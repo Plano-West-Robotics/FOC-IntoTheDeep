@@ -97,6 +97,68 @@ public final class MecanumDrive {
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
         public double headingVelGain = 0.0; // shared with turn
+
+        /*
+        Pre-experimental testing values:
+        public double inPerTick = 0.002;
+        public double lateralInPerTick = 0.0011602700303631392;
+        public double trackWidthTicks = 6401.910155600542;
+
+        // feedforward parameters (in tick units)
+        public double kS = 1.6380856224829512;
+        public double kV = 0.00025360947398706077;
+        public double kA = 0.00005;
+
+        // path profile parameters (in inches)
+        public double maxWheelVel = 45;
+        public double minProfileAccel = -35;
+        public double maxProfileAccel = 35;
+
+        // turn profile parameters (in radians)
+        public double maxAngVel = Math.PI; // shared with path
+        public double maxAngAccel = Math.PI;
+
+        // path controller gains
+        public double axialGain = 4.6;
+        public double lateralGain = 3.5;
+        public double headingGain = 3.3; // shared with turn
+
+        public double axialVelGain = 0.0;
+        public double lateralVelGain = 0.0;
+        public double headingVelGain = 0.0; // shared with turn
+         */
+
+
+
+        /*
+        Experimental testing values:
+        public double inPerTick = 0.002;
+        public double lateralInPerTick = 0.0011602700303631392;
+        public double trackWidthTicks = 6401.910155600542;
+
+        // feedforward parameters (in tick units)
+        public double kS = TBD;
+        public double kV = TBD;
+        public double kA = TBD;
+
+        // path profile parameters (in inches)
+        public double maxWheelVel = 70;
+        public double minProfileAccel = -45;
+        public double maxProfileAccel = 70;
+
+        // turn profile parameters (in radians)
+        public double maxAngVel = Math.toRadians(225); // shared with path
+        public double maxAngAccel = 5;
+
+        // path controller gains
+        public double axialGain = TBD;
+        public double lateralGain = TBD;
+        public double headingGain = TBD; // shared with turn
+
+        public double axialVelGain = 0.0;
+        public double lateralVelGain = 0.0;
+        public double headingVelGain = 0.0; // shared with turn
+         */
     }
 
     public static Params PARAMS = new Params();

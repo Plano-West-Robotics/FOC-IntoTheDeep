@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.experimental;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -13,19 +13,16 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
-public class SpecimenAutoActions {
+public class SpecimenAutoActionsExperimental {
 
     public Intake intake;
     public Outtake outtake;
-
     public MecanumDrive drive;
-    public Pose2d initPose;
 
-    public SpecimenAutoActions(Intake intake, Outtake outtake, MecanumDrive drive, Pose2d initPose){
+    public SpecimenAutoActionsExperimental(Intake intake, Outtake outtake, MecanumDrive drive){
         this.intake = intake;
         this.outtake = outtake;
         this.drive = drive;
-        this.initPose = initPose;
     }
 
     public Action setIntakeExtend() { return intake.getArm().extend(250); }
@@ -51,6 +48,8 @@ public class SpecimenAutoActions {
     public TrajectoryActionBuilder hookFromPickupWithTimedElbowAndArmPath2;
     public TrajectoryActionBuilder toPickupFromChamberPath2;
     public TrajectoryActionBuilder hookFromPickupWithTimedElbowAndArmPath3;
+    public TrajectoryActionBuilder toPickupFromChamberPath3;
+    public TrajectoryActionBuilder hookFromPickupWithTimedElbowAndArmPath4;
 
     public Action moveToChamberPathAction;
     public Action pushSamplesPathAction;
@@ -60,6 +59,8 @@ public class SpecimenAutoActions {
     public Action hookFromPickupWithTimedElbowAndArmPathAction2;
     public Action toPickupFromChamberPathAction2;
     public Action hookFromPickupWithTimedElbowAndArmPathAction3;
+    public Action toPickupFromChamberPathAction3;
+    public Action hookFromPickupWithTimedElbowAndArmPathAction4;
 
     // At end of auto, transitioning into TeleOp
     public Action resetHorizontalSlides(){ return intake.getExtendo().retract(); }
@@ -149,53 +150,72 @@ public class SpecimenAutoActions {
 
     public void createTrajectories()
     {
-        // TODO: MAKE SURE TO TUNE THE Y POSITION OF THE CHAMBER - SHOULD CHANGE IT FOR ALL FOLLOWING TRAJECTORIES TOO
-        moveToChamberPath = drive.actionBuilder(initPose).strafeToConstantHeading(new Vector2d(-4, -28));
-        Pose2d moveToChamberPathFinalPose = new Pose2d(-4, -28, tR(90));
-        // TODO: MAKE THE ROBOT GO STRAIGHT TO THE BAR FOR THE PRELOAD HOOK AND
-        //       MAKE THE ROBOT GO AS FAR TO THE RIGHT AS POSSIBLE WITHOUT OVERLAPPING THE HOOKS
-        //       FOR EACH OF THE SPECIMENS (WHEN THE ODO GETS FIXED)
+        Pose2d initPose = new Pose2d(0, -63, Math.toRadians(90));
+
+        moveToChamberPath = drive.actionBuilder(initPose).splineToConstantHeading(new Vector2d(0, -28), tR(90));
+        Pose2d moveToChamberPathFinalPose = new Pose2d(0, -28, tR(90));
 
         pushSamplesPath = drive.actionBuilder(moveToChamberPathFinalPose)
-                .setTangent(Math.toRadians(350))
-                .splineToSplineHeading(new Pose2d(33, -36, tR(90)), tR(90))
+                .splineToConstantHeading(new Vector2d(0, -28), tR(90)) // go to the bar with preload 1
+                .splineToConstantHeading(new Vector2d(12, -42), tR(0)) // intermediate stage in spline
+                .splineToConstantHeading(new Vector2d(33, -36), tR(90)) // reached in between submersible and sample
                 .splineToConstantHeading(new Vector2d(42, -16), 0)
                 .splineToConstantHeading(new Vector2d(47, -20), Math.toRadians(270))
                 .splineToConstantHeading(new Vector2d(47, -36), Math.toRadians(270))
                 .splineToConstantHeading(new Vector2d(47, -16), tR(90))
-                .splineToConstantHeading(new Vector2d(49, -10), 0)
+                .splineToConstantHeading(new Vector2d(50, -10), 0)
                 .splineToConstantHeading(new Vector2d(54, -14), tR(270))
-                .splineToConstantHeading(new Vector2d(54, -46), tR(270));
-        Pose2d pushSamplesPathFinalPose = new Pose2d(54, -46, tR(90));
+                .splineToConstantHeading(new Vector2d(54, -40), tR(270))
+                .splineToConstantHeading(new Vector2d(54, -14), tR(90))
+                .splineToConstantHeading(new Vector2d(57, -10), tR(0))
+                .splineToConstantHeading(new Vector2d(59, -16), tR(270))
+                .splineToConstantHeading(new Vector2d(59, -40), tR(270));
+        Pose2d pushSamplesPathFinalPose = new Pose2d(59, -40, tR(90));
 
         pickupFromPushingPath = drive.actionBuilder(pushSamplesPathFinalPose)
-
-                .splineToConstantHeading(new Vector2d(42, -64.3), Math.toRadians(270), new TranslationalVelConstraint(30), new ProfileAccelConstraint(-15, 20));
-        Pose2d pickupFromPushingPathFinalPose = new Pose2d(42, -64.3, tR(90));
+                .splineToConstantHeading(new Vector2d(57, -50), tR(180)) // intermediate to pickup
+                .splineToConstantHeading(new Vector2d(53, -64.3), tR(270));
+        Pose2d pickupFromPushingPathFinalPose = new Pose2d(53, -64.3, tR(90));
 
         hookFromPickupWithTimedElbowAndArmPath1 = drive.actionBuilder(pickupFromPushingPathFinalPose)
                 .afterTime(0.7, new ParallelAction(setElbowHook(), setArmHook()))
-                .strafeToConstantHeading(new Vector2d(-1, -27));
+                .setTangent(tR(90))
+                .splineToConstantHeading(new Vector2d(2, -27), tR(90));
 
-        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose1 = new Pose2d(-1, -27, tR(90));
+        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose1 = new Pose2d(2, -27, tR(90));
 
         toPickupFromChamberPath1 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose1)
-                .strafeToConstantHeading(new Vector2d(38, -64.3));
+                .setTangent(tR(270))
+                .splineToConstantHeading(new Vector2d(38, -64.3), tR(270));
         Pose2d toPickupFromChamberPathFinalPose1 = new Pose2d(38, -64.3, tR(90));
 
         hookFromPickupWithTimedElbowAndArmPath2 = drive.actionBuilder(toPickupFromChamberPathFinalPose1)
                 .afterTime(0.7, new ParallelAction(setElbowHook(), setArmHook()))
-                .strafeToConstantHeading(new Vector2d(2, -27));
-        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose2 = new Pose2d(2, -27, tR(90));
+                .setTangent(tR(90))
+                .splineToConstantHeading(new Vector2d(3, -27), tR(90));
+        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose2 = new Pose2d(3, -27, tR(90));
 
         toPickupFromChamberPath2 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose2)
-                .strafeToConstantHeading(new Vector2d(38, -64.3));
+                .setTangent(tR(270))
+                .splineToConstantHeading(new Vector2d(38, -64.3), tR(270));
         Pose2d toPickupFromChamberPathFinalPose2 = new Pose2d(38, -64.3, tR(90));
 
         hookFromPickupWithTimedElbowAndArmPath3 = drive.actionBuilder(toPickupFromChamberPathFinalPose2)
                 .afterTime(0.7, new ParallelAction(setElbowHook(), setArmHook()))
-                .strafeToConstantHeading(new Vector2d(5, -27));
-        //Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose3 = new Pose2d(5, -27, tR(90));
+                .setTangent(tR(90))
+                .splineToConstantHeading(new Vector2d(5, -27), tR(90));
+        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose3 = new Pose2d(5, -27, tR(90));
+
+        toPickupFromChamberPath3 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose3)
+                .setTangent(tR(270))
+                .splineToConstantHeading(new Vector2d(38, -64.3), tR(270));
+        Pose2d toPickupFromChamberPathFinalPose3 = new Pose2d(38, -64.3, tR(90));
+
+        hookFromPickupWithTimedElbowAndArmPath4 = drive.actionBuilder(toPickupFromChamberPathFinalPose3)
+                .afterTime(0.7, new ParallelAction(setElbowHook(), setArmHook()))
+                .setTangent(tR(90))
+                .splineToConstantHeading(new Vector2d(6, -27), tR(90));
+        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose4 = new Pose2d(6, -27, tR(90));
 
     }
 
@@ -209,6 +229,8 @@ public class SpecimenAutoActions {
         hookFromPickupWithTimedElbowAndArmPathAction2 = hookFromPickupWithTimedElbowAndArmPath2.build();
         toPickupFromChamberPathAction2 = toPickupFromChamberPath2.build();
         hookFromPickupWithTimedElbowAndArmPathAction3 = hookFromPickupWithTimedElbowAndArmPath3.build();
+        toPickupFromChamberPathAction3 = toPickupFromChamberPath3.build();
+        hookFromPickupWithTimedElbowAndArmPathAction4 = hookFromPickupWithTimedElbowAndArmPath4.build();
     }
 
     public SequentialAction fullSequence()
@@ -230,7 +252,12 @@ public class SpecimenAutoActions {
             atPickup(),
             nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction3),
             atChamber(),
-            resetForTeleOp()
+                // 5th specimen
+                toPickupFromChamber(toPickupFromChamberPathAction3),
+                atPickup(),
+                nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction4),
+                atChamber(),
+            resetForTeleOp() // need to remove - make the offset thing with Faizan
         );
     }
 

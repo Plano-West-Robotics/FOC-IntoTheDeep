@@ -18,13 +18,16 @@ public class SpecimenAutoActionsExperimental {
     public Intake intake;
     public Outtake outtake;
     public MecanumDrive drive;
+    public Pose2d initPose;
 
-    public SpecimenAutoActionsExperimental(Intake intake, Outtake outtake, MecanumDrive drive){
+    public SpecimenAutoActionsExperimental(Intake intake, Outtake outtake, MecanumDrive drive, Pose2d initPose){
         this.intake = intake;
         this.outtake = outtake;
         this.drive = drive;
+        this.initPose = initPose;
     }
 
+    public Action setHSlidesRetract() { return intake.getExtendo().retract(); }
     public Action setIntakeExtend() { return intake.getArm().extend(250); }
     public Action setSwivelCenter() { return intake.getSwivel().center(300); }
     public Action setBackClawClose() { return outtake.getClaw().tightClose(60); } // TODO: need to adjust if it messes stuff up - also lower hc3
@@ -73,7 +76,7 @@ public class SpecimenAutoActionsExperimental {
     {
         return new SequentialAction
         (
-                new ParallelAction(setSwivelCenter(), setIntakeExtend(), setBackClawClose()),
+                new ParallelAction(setHSlidesRetract(), setSwivelCenter(), setIntakeExtend(), setBackClawClose()),
                 new ParallelAction(setElbowHook(), setArmHook()),
                 setIntakeRetract()
         );
@@ -150,8 +153,6 @@ public class SpecimenAutoActionsExperimental {
 
     public void createTrajectories()
     {
-        Pose2d initPose = new Pose2d(0, -63, Math.toRadians(90));
-
         moveToChamberPath = drive.actionBuilder(initPose).splineToConstantHeading(new Vector2d(0, -28), tR(90));
         Pose2d moveToChamberPathFinalPose = new Pose2d(0, -28, tR(90));
 
@@ -256,8 +257,8 @@ public class SpecimenAutoActionsExperimental {
                 toPickupFromChamber(toPickupFromChamberPathAction3),
                 atPickup(),
                 nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction4),
-                atChamber(),
-            resetForTeleOp() // need to remove - make the offset thing with Faizan
+                atChamber()
+            //resetForTeleOp() // need to remove - make the offset thing with Faizan
         );
     }
 

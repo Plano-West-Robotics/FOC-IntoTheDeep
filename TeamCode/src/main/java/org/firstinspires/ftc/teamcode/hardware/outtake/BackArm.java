@@ -13,11 +13,11 @@ public class BackArm extends StageServoPair<BackArm.Stage>
 
     public enum Stage
     {
-        BUCKET, // From above.
+        BUCKET, // From above. // DEPRECATED
         REST, // Perpendicular to ground.
         TRANSFER,
-        CLIP, // From under.
-        WALL
+        CLIP, // From under. // DEPRECATED
+        UNDERHAND
     }
 
     public BackArm(HardwareMap hardwareMap)
@@ -28,7 +28,7 @@ public class BackArm extends StageServoPair<BackArm.Stage>
                 .add(Stage.REST, 0.16)
                 .add(Stage.TRANSFER, 0.46)
                 .add(Stage.CLIP, 0.975)
-                .add(Stage.WALL, 1)
+                .add(Stage.UNDERHAND, 1)
         );
     }
 
@@ -52,9 +52,9 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         setStage(Stage.CLIP);
     }
 
-    public void wall()
+    public void underhand()
     {
-        setStage(Stage.WALL);
+        setStage(Stage.UNDERHAND);
     }
 
     public Action bucket(int timeInMilliseconds)
@@ -77,8 +77,8 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         return getTimedAction(this::clip, timeInMilliseconds);
     }
 
-    public Action wall(int timeInMilliseconds)
+    public Action underhand(int timeInMilliseconds)
     {
-        return getTimedAction(this::wall, timeInMilliseconds);
+        return getTimedAction(this::underhand, timeInMilliseconds);
     }
 }

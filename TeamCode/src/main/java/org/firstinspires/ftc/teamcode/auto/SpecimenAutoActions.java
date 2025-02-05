@@ -38,7 +38,7 @@ public class SpecimenAutoActions {
     public Action setSlidesToAboveChamber(){ return outtake.getExtendo().hc3(); }
     public Action setBackClawOpen(){ return outtake.getClaw().open(120); }
     public Action setElbowWall(){ return outtake.getElbow().wall(300); }
-    public Action setArmWall(){ return outtake.getArm().wall(450); }
+    public Action setArmUnderhand(){ return outtake.getArm().underhand(450); }
     public Action setSlidesToBottom(){ return outtake.getExtendo().lowerFully(); }
 
     public TrajectoryActionBuilder moveToChamberPath;
@@ -96,7 +96,7 @@ public class SpecimenAutoActions {
     {
         return new ParallelAction
                 (
-                        pushSamplesPathAction, setSlidesToBottom(), setElbowWall(), setArmWall()
+                        pushSamplesPathAction, setSlidesToBottom(), setElbowWall(), setArmUnderhand()
                 );
     }
 
@@ -128,7 +128,7 @@ public class SpecimenAutoActions {
     {
         return new ParallelAction
                 (
-                        setElbowWall(), setArmWall(), setSlidesToBottom(), pathAction
+                        setElbowWall(), setArmUnderhand(), setSlidesToBottom(), pathAction
                 );
     }
 

@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.subsystems.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
-// TODO: Add revisions from discord messages
+// TODO: Add revisions from discord messages - also need intake to outtake and outtake to intake states
+//  because you need to use states any time there are timings
 
 /*
 Changes to how the TeleOp could work:

@@ -14,11 +14,13 @@ public class HorizontalExtendo extends Extendo
 
     // TeleOp positions.
     public static final int RETRACT_THRESHOLD = 350;
-    public static final int EXTEND_THRESHOLD = 430; // Must be greater than RETRACT_THRESHOLD.
+    public static final int EXTEND_THRESHOLD = 360; // Must be greater than RETRACT_THRESHOLD.
 
     // Auto positions.
     public static final int RETRACT_POSITION = 30;
     public static final int EXTEND_POSITION = 800;
+
+    public static final int EXTEND_POSITION_EXP = 300;
 
     public HorizontalExtendo(HardwareMap hardwareMap)
     {
@@ -45,6 +47,11 @@ public class HorizontalExtendo extends Extendo
         return getAveragePosition() > EXTEND_THRESHOLD;
     }
 
+    public boolean isRetracted()
+    {
+        return getAveragePosition() < (RETRACT_POSITION + 30);
+    }
+
     public Action retract()
     {
         return getSlideAction(RETRACT_POSITION);
@@ -53,5 +60,10 @@ public class HorizontalExtendo extends Extendo
     public Action extend()
     {
         return getSlideAction(EXTEND_POSITION);
+    }
+
+    public void retractHorizontalExtendo()
+    {
+        getSlideAction(RETRACT_POSITION);
     }
 }

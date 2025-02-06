@@ -42,6 +42,11 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
         setStage(Stage.EXTEND);
     }
 
+    public void extendExperimental()
+    {
+        setStage(Stage.EXTEND_EXPERIMENTAL);
+    }
+
     public void upright()
     {
         setStage(Stage.UPRIGHT);

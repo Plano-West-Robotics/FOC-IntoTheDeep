@@ -33,6 +33,11 @@ public class Gamepads
                 && (getAnalogValue(analog, prevGP1, prevGP2) >= threshold);
     }
 
+    public boolean withinThreshold(Analog analog, double threshold)
+    {
+        return (getAnalogValue(analog, currGP1, currGP2) >= threshold);
+    }
+
     public double getAnalogValue(Analog analog)
     {
         return getAnalogValue(analog, currGP1, currGP2);

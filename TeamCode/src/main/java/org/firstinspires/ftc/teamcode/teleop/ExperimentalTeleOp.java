@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.subsystems.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+// TODO: Add revisions from discord messages
+
 /*
 Changes to how the TeleOp could work:
 

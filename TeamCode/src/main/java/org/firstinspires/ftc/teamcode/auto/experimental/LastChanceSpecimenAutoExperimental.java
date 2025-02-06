@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
-// TODO: COMPLETE ALL THE TODOS EXCEPT SPEC 4 1/31
+// TODO: RETUNE THE ODO POD POSITIONS
 
 @Config
 @Autonomous(name = "Specimen Auto Experimental **(DO NOT CHOOSE)**")

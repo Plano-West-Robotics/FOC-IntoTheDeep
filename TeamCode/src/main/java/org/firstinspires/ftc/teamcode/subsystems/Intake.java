@@ -29,6 +29,11 @@ public class Intake
         extendo.setPower(gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y));
     }
 
+    public void updateExtendoPowerExperimental(Gamepads gamepads)
+    {
+        extendo.setPower(gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_Y));
+    }
+
     public void updateClaw(Gamepads gamepads)
     {
         if (gamepads.justPressed(Button.GP2_X))

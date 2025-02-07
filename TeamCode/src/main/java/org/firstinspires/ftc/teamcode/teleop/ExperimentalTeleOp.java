@@ -18,35 +18,39 @@ import org.firstinspires.ftc.teamcode.subsystems.RobotCentricDrive;
 //  make sure to start, update, stop, and reset each nested state machine
 
 /*
-Changes to how the TeleOp could work:
+Changes to how the TeleOp works:
 
-- Have a single button to go from the intake holding the block to the outtake claw holding it in the outtake position
-- Change how the intake probing thing works - the intake arm should be closer to the ground so it is easier to see where the claw would go -
+- Have a single button to go from the intake holding the block to the outtake claw holding the block in the bucket position
+- Have a separate button for the intake -> specimen sequence
+- Change how the intake works - the intake arm should be closer to the ground so it is easier to see where the claw would go -
 also shouldn't have to press a second button for the claw to close and go back up - should work on a timer
-- All on one controller
+- All on one controller - both slides (vertical and horizontal) use right stick y - changes based on whether you're in intake/outtake mode
 
 Controls:
-Y -  move the arm down and close the intake claw around the sample, then go back up - if pressed again open intake
-B - complete transfer intake to outtake or outtake to intake
+A - intake to specimen sequence - if in intake mode, drop block on ground (should be done in the observation zone),
+go to wall pickup position for specimen without doing transfer of block (to pick up clipped specimen from wall)
+B - complete transfer intake to outtake or outtake to intake (for bucket sequence and going back to intake mode)
 X - open/close outtake claw
-A - intake to specimen sequence - if in intake mode, reset swivel, move arm down, release block, retract intake slides,
-go to wall pickup position for specimen without doing transfer of block
+Y -  move the arm down and close the intake claw around the sample, then go back up - if pressed again reset intake
 
-Left and Right Bumpers - move swivel
+Left and Right Bumpers - move swivel - only when in intake mode
 
-Right Trigger - move arm and elbow to front hook - slightly after the slides start moving up -
-pressing it again should move to hc3 and release claw
-pressing again should move it back to bucket position
+Right Trigger - move arm and elbow to front hook - after the slides finish moving up -
+pressing it again should move slides to the clip position and release claw
+pressing it again should move the slides and arm back to bucket position (to pickup another specimen from the wall)
 
-DPAD_UP - Vertical slides go to the bucket position - need to find - set it at about 3000 for now
-DPAD_DOWN - Vertical slides go to the bottom - make sure to set it at
+DPAD_UP - Vertical slides go to the bucket position - only operates in bucket mode
+DPAD_DOWN - Vertical slides go to the bottom - only operates in bucket mode (specimen mode has a different mechanism for going to the bottom)
 
-Left Stick X and Y - moving and strafing
-Right Stick X - turning
+Left Stick Y - forward/backward movement
+Left Stick X - left/right strafing
+Right Stick X - turning left/right in place
 Right Stick Y - intake slides or outtake slides, depending on the state
 
-Robot Centric - more intuitive - the robot should never be turned around anyway
+Robot Centric - more intuitive (and works better than the field centric atm) - the robot should never be turned around anyway
  */
+
+// TODO: NEED TO FIND THE RIGHT SPECIMEN AND BUCKET POSITIONS
 
 @TeleOp (name = "Experimental")
 public class ExperimentalTeleOp extends BaseTeleOp {

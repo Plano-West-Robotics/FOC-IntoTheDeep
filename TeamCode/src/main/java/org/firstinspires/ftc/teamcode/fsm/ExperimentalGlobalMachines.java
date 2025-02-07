@@ -51,7 +51,7 @@ public class ExperimentalGlobalMachines
         INIT,
         INTAKE,
         INTAKE_TO_DROP,
-        DROP_TO_BUCKET, // actually for specimen wall pickup - make sure to retract h slides
+        DROP_TO_BUCKET, // actually for specimen wall pickup
         INTAKE_TO_BUCKET,
         BUCKET,
         BUCKET_TO_SPECIMEN,

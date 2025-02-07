@@ -45,6 +45,7 @@ public class ExperimentalGlobalMachines
         dropToBucketFSM = getDropToBucketMachine();
         bucketFSM = getBucketMachine();
         bucketToSpecimenFSM = getBucketToSpecimenMachine();
+        specimenFSM = getSpecimenMachine();
     }
 
     public enum GlobalStates
@@ -347,6 +348,52 @@ public class ExperimentalGlobalMachines
                 .build();
     }
 
+    public enum SpecimenStates
+    {
+        GO_TO_HC2,
+        WAIT_FOR_TRIGGER, // wait for trigger, allow for experimental slide movement
+        GO_TO_HC3,
+        OPEN_CLAW, // wait for trigger -> go to bucket || wait for B -> go to intake
+        SPECIMEN_COMPLETE
+    }
+
+    public StateMachine getSpecimenMachine()
+    {
+        return new StateMachineBuilder()
+                .state(SpecimenStates.GO_TO_HC2)
+                .onEnter(() -> outtake.getExtendo().setHC2())
+                .transition(() -> (outtake.getExtendo().reachedHC2()), SpecimenStates.WAIT_FOR_TRIGGER)
+                .onExit(() -> outtake.getExtendo().brakeSlides())
+
+                .state(SpecimenStates.WAIT_FOR_TRIGGER)
+                .loop(() -> outtake.updateExtendoPowerExperimental(gamepads))
+                .transition(() -> gamepads.withinThreshold(Analog.GP1_RIGHT_TRIGGER, triggerThreshold), SpecimenStates.GO_TO_HC3)
+
+                .state(SpecimenStates.GO_TO_HC3)
+                .onEnter(() -> outtake.getExtendo().setHC3())
+                .transition(() -> (outtake.getExtendo().reachedHC3()), SpecimenStates.OPEN_CLAW)
+                .onExit(() -> outtake.getExtendo().brakeSlides())
+
+                .state(SpecimenStates.OPEN_CLAW)
+                .onEnter(() -> outtake.getClaw().open())
+                .transitionTimed(0.2)
+
+                .state(SpecimenStates.SPECIMEN_COMPLETE)
+                .loop(() -> {
+                    outtake.updateExtendoPowerExperimental(gamepads);
+                    outtake.updateClawExperimental(gamepads);
+                })
+                .build();
+    }
+
+    public enum SpecimenToBucketStates
+    {
+        CLOSE_CLAW,
+        SET_SLIDES_CLEARANCE,
+        MOVE_ARM_BUCKET_ELBOW_BUCKET,
+        SET_SLIDES_BOTTOM,
+        READY_FOR_BUCKET
+    }
 
     public StateMachine getGlobalMachines()
     {
@@ -424,8 +471,23 @@ public class ExperimentalGlobalMachines
                     bucketToSpecimenFSM.reset();
                 })
 
-                .state(GlobalStates.BUCKET_TO_INTAKE)
                 .state(GlobalStates.SPECIMEN)
+                .onEnter(() -> specimenFSM.start())
+                .loop(() -> specimenFSM.update())
+                .transition(() -> specimenFSM.getState() == SpecimenStates.SPECIMEN_COMPLETE &&
+                        gamepads.withinThreshold(Analog.GP1_RIGHT_TRIGGER, triggerThreshold), GlobalStates.SPECIMEN_TO_BUCKET)
+                .transition(() -> specimenFSM.getState() == SpecimenStates.SPECIMEN_COMPLETE &&
+                        gamepads.justPressed(Button.GP1_B), GlobalStates.SPECIMEN_TO_INTAKE)
+                .onExit(() -> {
+                    specimenFSM.stop();
+                    specimenFSM.reset();
+                })
+
+                .state(GlobalStates.SPECIMEN_TO_BUCKET)
+
+                .state(GlobalStates.BUCKET_TO_INTAKE)
+                .state(GlobalStates.SPECIMEN_TO_INTAKE)
+
 
 
 

@@ -35,6 +35,7 @@ go to wall pickup position for specimen without doing transfer of block
 Left and Right Bumpers - move swivel
 
 Right Trigger - move arm and elbow to front hook - slightly after the slides start moving up -
+pressing it again should move to hc3 and release claw
 pressing again should move it back to bucket position
 
 DPAD_UP - Vertical slides go to the bucket position - need to find - set it at about 3000 for now

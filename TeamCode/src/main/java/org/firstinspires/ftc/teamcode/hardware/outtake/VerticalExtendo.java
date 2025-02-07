@@ -120,6 +120,26 @@ public class VerticalExtendo extends Extendo
         return isReached(SAFE_LOW);
     }
 
+    public void setHC2()
+    {
+        setPos(HC2_POSITION);
+    }
+
+    public boolean reachedHC2()
+    {
+        return isReached(HC2_POSITION);
+    }
+
+    public void setHC3()
+    {
+        setPos(HC3_POSITION);
+    }
+
+    public boolean reachedHC3()
+    {
+        return isReached(HC3_POSITION);
+    }
+
     public void brakeSlides()
     {
         setPower(0);

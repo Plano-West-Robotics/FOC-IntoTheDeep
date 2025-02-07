@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
-import android.app.usage.NetworkStats;
-
-import org.firstinspires.ftc.robotcore.external.State;
 import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -124,7 +121,7 @@ public class ExperimentalGlobalMachines
                 .state(IntakeStates.RETRACT_SLIDES)
                 .onEnter(() -> intake.getExtendo().retractHorizontalExtendo())
                 .transition(() -> intake.getExtendo().retracted(), IntakeStates.READY_TO_TRANSFER)
-                .onExit(() -> intake.getExtendo().brakeSlides())
+                .onExit(() -> intake.getExtendo().halt())
 
                 .state(IntakeStates.READY_TO_TRANSFER)
 
@@ -170,7 +167,7 @@ public class ExperimentalGlobalMachines
                 .state(IntakeToBucketStates.MOVE_SLIDES_FOR_CLEARANCE)
                 .onEnter(() -> outtake.getExtendo().createBucketClearance())
                 .transition(() -> outtake.getExtendo().clearanceMade())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(IntakeToBucketStates.BUCKET_BACK_ARM)
                 .onEnter( () -> outtake.getArm().clip())
@@ -182,7 +179,7 @@ public class ExperimentalGlobalMachines
                     outtake.getExtendo().setBottom();
                 })
                 .transition(() -> outtake.getExtendo().reachedBottom())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(IntakeToBucketStates.AT_BUCKET)
                 .build();
@@ -219,7 +216,7 @@ public class ExperimentalGlobalMachines
                     intake.getExtendo().retractHorizontalExtendo();
                 })
                 .transition(() -> intake.getExtendo().isRetracted())
-                .onExit(() -> intake.getExtendo().brakeSlides())
+                .onExit(() -> intake.getExtendo().halt())
 
                 .state(IntakeToDropStates.DROP_COMPLETE)
                 .build();
@@ -245,7 +242,7 @@ public class ExperimentalGlobalMachines
                 .state(DropToBucketStates.MOVE_SLIDES_CLEARANCE)
                 .onEnter(() -> outtake.getExtendo().createBucketClearance())
                 .transition(() -> outtake.getExtendo().clearanceMade())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(DropToBucketStates.ELBOW_BUCKET_ARM_BUCKET)
                 .onEnter(() -> {
@@ -257,7 +254,7 @@ public class ExperimentalGlobalMachines
                 .state(DropToBucketStates.MOVE_SLIDES_DOWN)
                 .onEnter(() -> outtake.getExtendo().setBottom())
                 .transition(() -> outtake.getExtendo().reachedBottom())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(DropToBucketStates.OPEN_CLAW)
                 .onEnter(() -> outtake.getClaw().open())
@@ -297,25 +294,25 @@ public class ExperimentalGlobalMachines
                 .onEnter(() -> outtake.getExtendo().setHighBucket())
                 .loop(() -> outtake.updateClawExperimental(gamepads))
                 .transition(() -> outtake.getExtendo().reachedHighBucket(), BucketStates.FUNCTIONS_ACTIVE)
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(BucketStates.LOWERING_TO_BOTTOM)
                 .onEnter(() -> outtake.getExtendo().setBottom())
                 .loop(() -> outtake.updateClawExperimental(gamepads))
                 .transition(() -> outtake.getExtendo().reachedBottom(), BucketStates.FUNCTIONS_ACTIVE)
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(BucketStates.EXITING_TO_INTAKE)
                 .onEnter(() -> outtake.getExtendo().setBottom())
                 .transition(() -> outtake.getExtendo().reachedBottom(), BucketStates.READY_FOR_INTAKE)
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(BucketStates.READY_FOR_INTAKE)
 
                 .state(BucketStates.EXITING_TO_SPECIMEN)
                 .onEnter(() -> outtake.getExtendo().setBottom())
                 .transition(() -> outtake.getExtendo().reachedBottom(), BucketStates.READY_FOR_SPECIMEN)
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(BucketStates.READY_FOR_SPECIMEN)
 
@@ -335,7 +332,7 @@ public class ExperimentalGlobalMachines
                 .state(BucketToSpecimenStates.MOVE_SLIDES_CLEARANCE)
                 .onEnter(() -> outtake.getExtendo().createBucketClearance())
                 .transition(() -> outtake.getExtendo().clearanceMade())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(BucketToSpecimenStates.MOVE_ARM_ELBOW_HOOK)
                 .onEnter(() -> {
@@ -366,7 +363,7 @@ public class ExperimentalGlobalMachines
                 .state(SpecimenStates.GO_TO_HC2)
                 .onEnter(() -> outtake.getExtendo().setHC2())
                 .transition(() -> (outtake.getExtendo().reachedHC2()), SpecimenStates.WAIT_FOR_TRIGGER)
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(SpecimenStates.WAIT_FOR_TRIGGER)
                 .loop(() -> outtake.updateExtendoPowerExperimental(gamepads))
@@ -376,7 +373,7 @@ public class ExperimentalGlobalMachines
                 .state(SpecimenStates.GO_TO_HC3)
                 .onEnter(() -> outtake.getExtendo().setHC3())
                 .transition(() -> (outtake.getExtendo().reachedHC3()), SpecimenStates.OPEN_CLAW)
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(SpecimenStates.OPEN_CLAW)
                 .onEnter(() -> outtake.getClaw().open())
@@ -412,7 +409,7 @@ public class ExperimentalGlobalMachines
                 .state(SpecimenToBucketStates.SET_SLIDES_CLEARANCE)
                 .onEnter(() -> outtake.getExtendo().createBucketClearance())
                 .transition(() -> outtake.getExtendo().clearanceMade())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(SpecimenToBucketStates.MOVE_ARM_BUCKET_ELBOW_BUCKET)
                 .onEnter(() -> {
@@ -427,7 +424,7 @@ public class ExperimentalGlobalMachines
                     outtake.getClaw().open();
                 })
                 .transition(() -> outtake.getExtendo().reachedBottom())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(SpecimenToBucketStates.READY_FOR_BUCKET)
                 .build();
@@ -450,7 +447,7 @@ public class ExperimentalGlobalMachines
                 .state(BucketToIntakeStates.MOVE_SLIDES_CLEARANCE)
                 .onEnter(() -> outtake.getExtendo().createBucketClearance())
                 .transition(() -> outtake.getExtendo().clearanceMade())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(BucketToIntakeStates.CLOSE_CLAW)
                 .onEnter(() -> outtake.getClaw().close())
@@ -466,12 +463,12 @@ public class ExperimentalGlobalMachines
                 .state(BucketToIntakeStates.RETRACT_OUTTAKE_SLIDES)
                 .onEnter(() -> outtake.getExtendo().setBottom())
                 .transition(() -> outtake.getExtendo().reachedBottom())
-                .onExit(() -> outtake.getExtendo().brakeSlides())
+                .onExit(() -> outtake.getExtendo().halt())
 
                 .state(BucketToIntakeStates.RETRACT_INTAKE_SLIDES)
                 .onEnter(() -> intake.getExtendo().retractHorizontalExtendo())
                 .transition(() -> intake.getExtendo().isRetracted())
-                .onExit(() -> intake.getExtendo().brakeSlides())
+                .onExit(() -> intake.getExtendo().halt())
 
                 .state(BucketToIntakeStates.CENTER_INTAKE_SWIVEL_OPEN_CLAWS)
                 .onEnter(() -> {

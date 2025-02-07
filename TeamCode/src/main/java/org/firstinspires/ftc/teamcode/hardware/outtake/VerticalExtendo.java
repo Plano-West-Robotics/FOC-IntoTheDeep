@@ -139,9 +139,4 @@ public class VerticalExtendo extends Extendo
     {
         return isReached(HC3_POSITION);
     }
-
-    public void brakeSlides()
-    {
-        setPower(0);
-    }
 }

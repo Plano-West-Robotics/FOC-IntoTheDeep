@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.intake;
 
 import com.acmerobotics.roadrunner.Action;
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.base.Extendo;
@@ -71,10 +70,5 @@ public class HorizontalExtendo extends Extendo
     public boolean retracted()
     {
         return isReached(RETRACT_POSITION);
-    }
-
-    public void brakeSlides()
-    {
-        setPower(0);
     }
 }

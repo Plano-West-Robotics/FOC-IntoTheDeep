@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
-import org.firstinspires.ftc.teamcode.control.Analog;
-import org.firstinspires.ftc.teamcode.control.Gamepads;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake;
-
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
+import org.firstinspires.ftc.teamcode.control.Analog;
 import org.firstinspires.ftc.teamcode.control.Button;
+import org.firstinspires.ftc.teamcode.control.Gamepads;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 public class ExperimentalGlobalMachines
 {
@@ -154,11 +153,11 @@ public class ExperimentalGlobalMachines
                 .onEnter(() -> {
                     outtake.getArm().transfer();
                 })
-                .transitionTimed(0.4)
+                .transitionTimed(0.64)
 
                 .state(IntakeToBucketStates.CLOSE_OUTTAKE_CLAW)
                 .onEnter( () -> outtake.getClaw().close())
-                .transitionTimed(0.15)
+                .transitionTimed(0.2)
 
                 .state(IntakeToBucketStates.OPEN_INTAKE_CLAW)
                 .onEnter( () -> intake.getClaw().open())

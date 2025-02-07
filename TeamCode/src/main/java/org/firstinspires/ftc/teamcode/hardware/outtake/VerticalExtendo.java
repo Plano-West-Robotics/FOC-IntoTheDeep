@@ -14,7 +14,7 @@ public class VerticalExtendo extends Extendo
 
     // Auto VerticalExtendo parameters.
     public static final int LB_POSITION = 123; // Low basket.
-    public static final int HB_POSITION = 3500; // High basket.
+    public static final int HB_POSITION = 4100; // High basket.
     public static final int LC_POSITION = 345; // Low chamber.
     public static final int HC_POSITION = 2100; // High chamber.
     public static final int HC2_POSITION = 1200; // High chamber.

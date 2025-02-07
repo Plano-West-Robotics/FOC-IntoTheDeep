@@ -47,6 +47,7 @@ public class HorizontalExtendo extends Extendo
         return getAveragePosition() > EXTEND_THRESHOLD;
     }
 
+    @Override
     public boolean isRetracted()
     {
         return getAveragePosition() < (RETRACT_POSITION + 50);

@@ -26,7 +26,7 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
                 .add(Stage.CLIP, 0.527)
                 .add(Stage.WALL, 0.68)
                 .add(Stage.FRONT_HOOK, 0.7)
-                .add(Stage.BUCKET, 0.925)
+                .add(Stage.BUCKET, 0.527)
                 .add(Stage.HOOK_UP, 0.82)
         );
     }
@@ -85,6 +85,7 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
     {
         return getTimedAction(this::bucket, timeInMilliseconds);
     }
+
     public Action hookUp(int timeInMilliseconds)
     {
         return getTimedAction(this::hookUp, timeInMilliseconds);

@@ -47,6 +47,8 @@ public class ExtendoDebugger extends OpMode
         telemetry.addData("HR", "%s, %d", hr.getDirection(), hr.getPosition());
         telemetry.addData("VL", "%s, %d", vl.getDirection(), vl.getPosition());
         telemetry.addData("VR", "%s, %d", vr.getDirection(), vr.getPosition());
+        telemetry.addData("VS Avg", "%d", verticalExtendo.getAveragePosition());
+        telemetry.addData("HS Avg", "%d", horizontalExtendo.getAveragePosition());
         telemetry.update();
     }
 }

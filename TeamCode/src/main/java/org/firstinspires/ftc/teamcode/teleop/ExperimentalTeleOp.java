@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.FieldCentricDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.RobotCentricDrive;
 
 // TODO: Add revisions from discord messages - also need intake to outtake and outtake to intake states
 //  because you need to use states any time there are timings
@@ -45,6 +47,7 @@ Right Stick Y - intake slides or outtake slides, depending on the state
 Robot Centric - more intuitive - the robot should never be turned around anyway
  */
 
+@TeleOp (name = "Experimental")
 public class ExperimentalTeleOp extends BaseTeleOp {
 
     public Drive drive;
@@ -57,7 +60,7 @@ public class ExperimentalTeleOp extends BaseTeleOp {
     @Override
     public void setup()
     {
-        drive = new FieldCentricDrive(hardware);
+        drive = new RobotCentricDrive(hardware);
         intake = new Intake(hardware);
         outtake = new Outtake(hardware);
 
@@ -65,41 +68,6 @@ public class ExperimentalTeleOp extends BaseTeleOp {
         experimentalFSM = experimentalFSMClass.getGlobalMachines();
 
         experimentalFSM.start();
-
-        /*
-        experimentalFSM = new StateMachineBuilder()
-                .state(Experimentals.INIT)
-                .onEnter(() -> {
-                    intake.getArm().retract();
-                    intake.getClaw().open();
-                    intake.getSwivel().center();
-                    outtake.getArm().rest();
-                    outtake.getElbow().transfer();
-                    outtake.getClaw().open();
-
-                })
-                .transitionTimed(1)
-
-
-                .state(Experimentals.INTAKE)
-                .onEnter(() -> intake.getArm().extend())
-                .loop( () -> {
-
-                    intake.updateExtendoPowerExperimental(gamepads);
-                    intake.updateSwivel(gamepads);
-
-                    if (gamepads.justPressed(Button.GP1_Y)) // have to replace with a fsm :(
-                    {
-
-                    }
-
-                })
-
-                .build();
-
-        experimentalFSM.start();
-
-         */
     }
 
     @Override
@@ -107,5 +75,8 @@ public class ExperimentalTeleOp extends BaseTeleOp {
     {
         drive.update(gamepads);
         experimentalFSM.update();
+        telemetry.addData("V Slide Pos", outtake.getExtendo().getAveragePosition());
+        telemetry.addData("Left V Slide", outtake.getExtendo().getLeft().getPosition());
+        telemetry.addData("Right V Slide", outtake.getExtendo().getRight().getPosition());
     }
 }

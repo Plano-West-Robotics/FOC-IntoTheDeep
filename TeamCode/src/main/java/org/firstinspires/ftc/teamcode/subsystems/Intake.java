@@ -49,6 +49,12 @@ public class Intake
         else if (gamepads.justPressed(Button.GP2_RIGHT_BUMPER)) swivel.rotateCW();
     }
 
+    public void updateSwivelExperimental(Gamepads gamepads)
+    {
+        if (gamepads.justPressed(Button.GP1_LEFT_BUMPER)) swivel.rotateCCW();
+        else if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) swivel.rotateCW();
+    }
+
     public HorizontalExtendo getExtendo()
     {
         return extendo;

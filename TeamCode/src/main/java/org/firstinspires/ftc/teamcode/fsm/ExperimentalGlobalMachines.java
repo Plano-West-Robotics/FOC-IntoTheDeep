@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.control.Gamepads;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
+import com.sfdev.assembly.state.State;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -38,6 +39,8 @@ public class ExperimentalGlobalMachines
 
         intakeFSM = getIntakeMachine();
         intakeToBucketFSM = getIntakeToBucketMachine();
+        intakeToDropFSM = getIntakeToDropMachine();
+        dropToBucketFSM = getDropToBucketMachine();
     }
 
     public enum GlobalStates
@@ -61,7 +64,11 @@ public class ExperimentalGlobalMachines
         LOW_EXTEND_CLAW_OPEN,
         ARM_GRAB,
         CLAW_GRAB,
-        ARM_BACK_UP
+        ARM_BACK_UP,
+        RETRACT_ARM_CENTER_SWIVEL,
+        RETRACT_SLIDES,
+        READY_TO_TRANSFER,
+        READY_TO_DROP
     }
 
     public StateMachine getIntakeMachine() {
@@ -80,7 +87,7 @@ public class ExperimentalGlobalMachines
                 })
                 .loop(() -> {
                     intake.updateExtendoPowerExperimental(gamepads);
-                    intake.updateSwivel(gamepads);
+                    intake.updateSwivelExperimental(gamepads);
                 })
                 .transition(() -> gamepads.justPressed(Button.GP1_Y))
                 .state(IntakeStates.ARM_GRAB)
@@ -97,59 +104,134 @@ public class ExperimentalGlobalMachines
                 .onEnter(() -> {
                     intake.getArm().extendExperimental();
                 })
-                .onExit(() -> intake.getArm().retract())
                 .transition(() -> gamepads.justPressed(Button.GP1_Y), IntakeStates.LOW_EXTEND_CLAW_OPEN)
+                .transition(() -> gamepads.justPressed(Button.GP1_B), IntakeStates.RETRACT_ARM_CENTER_SWIVEL)
+                .transition(() -> gamepads.justPressed(Button.GP1_A), IntakeStates.READY_TO_DROP)
+
+                .state(IntakeStates.RETRACT_ARM_CENTER_SWIVEL)
+                .onEnter(() -> {
+                    intake.getArm().retract();
+                    intake.getSwivel().center();
+                })
+                .transitionTimed(0.2)
+
+                .state(IntakeStates.RETRACT_SLIDES)
+                .onEnter(() -> intake.getExtendo().retractHorizontalExtendo())
+                .transition(() -> intake.getExtendo().retracted(), IntakeStates.READY_TO_TRANSFER)
+                .onExit(() -> intake.getExtendo().brakeSlides())
+
+                .state(IntakeStates.READY_TO_TRANSFER)
+
+                .state(IntakeStates.READY_TO_DROP)
                 .build();
     }
 
     public enum IntakeToBucketStates
     {
-        RETRACT_SLIDES_CENTER_SWIVEL_OPEN_OUTTAKE_CLAW, // 1.1 s
+        OPEN_OUTTAKE_CLAW,
         TRANSFER_OUTTAKE_ARM, // 0.37 s
         CLOSE_OUTTAKE_CLAW,
         OPEN_INTAKE_CLAW,
+        MOVE_SLIDES_FOR_CLEARANCE,
         BUCKET_BACK_ARM,
-        BUCKET_BACK_ELBOW_UPRIGHT_FRONT_ARM,
+        BUCKET_BACK_ELBOW_LOWER_SLIDES,
         AT_BUCKET
     }
 
     public StateMachine getIntakeToBucketMachine()
     {
         return new StateMachineBuilder()
-                .state(IntakeToBucketStates.RETRACT_SLIDES_CENTER_SWIVEL_OPEN_OUTTAKE_CLAW)
+                .state(IntakeToBucketStates.OPEN_OUTTAKE_CLAW)
                 .onEnter(() -> {
-                    intake.getExtendo().retractHorizontalExtendo();
-                    intake.getSwivel().center();
                     outtake.getClaw().open();
                 })
-                .transition(() -> intake.getExtendo().isRetracted())
+                .transitionTimed(0.10)
 
                 .state(IntakeToBucketStates.TRANSFER_OUTTAKE_ARM)
                 .onEnter(() -> {
                     outtake.getArm().transfer();
                 })
-                .transitionTimed(0.37)
+                .transitionTimed(0.4)
 
                 .state(IntakeToBucketStates.CLOSE_OUTTAKE_CLAW)
                 .onEnter( () -> outtake.getClaw().close())
-                .transitionTimed(0.13)
+                .transitionTimed(0.15)
 
                 .state(IntakeToBucketStates.OPEN_INTAKE_CLAW)
                 .onEnter( () -> intake.getClaw().open())
-                .transitionTimed(0.13)
+                .transitionTimed(0.15)
+
+                .state(IntakeToBucketStates.MOVE_SLIDES_FOR_CLEARANCE)
+                .onEnter(() -> outtake.getExtendo().createBucketClearance())
+                .transition(() -> outtake.getExtendo().clearanceMade())
+                .onExit(() -> outtake.getExtendo().brakeSlides())
 
                 .state(IntakeToBucketStates.BUCKET_BACK_ARM)
                 .onEnter( () -> outtake.getArm().clip())
-                .transitionTimed(0.1)
+                .transitionTimed(0.5)
 
-                .state(IntakeToBucketStates.BUCKET_BACK_ELBOW_UPRIGHT_FRONT_ARM)
+                .state(IntakeToBucketStates.BUCKET_BACK_ELBOW_LOWER_SLIDES)
                 .onEnter( () -> {
                     outtake.getElbow().clip();
-                    intake.getArm().upright();
+                    outtake.getExtendo().setBottom();
                 })
-                .transitionTimed(0.4)
+                .transition(() -> outtake.getExtendo().reachedBottom())
+                .onExit(() -> outtake.getExtendo().brakeSlides())
 
                 .state(IntakeToBucketStates.AT_BUCKET)
+                .build();
+    }
+
+    public enum IntakeToDropStates
+    {
+        MOVE_ARM_DOWN,
+        OPEN_CLAW,
+        MOVE_ARM_BACK_UP,
+        CENTER_SWIVEL_RETRACT_ARM_RETRACT_SLIDES,
+        DROP_COMPLETE
+    }
+
+    public StateMachine getIntakeToDropMachine()
+    {
+        return new StateMachineBuilder()
+                .state(IntakeToDropStates.MOVE_ARM_DOWN)
+                .onEnter(() -> intake.getArm().probe())
+                .transitionTimed(0.35)
+
+                .state(IntakeToDropStates.OPEN_CLAW)
+                .onEnter(() -> intake.getClaw().open())
+                .transitionTimed(0.13)
+
+                .state(IntakeToDropStates.MOVE_ARM_BACK_UP)
+                .onEnter(() -> intake.getArm().extendExperimental())
+                .transitionTimed(0.4)
+
+                .state(IntakeToDropStates.CENTER_SWIVEL_RETRACT_ARM_RETRACT_SLIDES)
+                .onEnter(() -> {
+                    intake.getSwivel().center();
+                    intake.getArm().retract();
+                    intake.getExtendo().retractHorizontalExtendo();
+                })
+                .transition(() -> intake.getExtendo().isRetracted())
+                .onExit(() -> intake.getExtendo().brakeSlides())
+
+                .state(IntakeToDropStates.DROP_COMPLETE)
+                .build();
+    }
+
+    public enum DropToBucketStates
+    {
+        CLOSE_BACK_CLAW,
+        MOVE_SLIDES_CLEARANCE,
+        ELBOW_BUCKET_ARM_BUCKET,
+        MOVE_SLIDES_DOWN,
+        OPEN_CLAW
+    }
+
+    public StateMachine getDropToBucketMachine()
+    {
+        return new StateMachineBuilder()
+
                 .build();
     }
 
@@ -171,10 +253,9 @@ public class ExperimentalGlobalMachines
                 .state(GlobalStates.INTAKE)
                 .onEnter(() -> intakeFSM.start())
                 .loop(() -> intakeFSM.update())
-                .transition(() -> ((intakeFSM.getState() == IntakeStates.ARM_BACK_UP) && (gamepads.justPressed(Button.GP1_B))),
+                .transition(() -> (intakeFSM.getState() == IntakeStates.READY_TO_TRANSFER),
                         GlobalStates.INTAKE_TO_BUCKET)
-                .transition(() -> ((intakeFSM.getState() == IntakeStates.ARM_BACK_UP) &&
-                                (gamepads.withinThreshold(Analog.GP1_RIGHT_TRIGGER, triggerThreshold))),
+                .transition(() -> ((intakeFSM.getState() == IntakeStates.READY_TO_DROP)),
                         GlobalStates.INTAKE_TO_DROP)
                 .onExit(() ->
                     {   intakeFSM.stop();
@@ -185,11 +266,27 @@ public class ExperimentalGlobalMachines
                 .onEnter(() -> { intakeToBucketFSM.start();
                 })
                 .loop(() -> intakeToBucketFSM.update())
-                .transition(() -> intakeToBucketFSM.getState() == IntakeToBucketStates.AT_BUCKET)
+                .transition(() -> intakeToBucketFSM.getState() == IntakeToBucketStates.AT_BUCKET, GlobalStates.BUCKET)
                 .onExit(() ->
                         {   intakeToBucketFSM.stop();
                             intakeToBucketFSM.reset(); }
                 )
+
+                .state(GlobalStates.INTAKE_TO_DROP)
+                .onEnter(() -> intakeToDropFSM.start())
+                .loop(() -> intakeToDropFSM.update())
+                .transition(() -> intakeToDropFSM.getState() == IntakeToDropStates.DROP_COMPLETE, GlobalStates.DROP_TO_BUCKET)
+                .onExit(() -> {
+                    intakeToDropFSM.stop();
+                    intakeToDropFSM.reset();
+                })
+
+                .state(GlobalStates.DROP_TO_BUCKET)
+
+
+                .state(GlobalStates.BUCKET)
+
+
 
 
                 .build();

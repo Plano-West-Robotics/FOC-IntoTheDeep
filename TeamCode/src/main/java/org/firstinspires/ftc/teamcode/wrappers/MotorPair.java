@@ -120,7 +120,8 @@ public class MotorPair
 
     public int getAveragePosition()
     {
-        return (int) Math.round((left.getPosition() + right.getPosition()) / 2.0);
+        //return (int) Math.round((left.getPosition() + right.getPosition()) / 2.0);
+        return right.getPosition();
     }
 
     public int[] getPosition()

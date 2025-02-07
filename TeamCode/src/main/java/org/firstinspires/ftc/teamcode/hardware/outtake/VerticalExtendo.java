@@ -22,6 +22,8 @@ public class VerticalExtendo extends Extendo
     public static final int LR_POSITION = 567; // Low rung.
     public static final int HR_POSITION = 678; // High rung.
     public static final int WG_POSITION = 10; // Wall grab.
+    public static final int CLEARANCE_POSITION = 500;
+    public static final int SAFE_LOW = 20;
 
     public VerticalExtendo(HardwareMap hardwareMap)
     {
@@ -86,5 +88,30 @@ public class VerticalExtendo extends Extendo
     public Action lowerFully()
     {
         return getSlideAction(WG_POSITION);
+    }
+
+    public void createBucketClearance()
+    {
+        setPos(CLEARANCE_POSITION);
+    }
+
+    public boolean clearanceMade()
+    {
+        return isReached(CLEARANCE_POSITION);
+    }
+
+    public void setBottom()
+    {
+        setPos(SAFE_LOW);
+    }
+
+    public boolean reachedBottom()
+    {
+        return isReached(SAFE_LOW);
+    }
+
+    public void brakeSlides()
+    {
+        setPower(0);
     }
 }

@@ -1,20 +1,21 @@
 package org.firstinspires.ftc.teamcode.hardware.intake;
 
 import com.acmerobotics.roadrunner.Action;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.hardware.base.Extendo;
 
 public class HorizontalExtendo extends Extendo
 {
-    public static final double P = 0.0001;
+    public static final double P = 0.002;
     public static final double I = 0;
     public static final double D = 0.00002;
     public static final double F = 0;
 
     // TeleOp positions.
-    public static final int RETRACT_THRESHOLD = 350;
-    public static final int EXTEND_THRESHOLD = 360; // Must be greater than RETRACT_THRESHOLD.
+    public static final int RETRACT_THRESHOLD = 200;
+    public static final int EXTEND_THRESHOLD = 220; // Must be greater than RETRACT_THRESHOLD.
 
     // Auto positions.
     public static final int RETRACT_POSITION = 30;
@@ -49,7 +50,7 @@ public class HorizontalExtendo extends Extendo
 
     public boolean isRetracted()
     {
-        return getAveragePosition() < (RETRACT_POSITION + 30);
+        return getAveragePosition() < (RETRACT_POSITION + 50);
     }
 
     public Action retract()
@@ -64,6 +65,16 @@ public class HorizontalExtendo extends Extendo
 
     public void retractHorizontalExtendo()
     {
-        getSlideAction(RETRACT_POSITION);
+        setPos(RETRACT_POSITION);
+    }
+
+    public boolean retracted()
+    {
+        return isReached(RETRACT_POSITION);
+    }
+
+    public void brakeSlides()
+    {
+        setPower(0);
     }
 }

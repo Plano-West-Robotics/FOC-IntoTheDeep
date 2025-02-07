@@ -23,6 +23,7 @@ public abstract class Extendo extends MotorPair
     public final double minPower; // the minimum value the method may return
     public final double maxPower; // the maximum value the method may return
     public final double k; // a constant that adjusts the steepness of the curve
+    public final double positionErrorTolerance;
 
     public Extendo(HardwareMap hardwareMap, String leftMotorName, String rightMotorName,
                    int minPosition, int maxPosition,
@@ -44,6 +45,7 @@ public abstract class Extendo extends MotorPair
         this.minPower = minPower;
         this.maxPower = maxPower;
         this.k = k;
+        this.positionErrorTolerance = positionErrorTolerance;
 
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(positionErrorTolerance);
@@ -181,4 +183,17 @@ public abstract class Extendo extends MotorPair
             }
         };
     }
+
+    public void setPos(int targetPosition)
+    {
+        double power = calculatePIDFControllerPower(targetPosition);
+        setPower(power, false);
+    }
+
+    public boolean isReached(int targetPosition)
+    {
+        return (Math.abs(getAveragePosition() - targetPosition) <= positionErrorTolerance);
+    }
+
+
 }

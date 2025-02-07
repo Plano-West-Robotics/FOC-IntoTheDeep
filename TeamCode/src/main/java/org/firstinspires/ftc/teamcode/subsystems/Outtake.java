@@ -29,6 +29,11 @@ public class Outtake
         extendo.setPower(gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y));
     }
 
+    public void updateExtendoPowerExperimental(Gamepads gamepads)
+    {
+        extendo.setPower(gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_Y));
+    }
+
     public void updateClaw(Gamepads gamepads)
     {
         if (gamepads.justPressed(Button.GP2_X))
@@ -44,6 +49,15 @@ public class Outtake
                 if (claw.atStage(BackClaw.Stage.OPEN)) claw.close();
                 else if (claw.atStage(BackClaw.Stage.CLOSE)) claw.open();
             }
+        }
+    }
+
+    public void updateClawExperimental(Gamepads gamepads)
+    {
+        if (gamepads.justPressed(Button.GP1_X))
+        {
+            if (claw.atStage(BackClaw.Stage.OPEN)) claw.close();
+            else if (claw.atStage(BackClaw.Stage.CLOSE)) claw.open();
         }
     }
 

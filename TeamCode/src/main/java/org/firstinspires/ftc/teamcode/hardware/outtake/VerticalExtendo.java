@@ -90,6 +90,16 @@ public class VerticalExtendo extends Extendo
         return getSlideAction(WG_POSITION);
     }
 
+    public void setHighBucket()
+    {
+        setPos(HB_POSITION);
+    }
+
+    public boolean reachedHighBucket()
+    {
+        return isReached(HB_POSITION);
+    }
+
     public void createBucketClearance()
     {
         setPos(CLEARANCE_POSITION);

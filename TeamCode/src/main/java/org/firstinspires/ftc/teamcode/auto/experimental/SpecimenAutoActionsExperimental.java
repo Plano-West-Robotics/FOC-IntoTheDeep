@@ -257,8 +257,8 @@ public class SpecimenAutoActionsExperimental {
                 toPickupFromChamber(toPickupFromChamberPathAction3),
                 atPickup(),
                 nonPreloadHook(hookFromPickupWithTimedElbowAndArmPathAction4),
-                atChamber()
-            //resetForTeleOp() // need to remove - make the offset thing with Faizan
+                atChamber(),
+            resetForTeleOp() // need to remove - make the offset thing with Faizan
         );
     }
 

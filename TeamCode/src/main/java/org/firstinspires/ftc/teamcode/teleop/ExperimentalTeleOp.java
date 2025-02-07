@@ -28,7 +28,7 @@ also shouldn't have to press a second button for the claw to close and go back u
 Controls:
 Y -  move the arm down and close the intake claw around the sample, then go back up - if pressed again open intake
 B - complete transfer intake to outtake or outtake to intake
-X - release outtake claw
+X - open/close outtake claw
 A - intake to specimen sequence - if in intake mode, reset swivel, move arm down, release block, retract intake slides,
 go to wall pickup position for specimen without doing transfer of block
 
@@ -75,8 +75,6 @@ public class ExperimentalTeleOp extends BaseTeleOp {
     {
         drive.update(gamepads);
         experimentalFSM.update();
-        telemetry.addData("V Slide Pos", outtake.getExtendo().getAveragePosition());
-        telemetry.addData("Left V Slide", outtake.getExtendo().getLeft().getPosition());
-        telemetry.addData("Right V Slide", outtake.getExtendo().getRight().getPosition());
+        telemetry.addData("Global State", experimentalFSM.getState());
     }
 }

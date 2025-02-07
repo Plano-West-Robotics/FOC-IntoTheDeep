@@ -100,12 +100,12 @@ public class VerticalExtendo extends Extendo
         return isReached(HB_POSITION);
     }
 
-    public void createBucketClearance()
+    public void setBucketClearance()
     {
         setPos(CLEARANCE_POSITION);
     }
 
-    public boolean clearanceMade()
+    public boolean reachedBucketClearance()
     {
         return isReached(CLEARANCE_POSITION);
     }

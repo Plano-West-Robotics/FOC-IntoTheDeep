@@ -62,12 +62,12 @@ public class HorizontalExtendo extends Extendo
         return getSlideAction(EXTEND_POSITION);
     }
 
-    public void retractHorizontalExtendo()
+    public void setRetract()
     {
         setPos(RETRACT_POSITION);
     }
 
-    public boolean retracted()
+    public boolean reachedRetract()
     {
         return isReached(RETRACT_POSITION);
     }

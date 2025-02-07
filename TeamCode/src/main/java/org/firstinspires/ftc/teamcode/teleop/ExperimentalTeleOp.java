@@ -58,6 +58,8 @@ public class ExperimentalTeleOp extends BaseTeleOp {
     public ExperimentalGlobalMachines experimentalFSMClass;
     public StateMachine experimentalFSM;
 
+    public StateMachine specimenFSM;
+
     @Override
     public void setup()
     {
@@ -68,6 +70,8 @@ public class ExperimentalTeleOp extends BaseTeleOp {
         experimentalFSMClass = new ExperimentalGlobalMachines(intake, outtake, gamepads);
         experimentalFSM = experimentalFSMClass.getGlobalMachines();
 
+        specimenFSM = experimentalFSMClass.specimenFSM;
+
         experimentalFSM.start();
     }
 
@@ -77,5 +81,6 @@ public class ExperimentalTeleOp extends BaseTeleOp {
         drive.update(gamepads);
         experimentalFSM.update();
         telemetry.addData("Global State", experimentalFSM.getState());
+        telemetry.addData("Specimen State", specimenFSM.getState());
     }
 }

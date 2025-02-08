@@ -12,30 +12,35 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
     public enum Stage
     {
         TRANSFER,
+        SQUEEZE,
         CLIP,
         WALL,
-        FRONT_HOOK,
         BUCKET,
-        HOOK_UP,
-        SQUEEZE
+        FRONT_HOOK,
+        HOOK_UP
     }
 
     public BackElbow(HardwareMap hardwareMap)
     {
         super(new StageServoMonoBuilder<>(hardwareMap, "be", Stage.class)
                 .add(Stage.TRANSFER, 0.37)
+                .add(Stage.SQUEEZE, 0.48)
                 .add(Stage.CLIP, 0.62)
                 .add(Stage.WALL, 0.62)
-                .add(Stage.FRONT_HOOK, 0.7)
                 .add(Stage.BUCKET, 0.66)
+                .add(Stage.FRONT_HOOK, 0.7)
                 .add(Stage.HOOK_UP, 0.82)
-                .add(Stage.SQUEEZE, 0.48)
         );
     }
 
     public void transfer()
     {
         setStage(Stage.TRANSFER);
+    }
+
+    public void squeeze()
+    {
+        setStage(Stage.SQUEEZE);
     }
 
     public void clip()
@@ -48,14 +53,14 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         setStage(Stage.WALL);
     }
 
-    public void frontHook()
-    {
-        setStage(Stage.FRONT_HOOK);
-    }
-
     public void bucket()
     {
         setStage(Stage.BUCKET);
+    }
+
+    public void frontHook()
+    {
+        setStage(Stage.FRONT_HOOK);
     }
 
     public void hookUp()
@@ -63,14 +68,14 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         setStage(Stage.HOOK_UP);
     }
 
-    public void squeeze()
-    {
-        setStage(Stage.SQUEEZE);
-    }
-
     public Action transfer(int timeInMilliseconds)
     {
         return getTimedAction(this::transfer, timeInMilliseconds);
+    }
+
+    public Action squeeze(int timeInMilliseconds)
+    {
+        return getTimedAction(this::squeeze, timeInMilliseconds);
     }
 
     public Action clip(int timeInMilliseconds)
@@ -83,14 +88,14 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         return getTimedAction(this::wall, timeInMilliseconds);
     }
 
-    public Action frontHook(int timeInMilliseconds)
-    {
-        return getTimedAction(this::frontHook, timeInMilliseconds);
-    }
-
     public Action bucket(int timeInMilliseconds)
     {
         return getTimedAction(this::bucket, timeInMilliseconds);
+    }
+
+    public Action frontHook(int timeInMilliseconds)
+    {
+        return getTimedAction(this::frontHook, timeInMilliseconds);
     }
 
     public Action hookUp(int timeInMilliseconds)

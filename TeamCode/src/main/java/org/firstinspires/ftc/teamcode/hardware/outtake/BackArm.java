@@ -13,30 +13,25 @@ public class BackArm extends StageServoPair<BackArm.Stage>
 
     public enum Stage
     {
-        BUCKET, // From above.
         REST, // Perpendicular to ground.
         TRANSFER,
-        CLIP, // From under.
+        HOOK_UP, // (Almost} parallel to the ground.,
+        CLIP,
         WALL,
-        HOOK_UP
+        BUCKET
     }
 
     public BackArm(HardwareMap hardwareMap)
     {
         super(new StageServoPairBuilder<>(hardwareMap, "bal",
                 "bar", Stage.class, POSITION_DIFF)
-                .add(Stage.BUCKET, 1)
                 .add(Stage.REST, 0.051)
                 .add(Stage.TRANSFER, 0.38)
+                .add(Stage.HOOK_UP, 0.4)
                 .add(Stage.CLIP, 0.85)
                 .add(Stage.WALL, 0.85)
-                .add(Stage.HOOK_UP, 0.4)
+                .add(Stage.BUCKET, 1)
         );
-    }
-
-    public void bucket()
-    {
-        setStage(Stage.BUCKET);
     }
 
     public void rest()
@@ -49,6 +44,11 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         setStage(Stage.TRANSFER);
     }
 
+    public void hookUp()
+    {
+        setStage(Stage.HOOK_UP);
+    }
+
     public void clip()
     {
         setStage(Stage.CLIP);
@@ -59,14 +59,9 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         setStage(Stage.WALL);
     }
 
-    public void hookUp()
+    public void bucket()
     {
-        setStage(Stage.HOOK_UP);
-    }
-
-    public Action bucket(int timeInMilliseconds)
-    {
-        return getTimedAction(this::bucket, timeInMilliseconds);
+        setStage(Stage.BUCKET);
     }
 
     public Action rest(int timeInMilliseconds)
@@ -79,6 +74,11 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         return getTimedAction(this::transfer, timeInMilliseconds);
     }
 
+    public Action hookUp(int timeInMilliseconds)
+    {
+        return getTimedAction(this::hookUp, timeInMilliseconds);
+    }
+
     public Action clip(int timeInMilliseconds)
     {
         return getTimedAction(this::clip, timeInMilliseconds);
@@ -89,8 +89,8 @@ public class BackArm extends StageServoPair<BackArm.Stage>
         return getTimedAction(this::wall, timeInMilliseconds);
     }
 
-    public Action hookUp(int timeInMilliseconds)
+    public Action bucket(int timeInMilliseconds)
     {
-        return getTimedAction(this::hookUp, timeInMilliseconds);
+        return getTimedAction(this::bucket, timeInMilliseconds);
     }
 }

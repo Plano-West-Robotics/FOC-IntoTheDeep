@@ -15,9 +15,9 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
     {
         PROBE, // Parallel to ground; arm is outside of robot.
         EXTEND, // A little above parallel to ground; arm is outside of robot.
+        EXTEND_EXPERIMENTAL,
         UPRIGHT, // Perpendicular to ground.
         RETRACT, // Parallel to ground; arm is within the robot.
-        EXTEND_EXPERIMENTAL
     }
 
     public FrontArm(HardwareMap hardwareMap)
@@ -26,9 +26,9 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
                 (hardwareMap, "fal", "far", Stage.class, POSITION_DIFF)
                 .add(Stage.PROBE, 0.09)
                 .add(Stage.EXTEND, 0.25)
+                .add(Stage.EXTEND_EXPERIMENTAL, 0.2)
                 .add(Stage.UPRIGHT, 0.46)
-                .add(Stage.RETRACT, 0.80)
-                .add(Stage.EXTEND_EXPERIMENTAL, 0.20)
+                .add(Stage.RETRACT, 0.8)
         );
     }
 
@@ -65,6 +65,11 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
     public Action extend(int timeInMilliseconds)
     {
         return getTimedAction(this::extend, timeInMilliseconds);
+    }
+
+    public Action extendExperimental(int timeInMilliseconds)
+    {
+        return getTimedAction(this::extendExperimental, timeInMilliseconds);
     }
 
     public Action upright(int timeInMilliseconds)

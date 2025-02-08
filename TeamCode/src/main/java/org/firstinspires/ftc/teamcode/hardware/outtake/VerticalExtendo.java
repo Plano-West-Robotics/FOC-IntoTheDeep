@@ -23,6 +23,7 @@ public class VerticalExtendo extends Extendo
     public static final int HR_POSITION = 678; // High rung.
     public static final int WG_POSITION = 10; // Wall grab.
     public static final int CLEARANCE_POSITION = 500;
+    public static final int SPECIMEN_CLEARANCE_POSITION = 1000;
     public static final int SAFE_LOW = 20;
 
     public VerticalExtendo(HardwareMap hardwareMap)
@@ -139,4 +140,12 @@ public class VerticalExtendo extends Extendo
     {
         return isReached(HC3_POSITION);
     }
+
+    public void setSpecimenClearance()
+    { setPos(SPECIMEN_CLEARANCE_POSITION); }
+
+    public boolean reachedSpecimenClearance()
+    { return isReached(SPECIMEN_CLEARANCE_POSITION); }
+
+
 }

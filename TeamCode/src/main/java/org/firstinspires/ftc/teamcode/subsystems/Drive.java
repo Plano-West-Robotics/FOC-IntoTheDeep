@@ -68,4 +68,14 @@ public abstract class Drive
         double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
         drive(drive, strafe, turn);
     }
+
+    public void updateExperimental(Gamepads gamepads)
+    {
+        if (gamepads.withinThreshold(Analog.GP1_LEFT_TRIGGER, 0.6)) toggleSlowMode();
+
+        double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
+        double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
+        double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
+        drive(drive, strafe, turn);
+    }
 }

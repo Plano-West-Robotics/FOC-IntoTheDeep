@@ -19,7 +19,7 @@ public final class PinpointLocalizer implements Localizer {
 
     public static Params PARAMS = new Params();
 
-    private final GoBildaPinpointDriver driver;
+    public final GoBildaPinpointDriver driver;
     private Pose2d txWorldPinpoint;
     private Pose2d txPinpointRobot = new Pose2d(0, 0, 0);
 

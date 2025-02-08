@@ -25,19 +25,21 @@ also shouldn't have to press a second button for the claw to close and go back u
 
 Controls:
 A - intake to specimen sequence - if in intake mode, drop block on ground (should be done in the observation zone),
-go to wall pickup position for specimen without doing transfer of block (to pick up clipped specimen from wall)
+go to wall pickup position for specimen without doing transfer of block (to pick up clipped specimen from wall),
+if you hold it instead of letting it go it will go into intake mode instead of swapping to outtake mode
 B - complete transfer intake to outtake or outtake to intake (for bucket sequence and going back to intake mode)
 X - open/close outtake claw
-Y -  move the arm down and close the intake claw around the sample, then go back up - if pressed again reset intake
+Y -  when held it will move the arm down and hold it there, when you release it it will close the claw and move the arm back up
 
 Left and Right Bumpers - move swivel - only when in intake mode
 
-Right Trigger - move arm and elbow to front hook - after the slides finish moving up -
-pressing it again should move slides to the clip position and release claw
+Right Trigger - closes claw, moves slides up then moves arm and elbow to the front hooking pos -
+after the slides finish moving up -
+pressing it again should move slides to the clip position and release claw -
 pressing it again should move the slides and arm back to bucket position (to pickup another specimen from the wall)
 
-DPAD_UP - Vertical slides go to the bucket position - only operates in bucket mode
-DPAD_DOWN - Vertical slides go to the bottom - only operates in bucket mode (specimen mode has a different mechanism for going to the bottom)
+DPAD_UP - Vertical slides go to the bucket position - make sure you use this for the maximum bucket arm extension
+DPAD_DOWN - Vertical slides go to the bottom
 
 Left Stick Y - forward/backward movement
 Left Stick X - left/right strafing
@@ -60,6 +62,7 @@ public class ExperimentalTeleOp extends BaseTeleOp {
     public StateMachine experimentalFSM;
 
     public StateMachine specimenFSM;
+    public StateMachine intakeToDropFSM;
 
     @Override
     public void setup()
@@ -72,6 +75,7 @@ public class ExperimentalTeleOp extends BaseTeleOp {
         experimentalFSM = experimentalFSMClass.getGlobalMachines();
 
         specimenFSM = experimentalFSMClass.specimenFSM;
+        intakeToDropFSM = experimentalFSMClass.intakeToDropFSM;
 
         experimentalFSM.start();
     }
@@ -79,9 +83,10 @@ public class ExperimentalTeleOp extends BaseTeleOp {
     @Override
     public void run()
     {
-        drive.update(gamepads);
+        drive.updateExperimental(gamepads);
         experimentalFSM.update();
         telemetry.addData("Global State", experimentalFSM.getState());
         telemetry.addData("Specimen State", specimenFSM.getState());
+        telemetry.addData("Intake To Drop State", intakeToDropFSM.getState());
     }
 }

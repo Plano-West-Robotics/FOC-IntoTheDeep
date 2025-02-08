@@ -381,9 +381,9 @@ public class ExperimentalGlobalMachines
 
     public enum SpecimenStates
     {
-        GO_TO_HC2,
+        GO_TO_BELOW_HIGH_CHAMBER,
         WAIT_FOR_TRIGGER, // wait for trigger, allow for experimental slide movement
-        GO_TO_HC3,
+        GO_TO_ABOVE_HIGH_CHAMBER,
         OPEN_CLAW, // wait for trigger -> go to bucket || wait for B -> go to intake
         SPECIMEN_COMPLETE,
         FAST_EXIT
@@ -393,17 +393,17 @@ public class ExperimentalGlobalMachines
     {
         return new StateMachineBuilder()
                 .waitState(0.5)
-                .state(SpecimenStates.GO_TO_HC2)
+                .state(SpecimenStates.GO_TO_BELOW_HIGH_CHAMBER)
                 .onEnter(() -> outtake.getExtendo().setBelowHighChamber())
                 .transition(() -> (outtake.getExtendo().reachedBelowHighChamber()), SpecimenStates.WAIT_FOR_TRIGGER)
                 .onExit(() -> outtake.getExtendo().halt())
 
                 .state(SpecimenStates.WAIT_FOR_TRIGGER)
                 .loop(() -> outtake.updateExtendoPowerExperimental(gamepads))
-                .transition(() -> gamepads.withinThreshold(Analog.GP1_RIGHT_TRIGGER, triggerThreshold), SpecimenStates.GO_TO_HC3)
+                .transition(() -> gamepads.withinThreshold(Analog.GP1_RIGHT_TRIGGER, triggerThreshold), SpecimenStates.GO_TO_ABOVE_HIGH_CHAMBER)
                 .transition(() -> gamepads.justPressed(Button.GP1_B), SpecimenStates.FAST_EXIT)
 
-                .state(SpecimenStates.GO_TO_HC3)
+                .state(SpecimenStates.GO_TO_ABOVE_HIGH_CHAMBER)
                 .onEnter(() -> outtake.getExtendo().setAboveHighChamber())
                 .transition(() -> (outtake.getExtendo().reachedAboveHighChamber()), SpecimenStates.OPEN_CLAW)
                 .onExit(() -> outtake.getExtendo().halt())

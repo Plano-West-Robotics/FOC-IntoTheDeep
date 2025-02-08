@@ -568,8 +568,8 @@ public class ExperimentalGlobalMachines
                 .state(GlobalStates.INTAKE_TO_DROP)
                 .onEnter(() -> intakeToDropFSM.start())
                 .loop(() -> intakeToDropFSM.update())
-                .transition(() -> intakeToDropFSM.getState() == IntakeToDropStates.DROP_COMPLETE && gamepads.isPressed(Button.GP1_A), GlobalStates.INTAKE)
-                .transition(() -> intakeToDropFSM.getState() == IntakeToDropStates.DROP_COMPLETE, GlobalStates.DROP_TO_BUCKET)
+                .transition(() -> intakeToDropFSM.getState() == IntakeToDropStates.DROP_COMPLETE, GlobalStates.INTAKE)
+                .transition(() -> intakeToDropFSM.getState() == IntakeToDropStates.DROP_COMPLETE && gamepads.isPressed(Button.GP1_A), GlobalStates.DROP_TO_BUCKET)
                 .onExit(() -> {
                     intakeToDropFSM.stop();
                     intakeToDropFSM.reset();

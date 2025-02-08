@@ -32,6 +32,7 @@ public class GamepadDebugger extends OpMode
         {
             telemetry.addData(buttonValue.name(), gamepads.isPressed(buttonValue));
         }
+        gamepads.update(gamepad1, gamepad2);
         telemetry.update();
     }
 }

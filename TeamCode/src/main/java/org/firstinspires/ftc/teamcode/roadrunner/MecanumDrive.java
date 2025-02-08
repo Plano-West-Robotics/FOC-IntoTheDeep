@@ -71,75 +71,14 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         // drive model parameters
-        public double inPerTick = 0.002;
-        public double lateralInPerTick = 0.0011602700303631392;
-        public double trackWidthTicks = 6401.910155600542;
+        public double inPerTick = 1;
+        public double lateralInPerTick = inPerTick;
+        public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.6380856224829512;
-        public double kV = 0.00025360947398706077;
-        public double kA = 0.00005;
-
-        // path profile parameters (in inches)
-        public double maxWheelVel = 45;
-        public double minProfileAccel = -35;
-        public double maxProfileAccel = 35;
-
-        // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
-        public double maxAngAccel = Math.PI;
-
-        // path controller gains
-        public double axialGain = 4.6;
-        public double lateralGain = 3.5;
-        public double headingGain = 3.3; // shared with turn
-
-        public double axialVelGain = 0.0;
-        public double lateralVelGain = 0.0;
-        public double headingVelGain = 0.0; // shared with turn
-
-        /*
-        Pre-experimental testing values:
-        public double inPerTick = 0.002;
-        public double lateralInPerTick = 0.0011602700303631392;
-        public double trackWidthTicks = 6401.910155600542;
-
-        // feedforward parameters (in tick units)
-        public double kS = 1.6380856224829512;
-        public double kV = 0.00025360947398706077;
-        public double kA = 0.00005;
-
-        // path profile parameters (in inches)
-        public double maxWheelVel = 45;
-        public double minProfileAccel = -35;
-        public double maxProfileAccel = 35;
-
-        // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
-        public double maxAngAccel = Math.PI;
-
-        // path controller gains
-        public double axialGain = 4.6;
-        public double lateralGain = 3.5;
-        public double headingGain = 3.3; // shared with turn
-
-        public double axialVelGain = 0.0;
-        public double lateralVelGain = 0.0;
-        public double headingVelGain = 0.0; // shared with turn
-         */
-
-
-
-        /*
-        Experimental testing values:
-        public double inPerTick = 0.002;
-        public double lateralInPerTick = 0.0011602700303631392;
-        public double trackWidthTicks = 6401.910155600542;
-
-        // feedforward parameters (in tick units)
-        public double kS = TBD;
-        public double kV = TBD;
-        public double kA = TBD;
+        public double kS = 0;
+        public double kV = 0;
+        public double kA = 0;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 70;
@@ -151,14 +90,13 @@ public final class MecanumDrive {
         public double maxAngAccel = 5;
 
         // path controller gains
-        public double axialGain = TBD;
-        public double lateralGain = TBD;
-        public double headingGain = TBD; // shared with turn
+        public double axialGain = 0.0;
+        public double lateralGain = 0.0;
+        public double headingGain = 0.0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
         public double headingVelGain = 0.0; // shared with turn
-         */
     }
 
     public static Params PARAMS = new Params();
@@ -317,7 +255,7 @@ public final class MecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        localizer = new TwoDeadWheelLocalizer(hardwareMap, lazyImu.get(), PARAMS.inPerTick, pose);
+        localizer = new PinpointLocalizer(hardwareMap, PARAMS.inPerTick, pose);
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
@@ -523,14 +461,14 @@ public final class MecanumDrive {
     public PoseVelocity2d updatePoseEstimate() {
         PoseVelocity2d vel = localizer.update();
         poseHistory.add(localizer.getPose());
-
+        
         while (poseHistory.size() > 100) {
             poseHistory.removeFirst();
         }
 
         estimatedPoseWriter.write(new PoseMessage(localizer.getPose()));
-
-
+        
+        
         return vel;
     }
 

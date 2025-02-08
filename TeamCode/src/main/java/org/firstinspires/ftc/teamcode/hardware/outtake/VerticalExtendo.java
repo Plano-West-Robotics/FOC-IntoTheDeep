@@ -14,7 +14,7 @@ public class VerticalExtendo extends Extendo
 
     // Auto VerticalExtendo parameters.
     public static final int LB_POSITION = 123; // Low basket.
-    public static final int HB_POSITION = 234; // High basket.
+    public static final int HB_POSITION = 4100; // High basket.
     public static final int LC_POSITION = 345; // Low chamber.
     public static final int HC_POSITION = 2100; // High chamber.
     public static final int HC2_POSITION = 1200; // High chamber.
@@ -22,6 +22,9 @@ public class VerticalExtendo extends Extendo
     public static final int LR_POSITION = 567; // Low rung.
     public static final int HR_POSITION = 678; // High rung.
     public static final int WG_POSITION = 10; // Wall grab.
+    public static final int CLEARANCE_POSITION = 500;
+    public static final int SPECIMEN_CLEARANCE_POSITION = 1000;
+    public static final int SAFE_LOW = 20;
 
     public VerticalExtendo(HardwareMap hardwareMap)
     {
@@ -87,4 +90,62 @@ public class VerticalExtendo extends Extendo
     {
         return getSlideAction(WG_POSITION);
     }
+
+    public void setHighBucket()
+    {
+        setPos(HB_POSITION);
+    }
+
+    public boolean reachedHighBucket()
+    {
+        return isReached(HB_POSITION);
+    }
+
+    public void setBucketClearance()
+    {
+        setPos(CLEARANCE_POSITION);
+    }
+
+    public boolean reachedBucketClearance()
+    {
+        return isReached(CLEARANCE_POSITION);
+    }
+
+    public void setBottom()
+    {
+        setPos(SAFE_LOW);
+    }
+
+    public boolean reachedBottom()
+    {
+        return isReached(SAFE_LOW);
+    }
+
+    public void setHC2()
+    {
+        setPos(HC2_POSITION);
+    }
+
+    public boolean reachedHC2()
+    {
+        return isReached(HC2_POSITION);
+    }
+
+    public void setHC3()
+    {
+        setPos(HC3_POSITION);
+    }
+
+    public boolean reachedHC3()
+    {
+        return isReached(HC3_POSITION);
+    }
+
+    public void setSpecimenClearance()
+    { setPos(SPECIMEN_CLEARANCE_POSITION); }
+
+    public boolean reachedSpecimenClearance()
+    { return isReached(SPECIMEN_CLEARANCE_POSITION); }
+
+
 }

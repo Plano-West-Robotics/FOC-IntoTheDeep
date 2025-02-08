@@ -29,6 +29,11 @@ public class Intake
         extendo.setPower(gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y));
     }
 
+    public void updateExtendoPowerExperimental(Gamepads gamepads)
+    {
+        extendo.setPower(gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_Y));
+    }
+
     public void updateClaw(Gamepads gamepads)
     {
         if (gamepads.justPressed(Button.GP2_X))
@@ -42,6 +47,12 @@ public class Intake
     {
         if (gamepads.justPressed(Button.GP2_LEFT_BUMPER)) swivel.rotateCCW();
         else if (gamepads.justPressed(Button.GP2_RIGHT_BUMPER)) swivel.rotateCW();
+    }
+
+    public void updateSwivelExperimental(Gamepads gamepads)
+    {
+        if (gamepads.justPressed(Button.GP1_LEFT_BUMPER)) swivel.rotateCCW();
+        else if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) swivel.rotateCW();
     }
 
     public HorizontalExtendo getExtendo()

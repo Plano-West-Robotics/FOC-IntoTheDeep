@@ -17,16 +17,18 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
         EXTEND, // A little above parallel to ground; arm is outside of robot.
         UPRIGHT, // Perpendicular to ground.
         RETRACT, // Parallel to ground; arm is within the robot.
+        EXTEND_EXPERIMENTAL
     }
 
     public FrontArm(HardwareMap hardwareMap)
     {
-        super(new StageServoPairBuilder<>
+        super (new StageServoPairBuilder<>
                 (hardwareMap, "fal", "far", Stage.class, POSITION_DIFF)
-                .add(Stage.PROBE, 0.11)
+                .add(Stage.PROBE, 0.09)
                 .add(Stage.EXTEND, 0.25)
                 .add(Stage.UPRIGHT, 0.46)
                 .add(Stage.RETRACT, 0.80)
+                .add(Stage.EXTEND_EXPERIMENTAL, 0.20)
         );
     }
 
@@ -38,6 +40,11 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
     public void extend()
     {
         setStage(Stage.EXTEND);
+    }
+
+    public void extendExperimental()
+    {
+        setStage(Stage.EXTEND_EXPERIMENTAL);
     }
 
     public void upright()

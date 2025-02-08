@@ -25,11 +25,11 @@ public class BackArm extends StageServoPair<BackArm.Stage>
     {
         super(new StageServoPairBuilder<>(hardwareMap, "bal",
                 "bar", Stage.class, POSITION_DIFF)
-                .add(Stage.BUCKET, 0.03)
-                .add(Stage.REST, 0.16)
-                .add(Stage.TRANSFER, 0.46)
-                .add(Stage.CLIP, 0.975)
-                .add(Stage.WALL, 1)
+                .add(Stage.BUCKET, 1)
+                .add(Stage.REST, 0.051)
+                .add(Stage.TRANSFER, 0.38)
+                .add(Stage.CLIP, 0.85)
+                .add(Stage.WALL, 0.85)
                 .add(Stage.HOOK_UP, 0.4)
         );
     }

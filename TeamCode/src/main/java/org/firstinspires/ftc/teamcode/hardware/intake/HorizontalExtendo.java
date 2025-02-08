@@ -7,18 +7,20 @@ import org.firstinspires.ftc.teamcode.hardware.base.Extendo;
 
 public class HorizontalExtendo extends Extendo
 {
-    public static final double P = 0.0001;
+    public static final double P = 0.002;
     public static final double I = 0;
     public static final double D = 0.00002;
     public static final double F = 0;
 
     // TeleOp positions.
-    public static final int RETRACT_THRESHOLD = 350;
-    public static final int EXTEND_THRESHOLD = 430; // Must be greater than RETRACT_THRESHOLD.
+    public static final int RETRACT_THRESHOLD = 200;
+    public static final int EXTEND_THRESHOLD = 220; // Must be greater than RETRACT_THRESHOLD.
 
     // Auto positions.
     public static final int RETRACT_POSITION = 30;
     public static final int EXTEND_POSITION = 800;
+
+    public static final int EXTEND_POSITION_EXP = 300;
 
     public HorizontalExtendo(HardwareMap hardwareMap)
     {
@@ -45,6 +47,12 @@ public class HorizontalExtendo extends Extendo
         return getAveragePosition() > EXTEND_THRESHOLD;
     }
 
+    @Override
+    public boolean isRetracted()
+    {
+        return getAveragePosition() < (RETRACT_POSITION + 50);
+    }
+
     public Action retract()
     {
         return getSlideAction(RETRACT_POSITION);
@@ -53,5 +61,15 @@ public class HorizontalExtendo extends Extendo
     public Action extend()
     {
         return getSlideAction(EXTEND_POSITION);
+    }
+
+    public void setRetract()
+    {
+        setPos(RETRACT_POSITION);
+    }
+
+    public boolean reachedRetract()
+    {
+        return isReached(RETRACT_POSITION);
     }
 }

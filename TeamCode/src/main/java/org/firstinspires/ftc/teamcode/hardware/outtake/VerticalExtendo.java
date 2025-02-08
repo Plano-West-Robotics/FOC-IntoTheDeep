@@ -13,18 +13,18 @@ public class VerticalExtendo extends Extendo
     public static final double F = 0;
 
     // Auto VerticalExtendo parameters.
-    public static final int LB_POSITION = 123; // Low basket.
     public static final int HB_POSITION = 4100; // High basket.
-    public static final int LC_POSITION = 345; // Low chamber.
+    public static final int HC3_POSITION = 2200; // High chamber.
     public static final int HC_POSITION = 2100; // High chamber.
     public static final int HC2_POSITION = 1200; // High chamber.
-    public static final int HC3_POSITION = 2200; // High chamber.
-    public static final int LR_POSITION = 567; // Low rung.
-    public static final int HR_POSITION = 678; // High rung.
-    public static final int WG_POSITION = 10; // Wall grab.
-    public static final int CLEARANCE_POSITION = 500;
     public static final int SPECIMEN_CLEARANCE_POSITION = 1000;
+    public static final int HR_POSITION = 678; // High rung.
+    public static final int LR_POSITION = 567; // Low rung.
+    public static final int CLEARANCE_POSITION = 500;
+    public static final int LC_POSITION = 345; // Low chamber.
+    public static final int LB_POSITION = 123; // Low basket.
     public static final int SAFE_LOW = 20;
+    public static final int WG_POSITION = 10; // Wall grab.
 
     public VerticalExtendo(HardwareMap hardwareMap)
     {

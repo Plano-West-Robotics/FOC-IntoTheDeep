@@ -53,16 +53,6 @@ public class HorizontalExtendo extends Extendo
         return getAveragePosition() < (RETRACT_POSITION + 50);
     }
 
-    public Action retract()
-    {
-        return getSlideAction(RETRACT_POSITION);
-    }
-
-    public Action extend()
-    {
-        return getSlideAction(EXTEND_POSITION);
-    }
-
     public void setRetract()
     {
         setPos(RETRACT_POSITION);
@@ -71,5 +61,15 @@ public class HorizontalExtendo extends Extendo
     public boolean reachedRetract()
     {
         return isReached(RETRACT_POSITION);
+    }
+
+    public Action retract()
+    {
+        return getSlideAction(RETRACT_POSITION);
+    }
+
+    public Action extend()
+    {
+        return getSlideAction(EXTEND_POSITION);
     }
 }

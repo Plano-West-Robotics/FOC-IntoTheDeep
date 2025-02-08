@@ -18,8 +18,8 @@ public abstract class Drive
         public static double regularSpeed = 0.85;
         public static double regularTurnSpeed = 0.7;
 
-        public static double slowSpeed = 0.2;
-        public static double slowTurnSpeed = 0.4;
+        public static double slowSpeed = 0.38;
+        public static double slowTurnSpeed = 0.55;
     }
 
     public Drive(Hardware hardware)
@@ -71,7 +71,7 @@ public abstract class Drive
 
     public void updateExperimental(Gamepads gamepads)
     {
-        if (gamepads.withinThreshold(Analog.GP1_LEFT_TRIGGER, 0.6)) toggleSlowMode();
+        if (gamepads.justEnteredThreshold(Analog.GP1_LEFT_TRIGGER, 0.4)) toggleSlowMode();
 
         double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
         double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);

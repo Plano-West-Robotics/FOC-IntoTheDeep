@@ -25,8 +25,8 @@ also shouldn't have to press a second button for the claw to close and go back u
 
 Controls:
 A - intake to specimen sequence - if in intake mode, drop block on ground (should be done in the observation zone),
-go to wall pickup position for specimen without doing transfer of block (to pick up clipped specimen from wall),
-if you hold it instead of letting it go it will go into intake mode instead of swapping to outtake mode
+If you hold it, the bot will go to wall pickup position for specimen without doing transfer of block (to pick up clipped specimen from wall),
+If you only tap it instead of holding it it will go back to intake mode so you can pick up more samples from the submersible
 B - complete transfer intake to outtake or outtake to intake (for bucket sequence and going back to intake mode)
 X - open/close outtake claw
 Y -  when held it will move the arm down and hold it there, when you release it it will close the claw and move the arm back up
@@ -38,6 +38,8 @@ after the slides finish moving up -
 pressing it again should move slides to the clip position and release claw -
 pressing it again should move the slides and arm back to bucket position (to pickup another specimen from the wall)
 
+Left Trigger - toggle slow mode
+
 DPAD_UP - Vertical slides go to the bucket position - make sure you use this for the maximum bucket arm extension
 DPAD_DOWN - Vertical slides go to the bottom
 
@@ -48,8 +50,6 @@ Right Stick Y - intake slides or outtake slides, depending on the state
 
 Robot Centric - more intuitive (and works better than the field centric atm) - the robot should never be turned around anyway
  */
-
-// TODO: NEED TO FIND THE RIGHT SPECIMEN AND BUCKET POSITIONS
 
 @TeleOp (name = "Experimental")
 public class ExperimentalTeleOp extends BaseTeleOp {

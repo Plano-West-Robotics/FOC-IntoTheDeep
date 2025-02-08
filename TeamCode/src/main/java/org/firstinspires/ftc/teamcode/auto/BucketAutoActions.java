@@ -45,7 +45,7 @@ public class BucketAutoActions {
     public Action setOuttakeClawClose() { return outtake.getClaw().close(120); };
     public Action setOuttakeElbowBucket() { return outtake.getElbow().bucket(250); };
     public Action setOuttakeArmBucket() { return outtake.getArm().bucket(450); };
-    public Action setOuttakeSlidesToBucket() { return outtake.getExtendo().highBasket(); }; // TODO: TUNE THE OUTTAKE SLIDES TO BE FASTER
+    public Action setOuttakeSlidesToBucket() { return outtake.getExtendo().highBucket(); }; // TODO: TUNE THE OUTTAKE SLIDES TO BE FASTER
     public Action setOuttakeClawOpen() { return outtake.getClaw().open(120); };
     public Action setOuttakeSlidesToBottom() { return outtake.getExtendo().lowerFully(); };
     public Action setOuttakeElbowRest() { return outtake.getElbow().transfer(250); };

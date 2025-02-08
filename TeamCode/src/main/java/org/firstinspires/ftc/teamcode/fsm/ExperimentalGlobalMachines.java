@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.fsm;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -395,8 +394,8 @@ public class ExperimentalGlobalMachines
         return new StateMachineBuilder()
                 .waitState(0.5)
                 .state(SpecimenStates.GO_TO_HC2)
-                .onEnter(() -> outtake.getExtendo().setHC2())
-                .transition(() -> (outtake.getExtendo().reachedHC2()), SpecimenStates.WAIT_FOR_TRIGGER)
+                .onEnter(() -> outtake.getExtendo().setBelowHighChamber())
+                .transition(() -> (outtake.getExtendo().reachedBelowHighChamber()), SpecimenStates.WAIT_FOR_TRIGGER)
                 .onExit(() -> outtake.getExtendo().halt())
 
                 .state(SpecimenStates.WAIT_FOR_TRIGGER)
@@ -405,8 +404,8 @@ public class ExperimentalGlobalMachines
                 .transition(() -> gamepads.justPressed(Button.GP1_B), SpecimenStates.FAST_EXIT)
 
                 .state(SpecimenStates.GO_TO_HC3)
-                .onEnter(() -> outtake.getExtendo().setHC3())
-                .transition(() -> (outtake.getExtendo().reachedHC3()), SpecimenStates.OPEN_CLAW)
+                .onEnter(() -> outtake.getExtendo().setAboveHighChamber())
+                .transition(() -> (outtake.getExtendo().reachedAboveHighChamber()), SpecimenStates.OPEN_CLAW)
                 .onExit(() -> outtake.getExtendo().halt())
 
                 .state(SpecimenStates.OPEN_CLAW)

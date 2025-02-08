@@ -12,19 +12,16 @@ public class VerticalExtendo extends Extendo
     public static final double D = 0.00015;
     public static final double F = 0;
 
-    // Auto VerticalExtendo parameters.
-    public static final int HB_POSITION = 4100; // High basket.
-    public static final int HC3_POSITION = 2200; // High chamber.
-    public static final int HC_POSITION = 2100; // High chamber.
-    public static final int HC2_POSITION = 1200; // High chamber.
-    public static final int SPECIMEN_CLEARANCE_POSITION = 1000;
-    public static final int HR_POSITION = 678; // High rung.
-    public static final int LR_POSITION = 567; // Low rung.
-    public static final int CLEARANCE_POSITION = 500;
-    public static final int LC_POSITION = 345; // Low chamber.
-    public static final int LB_POSITION = 123; // Low basket.
-    public static final int SAFE_LOW = 20;
-    public static final int WG_POSITION = 10; // Wall grab.
+    public static class Positions
+    {
+        public static final int HIGH_BUCKET = 4100;
+        public static final int ABOVE_HIGH_CHAMBER = 2200;
+        public static final int BELOW_HIGH_CHAMBER = 1200;
+        public static final int SPECIMEN_CLEARANCE = 1000;
+        public static final int BUCKET_CLEARANCE = 500;
+        public static final int BOTTOM = 20; // "Safe" low position.
+        public static final int FULLY_LOW = 10;
+    }
 
     public VerticalExtendo(HardwareMap hardwareMap)
     {
@@ -41,111 +38,93 @@ public class VerticalExtendo extends Extendo
         getRight().forward();
     }
 
-    public Action lowBasket()
-    {
-        return getSlideAction(LB_POSITION);
-    }
-
-    public Action highBasket()
-    {
-        return getSlideAction(HB_POSITION);
-    }
-
-    public Action lowChamber()
-    {
-        return getSlideAction(LC_POSITION);
-    }
-
-    public Action highChamber()
-    {
-        return getSlideAction(HC_POSITION);
-    }
-
-    public Action lowRung()
-    {
-        return getSlideAction(LR_POSITION);
-    }
-
-    public Action highRung()
-    {
-        return getSlideAction(HR_POSITION);
-    }
-
-    public Action wallGrab()
-    {
-        return getSlideAction(WG_POSITION);
-    }
-
-    public Action hc2()
-    {
-        return getSlideAction(HC2_POSITION);
-    }
-
-    public Action hc3()
-    {
-        return getSlideAction(HC3_POSITION);
-    }
-
-    public Action lowerFully()
-    {
-        return getSlideAction(WG_POSITION);
-    }
-
     public void setHighBucket()
     {
-        setPos(HB_POSITION);
+        setPos(Positions.HIGH_BUCKET);
     }
 
     public boolean reachedHighBucket()
     {
-        return isReached(HB_POSITION);
+        return isReached(Positions.HIGH_BUCKET);
+    }
+
+    public void setAboveHighChamber()
+    {
+        setPos(Positions.ABOVE_HIGH_CHAMBER);
+    }
+
+    public boolean reachedAboveHighChamber()
+    {
+        return isReached(Positions.ABOVE_HIGH_CHAMBER);
+    }
+
+    public void setBelowHighChamber()
+    {
+        setPos(Positions.BELOW_HIGH_CHAMBER);
+    }
+
+    public boolean reachedBelowHighChamber()
+    {
+        return isReached(Positions.BELOW_HIGH_CHAMBER);
+    }
+
+    public void setSpecimenClearance()
+    {
+        setPos(Positions.SPECIMEN_CLEARANCE);
+    }
+
+    public boolean reachedSpecimenClearance()
+    {
+        return isReached(Positions.SPECIMEN_CLEARANCE);
     }
 
     public void setBucketClearance()
     {
-        setPos(CLEARANCE_POSITION);
+        setPos(Positions.BUCKET_CLEARANCE);
     }
 
     public boolean reachedBucketClearance()
     {
-        return isReached(CLEARANCE_POSITION);
+        return isReached(Positions.BUCKET_CLEARANCE);
     }
 
     public void setBottom()
     {
-        setPos(SAFE_LOW);
+        setPos(Positions.BOTTOM);
     }
 
     public boolean reachedBottom()
     {
-        return isReached(SAFE_LOW);
+        return isReached(Positions.BOTTOM);
     }
 
-    public void setHC2()
+    public void setFullyLow()
     {
-        setPos(HC2_POSITION);
+        setPos(Positions.FULLY_LOW);
     }
 
-    public boolean reachedHC2()
+    public boolean reachedFullyLow()
     {
-        return isReached(HC2_POSITION);
+        return isReached(Positions.FULLY_LOW);
     }
 
-    public void setHC3()
+    public Action highBucket()
     {
-        setPos(HC3_POSITION);
+        return getSlideAction(Positions.HIGH_BUCKET);
     }
 
-    public boolean reachedHC3()
+    public Action aboveHighChamber()
     {
-        return isReached(HC3_POSITION);
+        return getSlideAction(Positions.ABOVE_HIGH_CHAMBER);
     }
 
-    public void setSpecimenClearance()
-    { setPos(SPECIMEN_CLEARANCE_POSITION); }
+    public Action belowHighChamber()
+    {
+        return getSlideAction(Positions.BELOW_HIGH_CHAMBER);
+    }
 
-    public boolean reachedSpecimenClearance()
-    { return isReached(SPECIMEN_CLEARANCE_POSITION); }
-
-
+    public Action lowerFully()
+    {
+        return getSlideAction(Positions.FULLY_LOW);
+    }
 }

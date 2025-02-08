@@ -32,8 +32,8 @@ public class SpecimenAutoActionsExperimental {
     public Action setElbowHook(){ return outtake.getElbow().frontHook(300); }
     public Action setArmHook(){ return outtake.getArm().transfer(450); }
     public Action setIntakeRetract(){ return intake.getArm().retract(400); }
-    public Action setSlidesToUnderChamber(){ return outtake.getExtendo().hc2(); }
-    public Action setSlidesToAboveChamber(){ return outtake.getExtendo().hc3(); }
+    public Action setSlidesToUnderChamber(){ return outtake.getExtendo().belowHighChamber(); }
+    public Action setSlidesToAboveChamber(){ return outtake.getExtendo().aboveHighChamber(); }
     public Action setBackClawOpen(){ return outtake.getClaw().open(60); } // TODO: Same
     public Action setElbowWall(){ return outtake.getElbow().wall(300); }
     public Action setArmWall(){ return outtake.getArm().wall(350); }

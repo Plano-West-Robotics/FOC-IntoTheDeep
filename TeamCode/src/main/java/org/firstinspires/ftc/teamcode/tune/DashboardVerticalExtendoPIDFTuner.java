@@ -7,20 +7,20 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.hardware.intake.HorizontalExtendo;
+import org.firstinspires.ftc.teamcode.hardware.outtake.VerticalExtendo;
 
 @Config
 @TeleOp(group = "Tune")
-public class HorizontalExtendoPIDFTuner extends OpMode
+public class DashboardVerticalExtendoPIDFTuner extends OpMode
 {
-    public static double p = HorizontalExtendo.P;
-    public static double i = HorizontalExtendo.I;
-    public static double d = HorizontalExtendo.D;
-    public static double f = HorizontalExtendo.F;
+    public static double p = VerticalExtendo.P;
+    public static double i = VerticalExtendo.I;
+    public static double d = VerticalExtendo.D;
+    public static double f = VerticalExtendo.F;
     public static int targetPosition = 0;
 
     public PIDFController controller;
-    public HorizontalExtendo extendo;
+    public VerticalExtendo extendo;
     public double currentPosition, controllerOutput;
 
     @Override
@@ -28,7 +28,7 @@ public class HorizontalExtendoPIDFTuner extends OpMode
     {
         controller = new PIDFController(p, i, d, f);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        extendo = new HorizontalExtendo(hardwareMap);
+        extendo = new VerticalExtendo(hardwareMap);
     }
 
     @Override

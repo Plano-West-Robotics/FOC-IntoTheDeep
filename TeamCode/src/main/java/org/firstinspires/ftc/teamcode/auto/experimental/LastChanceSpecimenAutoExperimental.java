@@ -9,15 +9,15 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.auto.SpecimenAutoActions;
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
-// TODO: RETUNE THE ODO POD POSITIONS
 
 @Config
-@Autonomous(name = "Specimen Auto Experimental **(DO NOT CHOOSE)**")
+@Autonomous(name = "Specimen Auto2", group = "CompPrograms")
 public class LastChanceSpecimenAutoExperimental extends LinearOpMode {
 
     Hardware hardware;
@@ -36,7 +36,6 @@ public class LastChanceSpecimenAutoExperimental extends LinearOpMode {
 
         hardware = new Hardware(hardwareMap);
 
-        /* TODO: Pay attention to the new starting position */
         initialPose = new Pose2d(0, -63, Math.toRadians(90));
 
         drive = new MecanumDrive(hardwareMap, initialPose);

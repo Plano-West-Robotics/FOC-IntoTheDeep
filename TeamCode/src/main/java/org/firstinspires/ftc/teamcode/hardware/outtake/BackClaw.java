@@ -22,7 +22,7 @@ public class BackClaw extends StageServoMono<BackClaw.Stage>
         super(new StageServoMonoBuilder<>(hardwareMap, "bc", Stage.class)
                 .add(Stage.OPEN, 0.35)
                 .add(Stage.BUCKET_OPEN, 0.35)
-                .add(Stage.CLOSE, 0.54)
+                .add(Stage.CLOSE, 0.58)
                 .add(Stage.TIGHT_CLOSE, 0.6)
         );
     }

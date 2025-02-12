@@ -37,6 +37,7 @@ public class DashboardAngularPIDFTuner extends OpMode
         gamepads = new Gamepads(gamepad1, gamepad2);
         controller = new PIDFController(p, i, d, f);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        drive.imu.resetYaw();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class DashboardAngularPIDFTuner extends OpMode
             // If targetAngle is negative, add 360, otherwise (targetAngle is positive) subtract 360.
             targetAngle -= Math.signum(targetAngle) * 360;
 
-        double rx = controller.calculate(currentAngle, targetAngle);
+        double rx = -controller.calculate(currentAngle, targetAngle);
         drive.drive(0, 0, rx);
 
         telemetry.addData("Current Angle (degrees)", currentAngle);

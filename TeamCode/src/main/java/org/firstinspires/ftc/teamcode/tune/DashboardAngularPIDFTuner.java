@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.control.Analog;
@@ -21,9 +22,7 @@ public class DashboardAngularPIDFTuner extends OpMode
     public static double i = 0;
     public static double d = 0;
     public static double f = 0;
-
-    public static double angVelControlOverrideThreshold = 0.01;
-    public static double minAngVel = 0.0015;
+    public static double targetAngle = 0;
 
     public Hardware hardware;
     public FieldCentricDrive drive;
@@ -45,22 +44,24 @@ public class DashboardAngularPIDFTuner extends OpMode
     {
         controller.setPIDF(p, i, d, f);
 
-        double x = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
-        double y = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
+        double currentAngle = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        targetAngle = Range.clip(targetAngle, -180, 180);
 
-        double rx = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
-        double currentAngVel = drive.imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
-        if (Math.abs(currentAngVel) <= minAngVel) currentAngVel = 0;
-        double targetAngVel = Math.abs(rx) > angVelControlOverrideThreshold ? currentAngVel : 0;
+        if (Math.abs(targetAngle - currentAngle) > 180)
+            // If targetAngle is negative, add 360, otherwise (targetAngle is positive) subtract 360.
+            targetAngle -= Math.signum(targetAngle) * 360;
 
-        double rxCorrection = controller.calculate(currentAngVel, targetAngVel);
-        rx -= rxCorrection;
+        double rx = controller.calculate(currentAngle, targetAngle);
+        drive.drive(0, 0, rx);
 
-        drive.drive(y, x, rx);
-
+        telemetry.addData("Current Angle (degrees)", currentAngle);
+        telemetry.addData("Target Angle (degrees)", targetAngle);
         telemetry.addData("RX", rx);
-        telemetry.addData("Current Angular Velocity (rad/sec)", currentAngVel);
-        telemetry.addData("Target Angular Velocity (rad/sec)", targetAngVel);
+
+        telemetry.addData("FR Power", drive.drivetrain.fr.getPower());
+        telemetry.addData("FL Power", drive.drivetrain.fl.getPower());
+        telemetry.addData("BR Power", drive.drivetrain.br.getPower());
+        telemetry.addData("BL Power", drive.drivetrain.bl.getPower());
 
         gamepads.update(gamepad1, gamepad2);
         telemetry.update();

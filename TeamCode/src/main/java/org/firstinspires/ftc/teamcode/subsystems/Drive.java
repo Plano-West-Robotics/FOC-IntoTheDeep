@@ -77,6 +77,14 @@ public abstract class Drive
         double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
         double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
 
+        if (drive == 0 && strafe == 0 && turn == 0)
+        {
+            drive = gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y);
+            strafe = gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_X);
+            turn = gamepads.getAnalogValue(Analog.GP2_RIGHT_STICK_X);
+        }
+
+        /*
         if (!gamepads.withinThreshold(Analog.GP1_LEFT_STICK_Y, 0.05))
             drive = gamepads.getAnalogValue(Analog.GP2_LEFT_STICK_Y);
 
@@ -85,7 +93,7 @@ public abstract class Drive
 
         if (!gamepads.withinThreshold(Analog.GP1_RIGHT_STICK_X, 0.05))
             turn = gamepads.getAnalogValue(Analog.GP2_RIGHT_STICK_X);
-
+*/
         drive(drive, strafe, turn);
     }
 }

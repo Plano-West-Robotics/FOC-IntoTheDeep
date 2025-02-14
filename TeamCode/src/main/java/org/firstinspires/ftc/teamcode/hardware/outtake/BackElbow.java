@@ -24,9 +24,9 @@ public class BackElbow extends StageServoMono<BackElbow.Stage>
         super(new StageServoMonoBuilder<>(hardwareMap, "be", Stage.class)
                 .add(Stage.TRANSFER, 0.57)
                 .add(Stage.SQUEEZE, 0.5)
-                .add(Stage.CLIP, 0.78)
-                .add(Stage.WALL, 0.78)
-                .add(Stage.BUCKET, 0.87)
+                .add(Stage.CLIP, 0.85)
+                .add(Stage.WALL, 0.85)
+                .add(Stage.BUCKET, 0.85)
                 .add(Stage.FRONT_HOOK, 0.92)
         );
     }

@@ -38,13 +38,11 @@ public class FieldCentricDrive extends Drive
     @Override
     public void update(Gamepads gamepads)
     {
-        if (gamepads.justPressed(Button.GP1_RIGHT_BUMPER)) toggleSlowMode();
-
-        if (gamepads.justPressed(Button.GP1_OPTIONS)) imu.resetYaw();
+        if (gamepads.justPressed(Button.GP1_DPAD_RIGHT)) imu.resetYaw();
 
         double drive = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_Y);
         double strafe = gamepads.getAnalogValue(Analog.GP1_LEFT_STICK_X);
         double turn = gamepads.getAnalogValue(Analog.GP1_RIGHT_STICK_X);
-        drive(drive, strafe, turn);
+        drive(strafe, drive, turn);
     }
 }

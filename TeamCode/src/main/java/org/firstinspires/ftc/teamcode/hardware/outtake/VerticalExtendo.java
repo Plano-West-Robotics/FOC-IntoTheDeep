@@ -125,6 +125,6 @@ public class VerticalExtendo extends Extendo
 
     public Action lowerFully()
     {
-        return getSlideAction(Positions.FULLY_LOW);
+        return getSlideAction(Positions.BOTTOM);
     }
 }

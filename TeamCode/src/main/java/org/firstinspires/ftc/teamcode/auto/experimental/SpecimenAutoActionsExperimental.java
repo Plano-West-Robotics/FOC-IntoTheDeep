@@ -164,7 +164,7 @@ public class SpecimenAutoActionsExperimental {
                 .splineToConstantHeading(new Vector2d(49, -16), tR(90), new TranslationalVelConstraint(20))
                 .splineToConstantHeading(new Vector2d(52, -10), 0, new TranslationalVelConstraint(20))
                 .splineToConstantHeading(new Vector2d(57.5, -14), tR(270))
-                .splineToConstantHeading(new Vector2d(57.5, -48), tR(270), new TranslationalVelConstraint(18));
+                .splineToConstantHeading(new Vector2d(57.5, -48), tR(270), new TranslationalVelConstraint(24));
                 /*
                 .splineToConstantHeading(new Vector2d(54, -14), tR(90))
                 .splineToConstantHeading(new Vector2d(57, -10), tR(0))
@@ -182,10 +182,10 @@ public class SpecimenAutoActionsExperimental {
         hookFromPickupWithTimedElbowAndArmPath1 = drive.actionBuilder(pickupFromPushingPathFinalPose)
                 .afterTime(0.7, new ParallelAction(setElbowHook(), setArmHook()))
                 .setTangent(tR(90))
-                .strafeToConstantHeading(new Vector2d(-2, -26), new TranslationalVelConstraint(25));
+                .strafeToConstantHeading(new Vector2d(-4, -25.5), new TranslationalVelConstraint(25));
                // .splineToConstantHeading(new Vector2d(-2, -27.6), tR(90), new TranslationalVelConstraint(25));
 
-        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose1 = new Pose2d(-2, -26, tR(90));
+        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose1 = new Pose2d(-4, -25.5, tR(90));
 
         toPickupFromChamberPath1 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose1)
                 .setTangent(tR(270))
@@ -195,8 +195,8 @@ public class SpecimenAutoActionsExperimental {
         hookFromPickupWithTimedElbowAndArmPath2 = drive.actionBuilder(toPickupFromChamberPathFinalPose1)
                 .afterTime(0.7, new ParallelAction(setElbowHook(), setArmHook()))
                 .setTangent(tR(90))
-                .strafeToConstantHeading(new Vector2d(-5, -26));
-        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose2 = new Pose2d(-5, -26, tR(90));
+                .strafeToConstantHeading(new Vector2d(2, -26));
+        Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose2 = new Pose2d(3, -26, tR(90));
 
         toPickupFromChamberPath2 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose2)
                 .setTangent(tR(270))
@@ -206,7 +206,7 @@ public class SpecimenAutoActionsExperimental {
         hookFromPickupWithTimedElbowAndArmPath3 = drive.actionBuilder(toPickupFromChamberPathFinalPose2)
                 .afterTime(0.7, new ParallelAction(setElbowHook(), setArmHook()))
                 .setTangent(tR(90))
-                .strafeToConstantHeading(new Vector2d(2, -26));
+                .strafeToConstantHeading(new Vector2d(4, -26));
         Pose2d hookFromPickupWithTimedElbowAndArmPathFinalPose3 = new Pose2d(2, -26, tR(90));
 
         toPickupFromChamberPath3 = drive.actionBuilder(hookFromPickupWithTimedElbowAndArmPathFinalPose3)

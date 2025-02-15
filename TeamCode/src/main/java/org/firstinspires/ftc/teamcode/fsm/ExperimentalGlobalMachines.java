@@ -111,6 +111,7 @@ public class ExperimentalGlobalMachines
                 .onEnter(() -> {
                     intake.getArm().extendExperimental();
                 })
+                .loop(() -> intake.updateExtendoPowerExperimental(gamepads))
                 .transition(() -> gamepads.justPressed(Button.GP1_Y), IntakeStates.LOW_EXTEND_CLAW_OPEN)
                 .transition(() -> gamepads.justPressed(Button.GP1_B), IntakeStates.RETRACT_ARM_CENTER_SWIVEL)
                 .transition(() -> gamepads.justPressed(Button.GP1_A), IntakeStates.READY_TO_DROP)

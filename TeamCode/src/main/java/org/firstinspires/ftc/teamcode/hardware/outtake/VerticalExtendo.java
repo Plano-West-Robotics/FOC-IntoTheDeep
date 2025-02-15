@@ -15,7 +15,7 @@ public class VerticalExtendo extends Extendo
     public static class Positions
     {
         public static final int HIGH_BUCKET = 4100;
-        public static final int ABOVE_HIGH_CHAMBER = 2200;
+        public static final int ABOVE_HIGH_CHAMBER = 2300;
         public static final int BELOW_HIGH_CHAMBER = 1200;
         public static final int SPECIMEN_CLEARANCE = 1000;
         public static final int BUCKET_CLEARANCE = 500;

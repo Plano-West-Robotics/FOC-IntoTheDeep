@@ -49,10 +49,10 @@ Left Stick X - left/right strafing
 Right Stick X - turning left/right in place
 Right Stick Y - intake slides or outtake slides, depending on the state
 
-Robot Centric - more intuitive (and works better than the field centric atm) - the robot should never be turned around anyway
+Field Centric - easier to pick up samples from the submersible
  */
 
-@TeleOp (name = "Experimental")
+@TeleOp (name = "Experimental (For Last Call)")
 public class ExperimentalTeleOp extends BaseTeleOp {
 
     public Drive drive;

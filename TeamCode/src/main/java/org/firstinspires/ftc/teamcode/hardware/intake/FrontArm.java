@@ -26,7 +26,7 @@ public class FrontArm extends StageServoPair<FrontArm.Stage>
                 (hardwareMap, "fal", "far", Stage.class, POSITION_DIFF)
                 .add(Stage.PROBE, 0.09)
                 .add(Stage.EXTEND, 0.25)
-                .add(Stage.EXTEND_EXPERIMENTAL, 0.2)
+                .add(Stage.EXTEND_EXPERIMENTAL, 0.23)
                 .add(Stage.UPRIGHT, 0.46)
                 .add(Stage.RETRACT, 0.8)
         );

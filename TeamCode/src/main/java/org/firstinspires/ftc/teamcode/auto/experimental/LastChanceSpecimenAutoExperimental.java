@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 
 
 @Config
-@Autonomous(name = "Specimen Auto2", group = "CompPrograms")
+@Autonomous(name = "Specimen Auto for Last Call", group = "CompPrograms")
 public class LastChanceSpecimenAutoExperimental extends LinearOpMode {
 
     Hardware hardware;

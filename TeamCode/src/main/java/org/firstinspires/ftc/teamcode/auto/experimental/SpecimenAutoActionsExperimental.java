@@ -164,14 +164,14 @@ public class SpecimenAutoActionsExperimental {
                 .splineToConstantHeading(new Vector2d(49, -16), tR(90), new TranslationalVelConstraint(20))
                 .splineToConstantHeading(new Vector2d(52, -10), 0, new TranslationalVelConstraint(20))
                 .splineToConstantHeading(new Vector2d(57.5, -14), tR(270))
-                .splineToConstantHeading(new Vector2d(57.5, -48), tR(270), new TranslationalVelConstraint(24));
+                .splineToConstantHeading(new Vector2d(57.5, -50), tR(270), new TranslationalVelConstraint(24));
                 /*
                 .splineToConstantHeading(new Vector2d(54, -14), tR(90))
                 .splineToConstantHeading(new Vector2d(57, -10), tR(0))
                 .splineToConstantHeading(new Vector2d(59, -16), tR(270))
                 .splineToConstantHeading(new Vector2d(59, -40), tR(270));
                  */
-        Pose2d pushSamplesPathFinalPose = new Pose2d(57.5, -48, tR(90));
+        Pose2d pushSamplesPathFinalPose = new Pose2d(57.5, -50, tR(90));
 
         pickupFromPushingPath = drive.actionBuilder(pushSamplesPathFinalPose)
                 .strafeToConstantHeading(new Vector2d(38, -62), new TranslationalVelConstraint(20));

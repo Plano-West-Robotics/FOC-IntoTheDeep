@@ -36,7 +36,7 @@ public class LastChanceSpecimenAutoExperimental extends LinearOpMode {
 
         hardware = new Hardware(hardwareMap);
 
-        initialPose = new Pose2d(0, -63, Math.toRadians(90));
+        initialPose = new Pose2d(24, -60, Math.toRadians(90));
 
         drive = new MecanumDrive(hardwareMap, initialPose);
 

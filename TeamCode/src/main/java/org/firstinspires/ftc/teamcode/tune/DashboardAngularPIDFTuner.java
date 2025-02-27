@@ -18,9 +18,9 @@ import org.firstinspires.ftc.teamcode.subsystems.FieldCentricDrive;
 @TeleOp(group = "Tune")
 public class DashboardAngularPIDFTuner extends OpMode
 {
-    public static double p = 0;
+    public static double p = 0.02;
     public static double i = 0;
-    public static double d = 0;
+    public static double d = 0.002;
     public static double f = 0;
     public static double targetAngle = 0;
 
